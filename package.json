@@ -6,8 +6,9 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "start:dev": "node-dev --respawn server/index.js",
+    "start:server": "node-dev --respawn server/index.js",
     "start": "node server/index.js",
+    "start:dev": "npm run build:watch & npm run start:server",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src server",
     "format": "prettier --write \"**/*.+(js|jsx|json|css|ts|tsx)\""
   },
@@ -49,6 +50,7 @@
     "axios": "^0.20.0",
     "bcrpyt": "^2.0.0",
     "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
