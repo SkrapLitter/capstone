@@ -1,0 +1,10 @@
+node_modules
+build
+dist
+res
+coverage
+.eslintignore
+.gitignore
+.huskyrc
+.lintstagedrc
+.prettierignore
