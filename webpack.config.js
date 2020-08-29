@@ -1,7 +1,7 @@
-const path = require('path')
-const dotenv = require('dotenv')
+const path = require('path');
+const dotenv = require('dotenv');
 
-dotenv.config()
+dotenv.config();
 
 module.exports = {
   entry: path.join(__dirname, '/src/index.tsx'),
@@ -31,4 +31,4 @@ module.exports = {
       },
     ],
   },
-}
+};
