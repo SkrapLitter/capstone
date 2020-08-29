@@ -30,7 +30,6 @@
     "no-unused-expressions": "off",
     "react/prop-types": 0,
     "react/jsx-one-expression-per-line": 0,
-    "jsx-a11y/alt-text": 0,
     "react/destructuring-assignment": 0,
     "react/no-unescaped-entities": 0,
     "no-nested-ternary": 0,
@@ -40,6 +39,8 @@
     "react/jsx-curly-newline": 0,
     "react/jsx-props-no-spreading": "off",
     "@typescript-eslint/no-var-requires": 0,
-    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "import/extensions": "off",
+    "import/no-unresolved": "off"
   }
 }
