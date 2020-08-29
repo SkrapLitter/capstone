@@ -5,6 +5,10 @@ dotenv.config()
 
 module.exports = {
   entry: path.join(__dirname, '/src/index.tsx'),
+  output: {
+    filename: 'main.js',
+    path: path.join(__dirname, './dist'),
+  },
   devtool: 'source-map',
   mode: 'development',
   resolve: {
