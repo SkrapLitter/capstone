@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "start:server": "node-dev --respawn server/index.js",
-    "start": "node server/index.js",
+    "start:server": "node-dev --respawn server/seed.js",
+    "start": "node server/seed.js",
     "start:dev": "npm run build:watch & npm run start:server",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src server",
     "format": "prettier --write \"**/*.+(js|jsx|json|css|ts|tsx)\""

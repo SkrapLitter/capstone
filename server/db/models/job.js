@@ -1,5 +1,5 @@
-import { STRING, UUID, UUIDV4, FLOAT, ENUM, BOOLEAN } from 'sequelize';
-import db from '../db';
+const { STRING, UUID, UUIDV4, FLOAT, ENUM, BOOLEAN } = require('sequelize');
+const db = require('../db');
 
 const Job = db.define('job', {
   id: {
@@ -15,19 +15,12 @@ const Job = db.define('job', {
     },
   },
   status: {
-    type: ENUM('active', 'pending', 'closed', 'completed'),
+    type: ENUM('paid', 'unpaid', 'cancelled', 'completed'),
     allowNull: false,
   },
   price: {
     type: FLOAT,
     defaultValue: 0,
-    validate: {
-      isActive: () => {
-        if (this.status === 'active' && !this.price) {
-          throw new Error('Price cannot be 0 for an active order');
-        }
-      },
-    },
   },
   city: {
     type: STRING,
@@ -56,7 +49,8 @@ const Job = db.define('job', {
   },
   reservedUser: {
     type: STRING,
+    userId: UUID,
   },
 });
 
-export default Job;
+module.exports = Job;
