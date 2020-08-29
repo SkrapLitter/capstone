@@ -14,7 +14,8 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "allowJs": true,
+    "esModuleInterop": true,
     "types": ["node"]
   },
-  "include": ["src/**/*", "/server/**/*"]
+  "include": ["src/**/*"]
 }

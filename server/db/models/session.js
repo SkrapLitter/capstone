@@ -1,5 +1,5 @@
-import { UUID, UUIDV4 } from 'sequelize';
-import db from '../db';
+const { UUID, UUIDV4 } = require('sequelize');
+const db = require('../db');
 
 const Session = db.define('session', {
   id: {
@@ -9,4 +9,4 @@ const Session = db.define('session', {
   },
 });
 
-export default Session;
+module.exports = Session;
