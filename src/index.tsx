@@ -1,7 +1,7 @@
-import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { render } from 'react-dom'
-import App from './app'
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { render } from 'react-dom';
+import App from './app';
 
 render(
   <Router>
@@ -9,4 +9,4 @@ render(
   </Router>,
   document.getElementById('root'),
   () => console.log('rendered')
-)
+);
