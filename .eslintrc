@@ -46,6 +46,7 @@
       }
     ],
     "import/extensions": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "func-names": "off"
   }
 }
