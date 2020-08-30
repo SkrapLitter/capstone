@@ -1,9 +1,11 @@
 import React from 'react';
+import ReduxTest from './reduxTest';
 
 const App: React.FC = () => {
   return (
     <div>
-      <h1>Hello World</h1>
+      <h1>Hello Litter</h1>
+      <ReduxTest />
     </div>
   );
 };
