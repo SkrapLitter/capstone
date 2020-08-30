@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrpyt = require('bcrypt');
 const {
   models: { User },
 } = require('../db');
@@ -23,7 +22,7 @@ passport.use(
             message: 'Username does not exist',
           });
         }
-        if (user.password !== bcrpyt.hashSync(password, user.salt)) {
+        if (!user.validPassword(password)) {
           return done(null, false, {
             message: 'Incorrect password.',
           });

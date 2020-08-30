@@ -21,8 +21,6 @@ module.exports = {
         use: { loader: 'ts-loader' },
         exclude: /node_modules/,
       },
-
-      // addition - add source-map support
       {
         enforce: 'pre',
         test: /\.js$/,

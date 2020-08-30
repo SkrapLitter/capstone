@@ -1,9 +1,8 @@
-const bcrypt = require('bcrypt');
 const passport = require('passport');
 const authRouter = require('express').Router();
-const { models } = require('../db');
-
-const { Session, User, Order } = models;
+const {
+  models: { Session, User },
+} = require('../db');
 
 authRouter.post('/register', async (req, res) => {
   try {
@@ -11,7 +10,7 @@ authRouter.post('/register', async (req, res) => {
     let { image } = req.body;
     if (username && password && firstName && lastName) {
       image = image ? image : 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390';
-      const user = await User.create({
+      await User.create({
         username,
         password,
         firstName,
