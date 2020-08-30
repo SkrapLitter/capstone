@@ -43,6 +43,9 @@ const User = db.define(
       type: TEXT,
       defaultValue: 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390',
     },
+    oauth: {
+      type: STRING,
+    },
   },
   {
     hooks: {

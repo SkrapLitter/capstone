@@ -8,19 +8,20 @@ authRouter.post('/register', async (req, res) => {
   try {
     const { username, password, firstName, lastName } = req.body;
     let { image } = req.body;
-    if (username && password && firstName && lastName) {
-      image = image ? image : 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390';
-      await User.create({
-        username,
-        password,
-        firstName,
-        lastName,
-        image,
-      });
-      res.status(202).send({
-        message: `user ${username} successfully created`,
-      });
-    }
+    const defaultImage = 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390';
+    image = image || defaultImage;
+    const user = await User.create({
+      username,
+      password,
+      firstName,
+      lastName,
+      image,
+    });
+    req.user = user;
+    res.status(202).send({
+      message: `user ${username} successfully created`,
+      user,
+    });
   } catch (e) {
     res.status(500).send({
       message: ('error creating user', e),
