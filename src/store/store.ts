@@ -1,5 +1,5 @@
-import { createStore, combineReducers } from 'redux';
-// import { ThunkMiddleware } from 'redux-thunk';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunks from 'redux-thunk';
 
 import User from './userInterface';
 
@@ -23,6 +23,6 @@ export const reducer = combineReducers({
   user: userReducer,
 });
 
-export const store = createStore(reducer);
+export const store = createStore(reducer, applyMiddleware(thunks));
 
 export type StoreState = ReturnType<typeof reducer>;
