@@ -40,7 +40,8 @@ const User = db.define(
     },
     image: {
       type: TEXT,
-      defaultValue: 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390',
+      defaultValue:
+        'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390',
     },
   },
   {
