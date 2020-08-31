@@ -18,5 +18,27 @@
   justify-content: center;
   margin-top: 20px;
   height: 75vh;
-  width: 100%;
+  width: 100%; 
+}
+
+/* label focus color */
+.input-field.fsField input:focus + label,
+.input-field.fsField input[type='email']:focus + label,
+.input-field.fsField input[type='password']:focus + label {
+  color: #000;
+
+/* label underline focus color */
+.input-field.fsField input:focus,
+.input-field.fsField input[type='email']:focus,
+.input-field.fsField input[type='password']:focus {
+  border-bottom: 1px solid #000;
+}
+.input-field.fsField input:focus.valid,
+.input-field.fsField input[type='email']:focus.valid,
+.input-field.fsField input[type='password']:focus.valid {
+  border-bottom: 2px solid #0f0;
+}
+.input-field input.valid {
+  border-bottom: 2px solid #0f0;
+  box-shadow: 0 0 0 0 #000;
 }

@@ -11,6 +11,8 @@ const defaultUser: User = {
 
 const userReducer = (state: User = defaultUser, action): User => {
   switch (action.type) {
+    case 'CREATE_ACCOUNT':
+      return action.user;
     default:
       return state;
   }

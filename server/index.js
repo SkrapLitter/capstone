@@ -62,8 +62,8 @@ app.use(async (req, res, next) => {
   }
 });
 
-routers.forEach(router => {
-  app.use(`/api/${router.url}`, router.router);
+routers.forEach(({ url, router }) => {
+  app.use(`/api/${url}`, router);
 });
 
 app.get('*', (req, res) => {
