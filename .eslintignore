@@ -3,3 +3,5 @@ dist
 public
 package.json
 package-lock.json
+tsconfig.json
+.prettierrc

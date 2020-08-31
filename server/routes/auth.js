@@ -41,7 +41,7 @@ authRouter.post(
         lastName,
         image,
       });
-
+      req.user = user;
       res.status(201).send(user);
     } catch (e) {
       res.status(500).send({

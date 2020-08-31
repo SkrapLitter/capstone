@@ -1,6 +1,7 @@
 const { STRING, UUID, UUIDV4, INTEGER, TEXT } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
+const Session = require('./session');
 
 const User = db.define(
   'user',
@@ -43,6 +44,9 @@ const User = db.define(
       defaultValue:
         'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390',
     },
+    oauth: {
+      type: STRING,
+    },
   },
   {
     hooks: {
@@ -55,6 +59,18 @@ const User = db.define(
 );
 User.prototype.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
+};
+User.prototype.findUserBySession = function (sessionId) {
+  return User.findOne({
+    include: [
+      {
+        model: Session,
+        where: {
+          id: sessionId,
+        },
+      },
+    ],
+  });
 };
 
 module.exports = User;
