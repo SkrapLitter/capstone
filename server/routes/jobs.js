@@ -118,4 +118,7 @@ jobRouter.put('/:id', async (req, res) => {
   }
 });
 
-module.exports = jobRouter;
+module.exports = {
+  url: 'jobs',
+  router: jobRouter,
+};

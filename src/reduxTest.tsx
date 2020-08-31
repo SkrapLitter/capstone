@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from './store/store';
-import User from './store/userInterface';
+import User from './store/user/userInterface';
 import io from 'socket.io-client';
 
 const SOCKET_IO_URL = 'http://localhost:3000';

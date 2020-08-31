@@ -6,7 +6,7 @@ const express = require('express');
 const chalk = require('chalk');
 const cors = require('cors');
 const { app, http } = require('./server');
-const { authRouter, jobRouter } = require('./routes');
+const routers = require('./routes');
 const {
   models: { Session },
 } = require('./db');
@@ -86,8 +86,10 @@ app.use(async (req, res, next) => {
       .catch(e => console.error(e));
   }
 });
-app.use('/api/auth', authRouter);
-app.use('/api/jobs', jobRouter);
+
+routers.forEach(({ url, router }) => {
+  app.use(`/api/${url}`, router);
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
