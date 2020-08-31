@@ -2,11 +2,43 @@
 const passport = require('passport');
 const authRouter = require('express').Router();
 const { check, validationResult } = require('express-validator');
+const dotenv = require('dotenv');
+const AWS = require('aws-sdk');
+const multer = require('multer');
 const { models } = require('../db');
 
+const upload = multer();
 const { Session, User } = models; // Order to be added
 const defaultImage =
   'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=1618390';
+const singleUpload = upload.single('image');
+
+dotenv.config();
+
+authRouter.post('/upload', singleUpload, async (req, res) => {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  });
+
+  console.log(s3);
+
+  const params = {
+    Bucket: 'capstone-fas3',
+    Key: 'cat.jpg',
+    Body: req.file.buffer,
+  };
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.error(err);
+      throw err;
+    }
+    console.log(`File uploaded successfully. ${data.Location}`);
+  });
+
+  res.status(201).send({ message: 'hello' });
+});
 
 authRouter.post(
   '/register',
@@ -21,6 +53,8 @@ authRouter.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
+
+    console.log(req.body);
 
     if (!errors.isEmpty()) {
       res.status(400).json({
@@ -43,10 +77,9 @@ authRouter.post(
       });
       req.user = user;
       res.status(201).send(user);
-    } catch (e) {
-      res.status(500).send({
-        message: `error creating user: ${e}`,
-      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ message: 'Server error' });
     }
   }
 );
