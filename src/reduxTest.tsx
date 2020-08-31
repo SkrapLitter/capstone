@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from './store/store';
-import User from './store/userInterface';
+import User from './store/user/userInterface';
 
 export interface StateProps {
   user: User;

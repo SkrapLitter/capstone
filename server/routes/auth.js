@@ -140,4 +140,7 @@ authRouter.delete('/logout', (req, res) => {
   }
 });
 
-module.exports = authRouter;
+module.exports = {
+  url: 'auth',
+  router: authRouter,
+};
