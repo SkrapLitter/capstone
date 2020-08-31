@@ -1,40 +1,34 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { getMap } from '../../store/map/mapActions';
-import { StoreState } from '../../store/store';
+import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
-import MapInterface, { Coordinates } from '../../store/map/mapInterface';
 
-interface MapProps {
-  getMap: (localCoord?: Coordinates) => MapInterface;
-  defaultMap: MapInterface;
-}
+const Map: React.FC = () => {
+  const [center, setCenter] = useState({ lat: 40.64, lng: -74.08 });
+  const [zoom, setZoom] = useState(11);
+  const [locationLoaded, setLocationLoaded] = useState(false);
 
-const Map: React.FC<MapProps> = (props: MapProps) => {
   useEffect(() => {
-    const success = pos => {
+    const success = ({ coords }) => {
       const localCoord = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
+        lat: coords.latitude,
+        lng: coords.longitude,
       };
-      props.getMap(localCoord);
+      setCenter(localCoord);
+      setZoom(14);
     };
-
-    const error = () => {
-      props.getMap();
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success);
+    setLocationLoaded(true);
   }, []);
 
   return (
     <div className="container">
       <div className="mapContainer">
-        {props.defaultMap.key && (
+        {locationLoaded === true && (
           <GoogleMapReact
-            bootstrapURLKeys={{ key: props.defaultMap.key }}
-            defaultCenter={props.defaultMap.center}
-            defaultZoom={props.defaultMap.zoom}
+            bootstrapURLKeys={{
+              key: 'AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI',
+            }}
+            center={center}
+            zoom={zoom}
           />
         )}
       </div>
@@ -42,12 +36,4 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
   );
 };
 
-const mapStateToProps = (state: StoreState) => {
-  return {
-    defaultMap: state.map,
-  };
-};
-
-const mapDispatchToProps = { getMap };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default Map;
