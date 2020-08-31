@@ -4,7 +4,7 @@ const express = require('express');
 const chalk = require('chalk');
 const cors = require('cors');
 const app = require('./server');
-const { authRouter, jobRouter } = require('./routes');
+const routers = require('./routes');
 const {
   models: { Session },
 } = require('./db');
@@ -18,8 +18,6 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const PUBLIC_PATH = path.join(__dirname, '../public');
 const DIST_PATH = path.join(__dirname, '../dist');
-
-app.use('/api/auth', authRouter);
 
 app.use(express.json());
 app.use(cors());
@@ -63,8 +61,10 @@ app.use(async (req, res, next) => {
       .catch(e => console.error(e));
   }
 });
-app.use('/api/auth', authRouter);
-app.use('/api/jobs', jobRouter);
+
+routers.forEach(router => {
+  app.use(`/api/${router.url}`, router.router);
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
