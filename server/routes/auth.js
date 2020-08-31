@@ -21,8 +21,6 @@ authRouter.post('/upload', singleUpload, async (req, res) => {
     secretAccessKey: process.env.AWS_SECRET,
   });
 
-  console.log(s3);
-
   const params = {
     Bucket: 'capstone-fas3',
     Key: 'cat.jpg',
@@ -53,8 +51,6 @@ authRouter.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-
-    console.log(req.body);
 
     if (!errors.isEmpty()) {
       res.status(400).json({
