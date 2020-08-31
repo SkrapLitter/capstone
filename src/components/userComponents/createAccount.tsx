@@ -48,7 +48,7 @@ const CreateAccount: React.FC<Props> = (props: Props) => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    set,
+    set: React.Dispatch<React.SetStateAction<string>>,
     labelId: string
   ): void => {
     // control form field value
