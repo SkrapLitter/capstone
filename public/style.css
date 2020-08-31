@@ -1,0 +1,14 @@
+.fixedFooter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footerIcons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.contentWrapper {
+  padding-bottom: 60px;
+}

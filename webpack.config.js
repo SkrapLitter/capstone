@@ -29,6 +29,14 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'source-map-loader',
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
 };

@@ -55,6 +55,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "file-loader": "^6.0.0",
+    "materialize-css": "^1.0.0-rc.2",
     "express-validator": "^6.6.0",
     "node-dev": "^5.2.0",
     "passport": "^0.4.1",
