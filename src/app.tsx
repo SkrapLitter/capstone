@@ -6,7 +6,7 @@ import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import Landing from './components/landingComponent/landing';
-import ReduxTest from './reduxTest';
+// import ReduxTest from './reduxTest';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   return (
     <div>
       <Navbar />
-      <ReduxTest />
+      {/* <ReduxTest /> */}
       <div className="contentWrapper">
         <Switch>
           <Route exact path="/" render={() => <Landing />} />

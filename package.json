@@ -45,6 +45,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "@types/google-map-react": "^1.1.8",
     "@types/react": "^16.9.48",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
@@ -56,9 +57,10 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "file-loader": "^6.0.0",
-    "materialize-css": "^1.0.0-rc.2",
     "express-validator": "^6.6.0",
+    "file-loader": "^6.0.0",
+    "google-map-react": "^2.1.2",
+    "materialize-css": "^1.0.0-rc.2",
     "node-dev": "^5.2.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",

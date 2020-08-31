@@ -12,3 +12,11 @@
 .contentWrapper {
   padding-bottom: 60px;
 }
+
+.mapContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  height: 75vh;
+  width: 100%;
+}
