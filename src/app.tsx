@@ -8,7 +8,6 @@ import Account from './components/accountComponent/account';
 import Landing from './components/landingComponent/landing';
 import ReduxTest from './reduxTest';
 
-
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
