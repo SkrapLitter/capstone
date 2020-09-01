@@ -61,7 +61,7 @@
     "express-validator": "^6.6.0",
     "file-loader": "^6.0.0",
     "google-map-react": "^2.1.2",
-    "materialize-css": "^1.0.0-rc.2"
+    "materialize-css": "^1.0.0-rc.2",
     "multer": "^1.4.2",
     "node-dev": "^5.2.0",
     "passport": "^0.4.1",
