@@ -5,9 +5,11 @@ import { updateForm } from '../../store/form/formActions';
 import Form from '../../store/form/formInterface';
 import { ThunkDispatch } from 'redux-thunk';
 import { fetchJobs } from '../../store/job/jobActions';
+import Job from '../../store/job/jobInterface';
 
 interface stateProps {
   form: Form;
+  job: Job;
 }
 interface dispatchProps {
   dispatch: ThunkDispatch<any, any, any>;
@@ -19,6 +21,7 @@ const Feed: React.FC<Props> = (props: Props) => {
   useEffect(() => {
     props.dispatch(fetchJobs());
   }, []);
+  console.log(props.job);
   return (
     <div>
       <input
@@ -33,9 +36,9 @@ const Feed: React.FC<Props> = (props: Props) => {
 };
 
 const mapState = (state: StoreState) => {
-  console.log(state);
   return {
     form: state.form,
+    job: state.job,
   };
 };
 const mapDispatch = dispatch => {
