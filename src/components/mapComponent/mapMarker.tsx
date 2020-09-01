@@ -18,12 +18,8 @@ interface Props {
 const MapMarker: React.FC<Props> = (props: Props) => {
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleChange = () => {
+    setOpen(!open);
   };
 
   const body = (
@@ -49,10 +45,10 @@ const MapMarker: React.FC<Props> = (props: Props) => {
   );
   return (
     <div className="marker">
-      <i onClick={handleOpen} className="material-icons" role="button">
+      <i onClick={handleChange} className="material-icons" role="button">
         delete
       </i>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleChange}>
         {body}
       </Modal>
     </div>
