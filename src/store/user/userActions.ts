@@ -1,12 +1,11 @@
 import axios from 'axios';
 import User from './userInterface';
 import { AppThunk } from '../thunkType';
-
-const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
+import TYPES from '../types';
 
 const createAccount = (user: User) => {
   return {
-    type: CREATE_ACCOUNT,
+    type: TYPES.CREATE_ACCOUNT,
     user,
   };
 };

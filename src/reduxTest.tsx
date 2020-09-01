@@ -8,13 +8,15 @@ const SOCKET_IO_URL = 'http://localhost:3000';
 const socket = io(SOCKET_IO_URL);
 
 socket.on('connect', () => {
-  console.log('connected');
+  console.log(`connected + ${socket.id}`);
+});
+socket.on('disconnect', function () {
+  console.log('disconnected');
 });
 export interface StateProps {
   user: User;
 }
 const ReduxTest: React.FC<StateProps> = (props: StateProps) => {
-  socket.emit('hello world', {});
   return (
     <div>
       <h2>

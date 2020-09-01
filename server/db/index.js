@@ -1,7 +1,7 @@
 const { models } = require('./models');
 const db = require('./db');
 
-const { User } = models;
+const { User, Job } = models;
 
 const sync = async () => {
   try {
@@ -15,6 +15,15 @@ const sync = async () => {
       clearance: 5,
     });
     console.log(user.validPassword('password'));
+    await Job.create({
+      name: 'McCarren Park',
+      status: 'paid',
+      price: 20,
+      city: 'Brooklyn',
+      state: 'New York',
+      address: 'Bedford Ave and Lorimer St',
+      userId: user.id,
+    });
   } catch (e) {
     console.error(e);
   }
