@@ -16,23 +16,24 @@ const singleUpload = upload.single('image');
 dotenv.config();
 
 authRouter.post('/upload', singleUpload, async (req, res) => {
+  const { buffer, originalname } = req.file;
+
   const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID,
     secretAccessKey: process.env.AWS_SECRET,
   });
 
   const params = {
-    Bucket: 'capstone-fas3',
-    Key: 'cat.jpg',
-    Body: req.file.buffer,
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: originalname,
+    Body: buffer,
   };
 
-  s3.upload(params, (err, data) => {
+  s3.upload(params, err => {
     if (err) {
       console.error(err);
-      throw err;
+      res.status(500).send({ message: 'Server error' });
     }
-    console.log(`File uploaded successfully. ${data.Location}`);
   });
 
   res.status(201).send({ message: 'hello' });
