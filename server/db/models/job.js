@@ -51,6 +51,12 @@ const Job = db.define('job', {
     type: STRING,
     userId: UUID,
   },
+  lat: {
+    type: FLOAT,
+  },
+  lng: {
+    type: FLOAT,
+  },
 });
 
 module.exports = Job;

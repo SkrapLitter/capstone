@@ -18,7 +18,7 @@
   justify-content: center;
   margin-top: 20px;
   height: 75vh;
-  width: 100%; 
+  width: 100%;
 }
 
 /* label focus color */
@@ -26,7 +26,7 @@
 .input-field.fsField input[type='email']:focus + label,
 .input-field.fsField input[type='password']:focus + label {
   color: #000;
-
+}
 /* label underline focus color */
 .input-field.fsField input:focus,
 .input-field.fsField input[type='email']:focus,
