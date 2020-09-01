@@ -42,3 +42,15 @@
   border-bottom: 2px solid #0f0;
   box-shadow: 0 0 0 0 #000;
 }
+
+.marker:hover {
+  cursor: pointer;
+}
+
+.mapModal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+}
