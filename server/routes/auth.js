@@ -51,25 +51,42 @@ authRouter.post(
   }
 );
 
-authRouter.post('/login', passport.authenticate('local'), async (req, res) => {
-  try {
-    const userId = req.user.id;
-    let usersSession = await Session.findByPk(req.sessionId);
+authRouter.post(
+  '/login',
+  [
+    [
+      check('username', 'Email is required').not().isEmpty(),
+      check('username', 'Include a valid email').isEmail(),
+      check('password', 'Enter a password with 6 or more characters').isLength({
+        min: 6,
+      }),
+    ],
+    passport.authenticate('local'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
 
-    if (!usersSession) {
-      usersSession = await Session.create({ id: req.sessionId });
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        errors: errors.array(),
+      });
     }
-    await usersSession.setUser(userId);
+    try {
+      const userId = req.user.id;
+      let usersSession = await Session.findByPk(req.sessionId);
 
-    res.status(200).send({
-      user: req.user,
-    });
-  } catch (e) {
-    req.status(404).send({
-      message: 'user not found',
-    });
+      if (!usersSession) {
+        usersSession = await Session.create({ id: req.sessionId });
+      }
+      await usersSession.setUser(userId);
+      res.status(200).send(req.user);
+    } catch (e) {
+      req.status(404).send({
+        message: 'user not found',
+      });
+    }
   }
-});
+);
 
 authRouter.get(
   '/facebook',
