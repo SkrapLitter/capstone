@@ -1,14 +1,14 @@
 import axios from 'axios';
 import User from './userInterface';
 import { AppThunk } from '../thunkType';
+import TYPES from '../types';
 
-const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_FAIL';
 
 const createAccount = (user: User) => {
   return {
-    type: CREATE_ACCOUNT,
+    type: TYPES.CREATE_ACCOUNT,
     user,
   };
 };

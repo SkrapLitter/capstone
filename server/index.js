@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 require('./config/passport');
 const path = require('path');
 const express = require('express');
 const chalk = require('chalk');
 const cors = require('cors');
-const app = require('./server');
+const { app, http } = require('./server');
 const routers = require('./routes');
 const {
   models: { Session },
@@ -13,6 +15,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const { findUserBySession } = require('./utils');
+const io = require('socket.io')(http);
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +32,28 @@ app.use(passport.session());
 app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
+io.on('connection', socket => {
+  console.log('a user has connected');
+  socket.on('join', async room => {
+    socket.join(room);
+    io.emit('roomJoined', room);
+  });
+  socket.on('message', async data => {
+    console.log(data);
+    // const { chatRoomName, author, message } = data;
+
+    // const chatRoom = await models.ChatRoom.findAll({
+    //   where: { name: chatRoomName },
+    // });
+    // const chatRoomId = chatRoom[0].id;
+    // const chatMessage = await models.ChatMessage.create({
+    //   chatRoomId,
+    //   author,
+    //   message: message,
+    // });
+    // io.emit('newMessage', chatMessage);
+  });
+});
 app.use(async (req, res, next) => {
   if (!req.cookies.session_id) {
     const session = await Session.create();
@@ -71,7 +96,7 @@ app.get('*', (req, res) => {
 });
 
 const startServer = () => {
-  app.listen(PORT, () => {
+  http.listen(PORT, () => {
     console.log(chalk.greenBright(`Server is listening on PORT: ${PORT}`));
   });
 };
