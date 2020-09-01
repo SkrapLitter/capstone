@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { StoreState } from '../../store/store';
+import { fetchJobs } from '../../store/job/jobActions';
+import Job from '../../store/job/jobInterface';
 import GoogleMapReact from 'google-map-react';
+import MapMarker from './mapMarker';
 
-const Map: React.FC = () => {
+interface StateProps {
+  job: Job;
+  fetchJobs: () => Job;
+}
+
+type Props = StateProps;
+
+const Map: React.FC<Props> = (props: Props) => {
   const [center, setCenter] = useState({ lat: 40.64, lng: -74.08 });
   const [zoom, setZoom] = useState(11);
   const [locationLoaded, setLocationLoaded] = useState(false);
@@ -19,6 +31,10 @@ const Map: React.FC = () => {
     setLocationLoaded(true);
   }, []);
 
+  useEffect(() => {
+    props.fetchJobs();
+  }, [props.job.allJobs.length]);
+
   return (
     <div className="container">
       <div className="mapContainer">
@@ -29,11 +45,29 @@ const Map: React.FC = () => {
             }}
             center={center}
             zoom={zoom}
-          />
+          >
+            {props.job.allJobs.map(job => {
+              return (
+                <MapMarker
+                  key={job.id}
+                  lat={job.lat}
+                  lng={job.lng}
+                  job={job}
+                  text={job.name}
+                />
+              );
+            })}
+          </GoogleMapReact>
         )}
       </div>
     </div>
   );
 };
 
-export default Map;
+const mapStateToProps = (state: StoreState) => ({
+  job: state.job,
+});
+
+const mapDispatchToProps = { fetchJobs };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);
