@@ -29,7 +29,9 @@ const CreateAccount: React.FC<Props> = (props: Props) => {
     return document.querySelectorAll('.valid').length === 4;
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
     e.preventDefault();
     if (isValid()) {
       // send to server then update redux user with response

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
   models: { Job },
@@ -5,6 +6,7 @@ const {
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
+const axios = require('axios');
 
 jobRouter.get('/', async (req, res) => {
   try {
@@ -48,7 +50,7 @@ jobRouter.post('/', async (req, res) => {
   try {
     const { name, price, city, state, address, userId } = req.body;
     const status = price ? 'paid' : 'unpaid';
-    await Job.create({
+    const job = await Job.create({
       name,
       price,
       city,
@@ -57,6 +59,19 @@ jobRouter.post('/', async (req, res) => {
       status,
       userId,
     });
+    await axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+          `${job.address} ${job.city}, ${job.state}`
+        )}&key=${process.env.GEOCODE_KEY}`
+      )
+      .then(async response => {
+        const lat = response.data.results[0].geometry.location.lat;
+        const lng = response.data.results[0].geometry.location.lng;
+        await job.update({ lat: lat });
+        await job.update({ lng: lng });
+      });
+
     res.status(200).send({ message: `${name} has been created` });
   } catch (e) {
     res.status(500).send(e);

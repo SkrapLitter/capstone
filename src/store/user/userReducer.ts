@@ -10,9 +10,13 @@ const defaultUser: User = {
 };
 
 const userReducer = (state: User = defaultUser, action): User => {
-  switch (action.type) {
+  const { user, type } = action;
+  switch (type) {
+    case 'LOGIN_SUCCESS':
     case 'CREATE_ACCOUNT':
-      return action.user;
+      return user;
+    case 'LOGIN_FAIL':
+      return defaultUser;
     default:
       return state;
   }
