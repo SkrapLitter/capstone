@@ -6,12 +6,10 @@ import Job from '../../store/job/jobInterface';
 import GoogleMapReact from 'google-map-react';
 import MapMarker from './mapMarker';
 
-interface StateProps {
+interface Props {
   job: Job;
   fetchJobs: () => Job;
 }
-
-type Props = StateProps;
 
 const Map: React.FC<Props> = (props: Props) => {
   const [center, setCenter] = useState({ lat: 40.64, lng: -74.08 });

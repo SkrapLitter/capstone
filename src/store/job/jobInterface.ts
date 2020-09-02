@@ -23,5 +23,5 @@ export default interface Job {
   allJobs: JobAttributes[];
   completedJobs: JobAttributes[];
   cancelledJobs: JobAttributes[];
-  filter: '';
+  filter: string;
 }

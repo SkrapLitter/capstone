@@ -24,7 +24,7 @@ const logout = () => {
 const loginFail = (error: string) => {
   return {
     type: TYPES.LOGIN_FAIL,
-    error
+    error,
   };
 };
 

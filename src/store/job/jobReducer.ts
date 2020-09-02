@@ -1,5 +1,5 @@
 import TYPES from '../types';
-import Job from './jobInterface';
+import Job, { JobAttributes } from './jobInterface';
 
 const defaultJobs: Job = {
   paidJobs: [],
@@ -16,8 +16,12 @@ const jobReducer = (state: Job = defaultJobs, action): Job => {
       return {
         ...state,
         allJobs: action.jobs,
-        paidJobs: action.paid,
-        unpaidJobs: action.unpaid,
+        paidJobs: action.jobs.filter(
+          (job: JobAttributes) => job.status === 'paid'
+        ),
+        unpaidJobs: action.jobs.filter(
+          (job: JobAttributes) => job.status === 'unpaid'
+        ),
       };
     case TYPES.SET_JOB_FILTER:
       return {

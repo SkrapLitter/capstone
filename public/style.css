@@ -108,3 +108,28 @@
   padding: 1rem;
   text-align: center;
 }
+
+@media (min-width: 1500px) {
+  .feedContainer {
+    /* display: flex;
+    justify-content: center; */
+    /* max-width: 700px; */
+    margin-right: 20%;
+    margin-left: 20%;
+  }
+}
+.cardButtons {
+  display: flex;
+}
+
+.cardButton {
+  margin: 5px;
+}
+
+.jobImage {
+  padding: 10px;
+}
+
+.feedButton {
+  background-color: #00c853;
+}
