@@ -6,13 +6,15 @@ export interface JobAttributes {
   city: string;
   state: string;
   address: string;
-  reserverd: boolean;
+  reserved: boolean;
   reservedUser?: string;
   lat: number;
   lng: number;
   createdAt: string;
   updatedAt: string;
   userId: string;
+  image: string;
+  description: string;
 }
 
 export default interface Job {
@@ -21,4 +23,5 @@ export default interface Job {
   allJobs: JobAttributes[];
   completedJobs: JobAttributes[];
   cancelledJobs: JobAttributes[];
+  filter: '';
 }

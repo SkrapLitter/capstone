@@ -97,7 +97,7 @@ const LoginForm: React.FC<Props> = (props: Props) => {
           className="btn waves-effect waves-light green accent-4"
           type="submit"
         >
-          Create Account
+          Login
           <i className="material-icons right">account_circle</i>
         </button>
       </div>

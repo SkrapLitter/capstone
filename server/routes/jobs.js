@@ -11,7 +11,6 @@ const axios = require('axios');
 jobRouter.get('/', async (req, res) => {
   try {
     const { filter } = req.query;
-    console.log(filter);
     if (filter) {
       const jobs = await Job.findAll({
         where: {
@@ -158,8 +157,9 @@ jobRouter.put('/:id', async (req, res) => {
       default:
         break;
     }
+    res.status(202).send({ status: true });
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ status: false });
     console.error('Error with job update', e);
   }
 });

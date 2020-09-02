@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { updateForm } from '../../store/form/formActions';
-import Form from '../../store/form/formInterface';
+import { Paper, Tabs, Tab } from '@material-ui/core';
+import View from '../../store/view/viewInterface';
 import { ThunkDispatch } from 'redux-thunk';
-import { fetchJobs } from '../../store/job/jobActions';
 import Job from '../../store/job/jobInterface';
+import { setView } from '../../store/view/viewAction';
+import PaidJobs from './paidJobs';
+import UnpaidJobs from './unpaidJobs';
+import SearchJobs from './searchJobs';
 
 interface stateProps {
-  form: Form;
   job: Job;
+  view: View;
 }
 interface dispatchProps {
   dispatch: ThunkDispatch<any, any, any>;
@@ -18,27 +21,47 @@ interface dispatchProps {
 type Props = stateProps & dispatchProps;
 
 const Feed: React.FC<Props> = (props: Props) => {
-  useEffect(() => {
-    props.dispatch(fetchJobs());
-  }, []);
-  console.log(props.job);
   return (
-    <div>
-      <input
-        value={props.form.firstName}
-        onChange={e => {
-          console.log(e.target.value);
-          props.dispatch(updateForm('firstName', e.target.value));
-        }}
-      />
+    <div className="feedPage">
+      <div className="FeedNavContainer">
+        <Paper square>
+          <h5>Job Navigator</h5>
+          <hr />
+          <Tabs
+            value={props.view.view}
+            indicatorColor="secondary"
+            textColor="primary"
+            onChange={(e, value) => {
+              e.preventDefault();
+              props.dispatch(setView(value));
+            }}
+            orientation="vertical"
+            variant="scrollable"
+            className="feedNav"
+          >
+            <Tab
+              label={`Search Jobs (${props.job.allJobs.length})`}
+              value="search"
+            />
+            <Tab label={`Paid (${props.job.paidJobs.length})`} value="paid" />
+            <Tab
+              label={`Unpaid (${props.job.unpaidJobs.length})`}
+              value="unpaid"
+            />
+          </Tabs>
+        </Paper>
+      </div>
+      <PaidJobs />
+      <UnpaidJobs />
+      <SearchJobs />
     </div>
   );
 };
 
 const mapState = (state: StoreState) => {
   return {
-    form: state.form,
     job: state.job,
+    view: state.view,
   };
 };
 const mapDispatch = dispatch => {

@@ -1,4 +1,5 @@
 import User from './userInterface';
+import TYPES from '../types';
 
 const defaultUser: User = {
   id: '1',
@@ -16,6 +17,8 @@ const userReducer = (state: User = defaultUser, action): User => {
     case 'CREATE_ACCOUNT':
       return user;
     case 'LOGIN_FAIL':
+      return defaultUser;
+    case TYPES.LOGOUT:
       return defaultUser;
     default:
       return state;
