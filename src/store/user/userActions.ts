@@ -24,15 +24,7 @@ const logout = () => {
 const loginFail = (error: string) => {
   return {
     type: TYPES.LOGIN_FAIL,
-    error
-  };
-};
-
-export const logoutUser = (): AppThunk => {
-  return async dispatch => {
-    const { status } = (await axios.delete('/api/auth/logout')).data;
-    if (status) dispatch(logout());
-    else console.log('error logging out');
+    error,
   };
 };
 
@@ -79,6 +71,17 @@ export const loginThunk = (username: string, password: string): AppThunk => {
     } catch (err) {
       const { statusText } = err.response;
       dispatch(loginFail(statusText));
+    }
+  };
+};
+
+export const logoutThunk = (): AppThunk => {
+  return async dispatch => {
+    try {
+      await axios.delete('/api/auth/logout');
+      dispatch(logout());
+    } catch (err) {
+      console.error(err);
     }
   };
 };

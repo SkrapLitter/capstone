@@ -20,8 +20,8 @@ const userReducer = (state: User = defaultUser, action): User => {
     case TYPES.LOGIN_FAIL:
       return {
         ...defaultUser,
-        error
-      }
+        error,
+      };
     case TYPES.LOGOUT:
       return defaultUser;
     default:

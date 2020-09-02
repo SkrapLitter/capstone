@@ -1,28 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { StoreState } from '../../store/store';
-import User from '../../store/user/userInterface';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { createAccountThunk } from '../../store/user/userActions';
 
-export interface StateProps {
-  user: User;
-}
-export interface DispatchProps {
-  createAccount: (
-    username: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => void;
-}
-type Props = StateProps & DispatchProps;
-
-const CreateAccount: React.FC<Props> = (props: Props) => {
+const CreateAccount: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const { createAccount, user } = props;
+
+  const dispatch = useDispatch();
   const setters = [setUsername, setPassword, setFirstName, setLastName];
 
   const isValid = (): boolean => {
@@ -35,7 +21,7 @@ const CreateAccount: React.FC<Props> = (props: Props) => {
     e.preventDefault();
     if (isValid()) {
       // send to server then update redux user with response
-      createAccount(username, password, firstName, lastName);
+      dispatch(createAccountThunk(username, password, firstName, lastName));
       // clear the form
       setters.forEach(fn => fn(''));
     } else {
@@ -64,15 +50,12 @@ const CreateAccount: React.FC<Props> = (props: Props) => {
       : label.classList.remove('active');
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
   return (
     <div
       className="container"
       style={{ maxWidth: '400px', textAlign: 'center' }}
     >
-      <h3>Create Account</h3>
+      <h4>Create Account</h4>
       <div className="input-field fsField">
         <input
           value={username}
@@ -153,22 +136,4 @@ const CreateAccount: React.FC<Props> = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: StoreState) => ({
-  user: state.user,
-});
-
-const mapDispatchToProps = dispatch => {
-  return {
-    createAccount: (
-      username: string,
-      password: string,
-      firstName: string,
-      lastName: string
-    ) => dispatch(createAccountThunk(username, password, firstName, lastName)),
-  };
-};
-
-export default connect<StateProps, DispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateAccount);
+export default CreateAccount;
