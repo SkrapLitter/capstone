@@ -54,3 +54,18 @@
   transform: translate(-50%, -50%);
   outline: none;
 }
+
+.m-t-l {
+  margin-top: 3rem;
+}
+.m-b-s {
+  margin-bottom: 1rem;
+}
+.max-w-400 {
+  max-width: 400px;
+}
+
+.alert {
+  padding: 1rem;
+  text-align: center;
+}
