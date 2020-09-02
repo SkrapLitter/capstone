@@ -1,7 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { StateProps } from '../reduxTest';
+import { connect } from 'react-redux';
+import User from '../store/user/userInterface';
+import { Button } from '@material-ui/core';
+import { ThunkDispatch } from 'redux-thunk';
+import { logoutUser } from '../store/user/userActions';
 
-const Navbar: React.FC = () => {
+interface stateProps {
+  user: User;
+}
+interface dispatchProps {
+  dispatch: ThunkDispatch<any, any, any>;
+}
+
+type Props = stateProps & dispatchProps;
+
+const Navbar: React.FC<Props> = (props: Props) => {
   return (
     <div className="navbar-fixed">
       <nav className="green accent-4">
@@ -15,8 +30,28 @@ const Navbar: React.FC = () => {
               <Link to="/map">Map</Link>
             </li>
             <li>
-              <Link to="/account">Account</Link>
+              <Link to="/inbox" className={props.user.clearance ? '' : 'ghost'}>
+                Inbox
+              </Link>
             </li>
+            <li>
+              <Link
+                to="/account"
+                className={props.user.clearance ? 'ghost' : ''}
+              >
+                Account
+              </Link>
+            </li>
+            <Button
+              onClick={e => {
+                e.preventDefault();
+                props.dispatch(logoutUser());
+              }}
+            >
+              <li className={props.user.clearance ? 'logoutButton' : 'ghost'}>
+                Logout
+              </li>
+            </Button>
           </ul>
         </div>
       </nav>
@@ -24,4 +59,17 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+const mapState = (state: StateProps) => {
+  return {
+    user: state.user,
+  };
+};
+const mapDispatch = dispatch => {
+  return {
+    dispatch,
+  };
+};
+export default connect<stateProps, dispatchProps>(
+  mapState,
+  mapDispatch
+)(Navbar);

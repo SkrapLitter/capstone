@@ -1,4 +1,12 @@
-const { STRING, UUID, UUIDV4, FLOAT, ENUM, BOOLEAN } = require('sequelize');
+const {
+  STRING,
+  UUID,
+  UUIDV4,
+  FLOAT,
+  ENUM,
+  BOOLEAN,
+  TEXT,
+} = require('sequelize');
 const db = require('../db');
 
 const Job = db.define('job', {
@@ -56,6 +64,15 @@ const Job = db.define('job', {
   },
   lng: {
     type: FLOAT,
+  },
+  image: {
+    type: TEXT,
+    defaultValue:
+      'https://experiencelife.com/wp-content/uploads/2003/03/Talking-Trash-1280x720.jpg',
+  },
+  description: {
+    type: TEXT,
+    allowNull: false,
   },
 });
 

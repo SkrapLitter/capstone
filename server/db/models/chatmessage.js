@@ -7,10 +7,6 @@ const ChatMessage = db.define('chatMessage', {
     type: UUID,
     defaultValue: UUIDV4,
   },
-  author: {
-    type: STRING,
-    allowNull: false,
-  },
   message: {
     type: STRING,
     allowNull: false,

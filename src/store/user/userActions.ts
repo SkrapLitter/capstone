@@ -3,9 +3,6 @@ import User from './userInterface';
 import { AppThunk } from '../thunkType';
 import TYPES from '../types';
 
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-const LOGIN_FAIL = 'LOGIN_FAIL';
-
 const createAccount = (user: User) => {
   return {
     type: TYPES.CREATE_ACCOUNT,
@@ -14,15 +11,35 @@ const createAccount = (user: User) => {
 };
 const login = (user: User) => {
   return {
-    type: LOGIN_SUCCESS,
+    type: TYPES.LOGIN_SUCCESS,
     user,
+  };
+};
+const logout = () => {
+  return {
+    type: TYPES.LOGOUT,
   };
 };
 
 const loginFail = (error: string) => {
   return {
-    type: LOGIN_FAIL,
-    error,
+    type: TYPES.LOGIN_FAIL,
+    error
+  };
+};
+
+export const logoutUser = (): AppThunk => {
+  return async dispatch => {
+    const { status } = (await axios.delete('/api/auth/logout')).data;
+    if (status) dispatch(logout());
+    else console.log('error logging out');
+  };
+};
+
+export const cookieLogin = (): AppThunk => {
+  return async dispatch => {
+    const { user } = (await axios.get('/api/auth/login')).data;
+    if (user) dispatch(login(user));
   };
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 require('dotenv').config();
 const { models } = require('./models');
 const db = require('./db');
@@ -16,16 +17,26 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 5,
     });
+    await User.create({
+      username: 'test@fullstack.com',
+      password: 'password',
+      firstName: 'Default',
+      lastName: 'Test',
+      image:
+        'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
+      clearance: 1,
+    });
     console.log(user.validPassword('password'));
 
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'paid',
-      price: 20,
+      price: 20.0,
       city: 'Brooklyn',
       state: 'New York',
       address: 'Bedford Ave and Lorimer St',
       userId: user.id,
+      description: 'Clean Up McCarren Park',
     });
     await axios
       .get(
@@ -43,11 +54,12 @@ const sync = async () => {
     const job2 = await Job.create({
       name: 'Tompkins Square Park',
       status: 'paid',
-      price: 20,
+      price: 20.0,
       city: 'New York',
       state: 'New York',
       address: 'Tompkins Square Park',
       userId: user.id,
+      description: 'Clean up Tomkins Square Park',
     });
 
     await axios
@@ -66,11 +78,12 @@ const sync = async () => {
     const job3 = await Job.create({
       name: 'Cooper Park',
       status: 'paid',
-      price: 20,
+      price: 20.0,
       city: 'Brooklyn',
       state: 'New York',
       address: 'Cooper Park',
       userId: user.id,
+      description: 'clean up Cooper Park',
     });
 
     await axios

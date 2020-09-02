@@ -179,11 +179,13 @@ authRouter.delete('/logout', (req, res) => {
     req.logOut();
     res.clearCookie('session_id');
     res.status(200).send({
-      message: 'successfully deleted',
+      status: true,
     });
   } catch (e) {
     console.error(e);
-    res.sendStatus(500);
+    res.status(500).send({
+      status: false,
+    });
   }
 });
 

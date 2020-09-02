@@ -3,6 +3,7 @@ import TYPES from '../types';
 interface View {
   type: string;
   view?: string;
+  e?: unknown;
 }
 
 const setView = (view: View['view']): View => ({

@@ -7,6 +7,7 @@ const defaultJobs: Job = {
   completedJobs: [],
   cancelledJobs: [],
   allJobs: [],
+  filter: '',
 };
 
 const jobReducer = (state: Job = defaultJobs, action): Job => {
@@ -17,6 +18,16 @@ const jobReducer = (state: Job = defaultJobs, action): Job => {
         allJobs: action.jobs,
         paidJobs: action.paid,
         unpaidJobs: action.unpaid,
+      };
+    case TYPES.SET_JOB_FILTER:
+      return {
+        ...state,
+        filter: action.filter,
+      };
+    case TYPES.FILTER_JOBS:
+      return {
+        ...state,
+        allJobs: action.jobs,
       };
     default:
       return state;

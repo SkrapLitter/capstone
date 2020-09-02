@@ -5,12 +5,24 @@ import Footer from './components/footer';
 import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
+import { ThunkDispatch } from 'redux-thunk';
 import Landing from './components/landingComponent/landing';
+import { cookieLogin } from './store/user/userActions';
+import { fetchJobs } from './store/job/jobActions';
+import { connect } from 'react-redux';
 
-const App: React.FC = () => {
+interface dispatchProps {
+  dispatch: ThunkDispatch<any, any, any>;
+}
+
+type Props = dispatchProps;
+
+const App: React.FC<Props> = (props: Props) => {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    props.dispatch(cookieLogin());
+    props.dispatch(fetchJobs());
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => {
@@ -35,4 +47,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatch,
+  };
+};
+
+export default connect<null, dispatchProps>(null, mapDispatchToProps)(App);
