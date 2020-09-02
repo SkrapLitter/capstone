@@ -8,7 +8,6 @@ import Account from './components/accountComponent/account';
 import { ThunkDispatch } from 'redux-thunk';
 import Landing from './components/landingComponent/landing';
 import { cookieLogin } from './store/user/userActions';
-import { fetchJobs } from './store/job/jobActions';
 import { connect } from 'react-redux';
 
 interface dispatchProps {
@@ -22,7 +21,6 @@ const App: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     props.dispatch(cookieLogin());
-    props.dispatch(fetchJobs());
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => {

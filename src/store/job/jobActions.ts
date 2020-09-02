@@ -48,12 +48,23 @@ const filterJobs = (jobs: Jobs['jobs']): Jobs => ({
   type: TYPES.FILTER_JOBS,
   jobs,
 });
-const fetchJobs = (): AppThunk => {
-  return async dispatch => {
-    const { jobs, paid, unpaid } = (await Axios.get('/api/jobs')).data;
-    dispatch(setJobs(jobs, paid, unpaid));
-  };
+
+// const fetchJobs = (): AppThunk => {
+//   return async dispatch => {
+//     const { jobs, paid, unpaid } = (await Axios.get('/api/jobs')).data;
+//     dispatch(setJobs(jobs, paid, unpaid));
+//   };
+// };
+
+const fetchJobs = (): AppThunk => dispatch => {
+  Axios.get('/api/jobs').then(({ data }) => {
+    dispatch({
+      type: TYPES.SET_JOBS,
+      jobs: data,
+    });
+  });
 };
+
 const reserveJob = (
   jobId: reserveJob['jobId'],
   userId: reserveJob['userId']
