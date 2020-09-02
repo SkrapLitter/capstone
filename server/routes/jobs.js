@@ -3,45 +3,15 @@ const jobRouter = require('express').Router();
 const {
   models: { Job },
 } = require('../db');
-const Sequelize = require('sequelize');
 
-const { Op } = Sequelize;
 const axios = require('axios');
 
 jobRouter.get('/', async (req, res) => {
   try {
-    const { filter } = req.query;
-    if (filter) {
-      const jobs = await Job.findAll({
-        where: {
-          name: {
-            [Op.iLike]: `%${filter}%`,
-          },
-        },
-        order: [['updatedAt', 'DESC']],
-      });
-      res.status(200).send({ jobs });
-    } else {
-      const jobs = await Job.findAll({
-        order: [['updatedAt', 'DESC']],
-      });
-      const paid = await Job.findAll({
-        where: {
-          status: 'paid',
-        },
-        order: [['updatedAt', 'DESC']],
-      });
-      const unpaid = await Job.findAll({
-        where: {
-          status: 'unpaid',
-        },
-        order: [['updatedAt', 'DESC']],
-      });
-      res.status(200).send({ jobs, paid, unpaid });
-    }
+    const jobs = await Job.findAll();
+    res.status(200).send(jobs);
   } catch (e) {
     res.status(500).send(e);
-    console.error('Error sending jobs', e);
   }
 });
 

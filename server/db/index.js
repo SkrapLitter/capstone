@@ -98,6 +98,52 @@ const sync = async () => {
         await job3.update({ lat: lat });
         await job3.update({ lng: lng });
       });
+
+    const job4 = await Job.create({
+      name: 'Domino Park',
+      status: 'unpaid',
+      city: 'Brooklyn',
+      state: 'New York',
+      address: 'Domino Park',
+      userId: user.id,
+      description: 'clean up Domino Park',
+    });
+
+    await axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+          `${job4.address} ${job4.city}, ${job4.state}`
+        )}&key=${process.env.GEOCODE_KEY}`
+      )
+      .then(async response => {
+        const lat = response.data.results[0].geometry.location.lat;
+        const lng = response.data.results[0].geometry.location.lng;
+        await job4.update({ lat: lat });
+        await job4.update({ lng: lng });
+      });
+
+    const job5 = await Job.create({
+      name: 'Maria Hernandez Park',
+      status: 'unpaid',
+      city: 'Brooklyn',
+      state: 'New York',
+      address: 'Maria Hernandez Park',
+      userId: user.id,
+      description: 'clean up Maria Hernandez Park',
+    });
+
+    await axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+          `${job5.address} ${job5.city}, ${job5.state}`
+        )}&key=${process.env.GEOCODE_KEY}`
+      )
+      .then(async response => {
+        const lat = response.data.results[0].geometry.location.lat;
+        const lng = response.data.results[0].geometry.location.lng;
+        await job5.update({ lat: lat });
+        await job5.update({ lng: lng });
+      });
   } catch (e) {
     console.error(e);
   }
