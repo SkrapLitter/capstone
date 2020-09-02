@@ -8,16 +8,20 @@ const defaultUser: User = {
   lastName: 'McNotLoggedIn',
   image: '',
   clearance: 0,
+  error: '',
 };
 
 const userReducer = (state: User = defaultUser, action): User => {
-  const { user, type } = action;
+  const { user, type, error } = action;
   switch (type) {
-    case 'LOGIN_SUCCESS':
-    case 'CREATE_ACCOUNT':
+    case TYPES.LOGIN_SUCCESS:
+    case TYPES.CREATE_ACCOUNT:
       return user;
-    case 'LOGIN_FAIL':
-      return defaultUser;
+    case TYPES.LOGIN_FAIL:
+      return {
+        ...defaultUser,
+        error
+      }
     case TYPES.LOGOUT:
       return defaultUser;
     default:

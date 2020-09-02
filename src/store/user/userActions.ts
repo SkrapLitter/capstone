@@ -21,9 +21,10 @@ const logout = () => {
   };
 };
 
-const loginFail = () => {
+const loginFail = (error: string) => {
   return {
     type: TYPES.LOGIN_FAIL,
+    error
   };
 };
 
@@ -48,51 +49,36 @@ export const createAccountThunk = (
   firstName: string,
   lastName: string
 ): AppThunk => {
-  return dispatch => {
-    axios
-      .post('/api/auth/register', {
+  return async dispatch => {
+    try {
+      const payload = {
         username,
         password,
         firstName,
         lastName,
-      })
-      .then(({ data }) => {
-        /* eslint-disable no-shadow */
-        const { id, username, firstName, lastName, clearance, image } = data;
-        const user = {
-          id,
-          username,
-          firstName,
-          lastName,
-          clearance,
-          image,
-        };
-        dispatch(createAccount(user));
-      })
-      .catch(console.error);
+      };
+      const { data } = await axios.post('/api/auth/register', payload);
+
+      dispatch(createAccount(data));
+    } catch (err) {
+      console.error(err);
+    }
   };
 };
 
 export const loginThunk = (username: string, password: string): AppThunk => {
-  return dispatch => {
-    return axios
-      .post('/api/auth/login', { username, password })
-      .then(({ data }) => {
-        const { id, username, firstName, lastName, clearance, image } = data;
-        const user = {
-          id,
-          username,
-          firstName,
-          lastName,
-          clearance,
-          image,
-        };
-        console.log(data);
-        dispatch(login(user));
-      })
-      .catch(e => {
-        dispatch(loginFail());
-        throw e;
-      });
+  return async dispatch => {
+    try {
+      const payload = {
+        username,
+        password,
+      };
+      const { data } = await axios.post('/api/auth/login', payload);
+
+      dispatch(login(data));
+    } catch (err) {
+      const { statusText } = err.response;
+      dispatch(loginFail(statusText));
+    }
   };
 };
