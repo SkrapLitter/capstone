@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { StoreState } from '../../store/store';
 import { loginThunk } from '../../store/user/userActions';
+
+export interface StateProps {
+  error: string | undefined;
+}
 
 export interface DispatchProps {
   login: (username: string, password: string) => void;
 }
 
-type Props = DispatchProps;
+type Props = StateProps & DispatchProps;
 
 const LoginForm: React.FC<Props> = (props: Props) => {
-  const { login } = props;
+  const { login, error } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const setters = [setUsername, setPassword];
@@ -54,7 +59,8 @@ const LoginForm: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div>
+    <div className="m-t-l m-b-s max-w-400 container">
+      {error && <div className="alert red lighten-5">Alert: {error}</div>}
       <div className="input-field fsField">
         <input
           value={username}
@@ -105,6 +111,10 @@ const LoginForm: React.FC<Props> = (props: Props) => {
   );
 };
 
+const mapStateToProps = (state: StoreState) => ({
+  error: state.user.error,
+});
+
 const mapDispatchToProps = dispatch => {
   return {
     login: (username: string, password: string) =>
@@ -112,7 +122,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect<null, DispatchProps>(
-  null,
+export default connect<StateProps, DispatchProps>(
+  mapStateToProps,
   mapDispatchToProps
 )(LoginForm);

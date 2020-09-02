@@ -5,4 +5,5 @@ export default interface User {
   lastName: string;
   image: string;
   clearance: number;
+  error?: string;
 }
