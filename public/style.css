@@ -108,6 +108,16 @@
   padding: 1rem;
   text-align: center;
 }
+.anchor,
+.anchor:focus {
+  background: transparent;
+  border: none;
+  color: #039be5;
+  font-style: italic;
+}
+.charcoal {
+  color: #777;
+  font-style: italic;
 
 @media (min-width: 1500px) {
   .feedContainer {

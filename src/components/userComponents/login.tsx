@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { loginThunk } from '../../store/user/userActions';
 
-export interface StateProps {
-  error: string | undefined;
-}
-
-export interface DispatchProps {
-  login: (username: string, password: string) => void;
-}
-
-type Props = StateProps & DispatchProps;
-
-const LoginForm: React.FC<Props> = (props: Props) => {
-  const { login, error } = props;
+const LoginForm: React.FC = () => {
+  // REDUX
+  const dispatch = useDispatch();
+  const selectUser = (state: StoreState) => state.user;
+  const error = useSelector(selectUser).error;
+  // STATE
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const setters = [setUsername, setPassword];
@@ -43,13 +37,15 @@ const LoginForm: React.FC<Props> = (props: Props) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
+    // validate form
     if (isValid()) {
       // send to server then update redux user with response
-      login(username, password);
+      dispatch(loginThunk(username, password));
       // clear the form
       setters.forEach(fn => fn(''));
     } else {
       const inputs = document.querySelectorAll('input');
+      // add invalid class to invalid fields
       inputs.forEach(input => {
         if (!input.classList.contains('valid')) {
           input.classList.add('invalid');
@@ -59,8 +55,12 @@ const LoginForm: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div className="m-t-l m-b-s max-w-400 container">
+    <div
+      className="container"
+      style={{ maxWidth: '400px', textAlign: 'center' }}
+    >
       {error && <div className="alert red lighten-5">Alert: {error}</div>}
+      <h4>Login</h4>
       <div className="input-field fsField">
         <input
           value={username}
@@ -111,18 +111,4 @@ const LoginForm: React.FC<Props> = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: StoreState) => ({
-  error: state.user.error,
-});
-
-const mapDispatchToProps = dispatch => {
-  return {
-    login: (username: string, password: string) =>
-      dispatch(loginThunk(username, password)),
-  };
-};
-
-export default connect<StateProps, DispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginForm);
+export default LoginForm;
