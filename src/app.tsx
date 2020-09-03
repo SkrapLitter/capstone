@@ -7,6 +7,7 @@ import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import { ThunkDispatch } from 'redux-thunk';
 import Landing from './components/landingComponent/landing';
+import JobDetails from './components/jobDetailsComponent/jobDetails';
 import { cookieLogin } from './store/user/userActions';
 import { connect } from 'react-redux';
 
@@ -34,9 +35,10 @@ const App: React.FC<Props> = (props: Props) => {
       <div className="contentWrapper">
         <Switch>
           <Route exact path="/" render={() => <Landing />} />
-          <Route path="/jobs" render={() => <Feed />} />
+          <Route exact path="/jobs" render={() => <Feed />} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
+          <Route path="/jobs/:id" component={JobDetails} />
           <Redirect to="/jobs" />
         </Switch>
       </div>

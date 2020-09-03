@@ -31,7 +31,7 @@ const Map: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     props.fetchJobs();
-  }, [props.job.allJobs.length]);
+  }, [props.job.jobs.length]);
 
   return (
     <div className="container">
@@ -44,7 +44,7 @@ const Map: React.FC<Props> = (props: Props) => {
             center={center}
             zoom={zoom}
           >
-            {props.job.allJobs.map(job => {
+            {props.job.jobs.map(job => {
               return (
                 <MapMarker
                   key={job.id}

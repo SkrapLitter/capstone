@@ -1,11 +1,13 @@
 import React from 'react';
 import { JobAttributes } from '../../store/job/jobInterface';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   job: JobAttributes;
 }
 
 const DesktopCard: React.FC<Props> = (props: Props) => {
+  const history = useHistory();
   return (
     <div className="col s12 m7">
       <div className="card horizontal">
@@ -30,6 +32,10 @@ const DesktopCard: React.FC<Props> = (props: Props) => {
               <button
                 className="waves-effect waves-light btn green accent-4 cardButton"
                 type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  history.push(`/jobs/${props.job.id}`);
+                }}
               >
                 View Details
               </button>

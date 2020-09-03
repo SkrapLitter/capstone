@@ -9,93 +9,87 @@ enum jobStatus {
   'cancelled',
 }
 interface Jobject {
-  state: string;
-  address: string;
+  id: string;
   name: string;
+  status: jobStatus;
   price: number;
   city: string;
+  state: string;
+  address: string;
   reserved: boolean;
-  reservedUser: string;
-  status: jobStatus;
+  reservedUser?: string;
+  reservedUsername?: string;
+  lat: number;
+  lng: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  image: string;
+  description: string;
+  createdUser: string;
 }
 
 interface Jobs {
   type: string;
-  jobs?: Jobject[];
-  paid?: Jobject[];
-  unpaid?: Jobject[];
-  filter?: string;
+  count: number;
+  jobs: Jobject[];
 }
-interface reserveJob {
-  jobId: string;
-  userId: string;
+interface Job {
+  type: string;
+  job: Jobject;
 }
-const setJobs = (
-  jobs: Jobs['jobs'],
-  paid: Jobs['paid'],
-  unpaid: Jobs['unpaid']
-): Jobs => ({
+const setJobs = (count: number, jobs: Jobject[]): Jobs => ({
   type: TYPES.SET_JOBS,
-  jobs,
-  paid,
-  unpaid,
-});
-const setJobFilter = (filter: string): Jobs => ({
-  type: TYPES.SET_JOB_FILTER,
-  filter,
-});
-const filterJobs = (jobs: Jobs['jobs']): Jobs => ({
-  type: TYPES.FILTER_JOBS,
+  count,
   jobs,
 });
 
-// const fetchJobs = (): AppThunk => {
-//   return async dispatch => {
-//     const { jobs, paid, unpaid } = (await Axios.get('/api/jobs')).data;
-//     dispatch(setJobs(jobs, paid, unpaid));
-//   };
-// };
+const setJob = (job: Jobject): Job => ({
+  type: TYPES.SET_JOB,
+  job,
+});
 
-const fetchJobs = (): AppThunk => dispatch => {
-  Axios.get('/api/jobs').then(({ data }) => {
-    dispatch({
-      type: TYPES.SET_JOBS,
-      jobs: data,
-    });
-  });
+const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
+  return async dispatch => {
+    let count;
+    let rows;
+    const data = (
+      await Axios.get(
+        `/api/jobs/?filter=${filter}&page=${page}&size=${size}&type=${type}`
+      )
+    ).data;
+    if (data) {
+      count = data.count;
+      rows = data.rows;
+    } else {
+      count = 0;
+      rows = [];
+    }
+    dispatch(setJobs(count, rows));
+  };
+};
+
+const fetchJob = (id: string): AppThunk => {
+  return async dispatch => {
+    const { data } = await Axios.get(`/api/jobs/job/${id}`);
+    dispatch(setJob(data));
+  };
 };
 
 const reserveJob = (
-  jobId: reserveJob['jobId'],
-  userId: reserveJob['userId']
+  jobId: string,
+  userId: string,
+  username: string
 ): AppThunk => {
   return async dispatch => {
     const { status } = await Axios.put(`/api/jobs/${jobId}`, {
       type: 'reserve',
       userId,
+      username,
     });
-    if (status) dispatch(fetchJobs);
+    if (status) dispatch(fetchJobs());
     else console.log('failure reserving');
   };
 };
 
-const sendFilterJobs = (filter: string): AppThunk => {
-  return async dispatch => {
-    dispatch(setJobFilter(filter));
-    const { jobs } = (await Axios.get(`/api/jobs/?filter=${filter}`)).data;
-    dispatch(filterJobs(jobs));
-  };
-};
-
-const clearJobs = () => ({
-  type: TYPES.CLEAR_JOB_FILTER,
-});
-
-const clearJobFilter = (): AppThunk => {
-  return dispatch => {
-    dispatch(clearJobs());
-    dispatch(fetchJobs());
-  };
-};
-
-export { setJobs, fetchJobs, reserveJob, sendFilterJobs, clearJobFilter };
+export { setJobs, fetchJobs, reserveJob, fetchJob };

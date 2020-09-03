@@ -118,6 +118,7 @@
 .charcoal {
   color: #777;
   font-style: italic;
+}
 
 @media (min-width: 1500px) {
   .feedContainer {
