@@ -17,30 +17,36 @@ jobRouter.get('/', async (req, res) => {
 
 jobRouter.post('/', async (req, res) => {
   try {
-    const { name, price, city, state, address, userId, description } = req.body;
+    const { name, price, address, userId, description } = req.body;
     const status = price ? 'paid' : 'unpaid';
+    const city = address.value.structured_formatting.secondary_text.split(
+      ', '
+    )[0];
+    const state = address.value.structured_formatting.secondary_text.split(
+      ', '
+    )[1];
+    const geocodeData = await axios
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?place_id=${encodeURI(
+          `${address.value.place_id}`
+        )}&key=${process.env.GEOCODE_KEY}`
+      )
+      .then(response => response.data);
+
+    const lat = geocodeData.results[0].geometry.location.lat;
+    const lng = geocodeData.results[0].geometry.location.lng;
     const job = await Job.create({
       name,
       price,
-      city,
-      state,
-      address,
       status,
       userId,
       description,
+      lat,
+      lng,
+      address: address.value.structured_formatting.main_text,
+      city,
+      state,
     });
-    await axios
-      .get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
-          `${job.address} ${job.city}, ${job.state}`
-        )}&key=${process.env.GEOCODE_KEY}`
-      )
-      .then(async response => {
-        const lat = response.data.results[0].geometry.location.lat;
-        const lng = response.data.results[0].geometry.location.lng;
-        await job.update({ lat, lng });
-      });
-
     res.status(200).send({ jobId: job.id });
   } catch (e) {
     res.status(500).send(e);

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import axios from 'axios';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 const CreateJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -9,16 +10,12 @@ const CreateJob: React.FC = () => {
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
 
   const setters: React.Dispatch<React.SetStateAction<string>>[] = [
     setName,
     setPrice,
-    setCity,
-    setState,
     setAddress,
     setDescription,
   ];
@@ -44,8 +41,6 @@ const CreateJob: React.FC = () => {
       .post('/api/jobs', {
         name,
         price,
-        city,
-        state,
         address,
         description,
         userId: user.id,
@@ -55,7 +50,7 @@ const CreateJob: React.FC = () => {
       })
       .catch(console.log);
   };
-
+  console.log('ADDRESS', address);
   return (
     <div
       className="container"
@@ -86,37 +81,15 @@ const CreateJob: React.FC = () => {
         </label>
       </div>
       <div className="input-field fsField">
-        <input
-          value={address}
-          onChange={e => handleChange(e, setAddress, 'addressLabel')}
-          id="address"
+        <p style={{ textAlign: 'left', color: 'gray' }}>Location</p>
+        <GooglePlacesAutocomplete
+          selectProps={{ address, onChange: setAddress }}
+          apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
         />
-        <label htmlFor="address" id="addressLabel">
-          Street Address
-        </label>
-      </div>
-      <div className="input-field fsField">
-        <input
-          value={city}
-          onChange={e => handleChange(e, setCity, 'cityLabel')}
-          id="city"
-        />
-        <label htmlFor="city" id="cityLabel">
-          City
-        </label>
-      </div>
-      <div className="input-field fsField">
-        <input
-          value={state}
-          onChange={e => handleChange(e, setState, 'stateLabel')}
-          id="state"
-        />
-        <label htmlFor="state" id="stateLabel">
-          State
-        </label>
       </div>
       <div className="input-field fsField">
         <textarea
+          className="createDescription"
           value={description}
           onChange={e => setDescription(e.target.value)}
           id="description"
