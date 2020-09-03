@@ -5,7 +5,8 @@ import { StoreState } from '../../store/store';
 
 const LogoutForm: React.FC = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: StoreState) => state.user);
+  const selectUser = (state: StoreState) => state.user;
+  const user = useSelector(selectUser);
   return (
     <button
       type="button"

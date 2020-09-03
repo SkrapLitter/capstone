@@ -1,7 +1,7 @@
 export interface JobAttributes {
   id: string;
   name: string;
-  status: string;
+  status: string; // paid unpaid completed cancelled
   price: number;
   city: string;
   state: string;
