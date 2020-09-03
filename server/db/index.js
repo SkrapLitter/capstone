@@ -84,6 +84,7 @@ const sync = async () => {
       address: 'Cooper Park',
       userId: user.id,
       description: 'clean up Cooper Park',
+      createdUser: user.username,
     });
 
     await axios
@@ -107,6 +108,7 @@ const sync = async () => {
       address: 'Domino Park',
       userId: user.id,
       description: 'clean up Domino Park',
+      createdUser: user.username,
     });
 
     await axios
@@ -130,6 +132,7 @@ const sync = async () => {
       address: 'Maria Hernandez Park',
       userId: user.id,
       description: 'clean up Maria Hernandez Park',
+      createdUser: user.username,
     });
 
     await axios

@@ -8,6 +8,7 @@ export interface JobAttributes {
   address: string;
   reserved: boolean;
   reservedUser?: string;
+  reservedUsername?: string;
   lat: number;
   lng: number;
   createdAt: string;
@@ -15,13 +16,11 @@ export interface JobAttributes {
   userId: string;
   image: string;
   description: string;
+  createdUser: string;
 }
 
 export default interface Job {
-  paidJobs: JobAttributes[];
-  unpaidJobs: JobAttributes[];
-  allJobs: JobAttributes[];
-  completedJobs: JobAttributes[];
-  cancelledJobs: JobAttributes[];
-  filter: string;
+  jobs: JobAttributes[];
+  count: number;
+  job: JobAttributes;
 }
