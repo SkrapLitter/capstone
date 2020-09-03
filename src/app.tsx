@@ -5,6 +5,7 @@ import Footer from './components/footer';
 import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
+import CreateJob from './components/jobComponents/createJob';
 import { ThunkDispatch } from 'redux-thunk';
 import Landing from './components/landingComponent/landing';
 import { cookieLogin } from './store/user/userActions';
@@ -37,6 +38,7 @@ const App: React.FC<Props> = (props: Props) => {
           <Route path="/jobs" render={() => <Feed />} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
+          <Route path="/create" component={CreateJob} />
           <Redirect to="/jobs" />
         </Switch>
       </div>

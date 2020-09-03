@@ -17,7 +17,7 @@ jobRouter.get('/', async (req, res) => {
 
 jobRouter.post('/', async (req, res) => {
   try {
-    const { name, price, city, state, address, userId } = req.body;
+    const { name, price, city, state, address, userId, description } = req.body;
     const status = price ? 'paid' : 'unpaid';
     const job = await Job.create({
       name,
@@ -27,6 +27,7 @@ jobRouter.post('/', async (req, res) => {
       address,
       status,
       userId,
+      description,
     });
     await axios
       .get(
@@ -37,11 +38,10 @@ jobRouter.post('/', async (req, res) => {
       .then(async response => {
         const lat = response.data.results[0].geometry.location.lat;
         const lng = response.data.results[0].geometry.location.lng;
-        await job.update({ lat: lat });
-        await job.update({ lng: lng });
+        await job.update({ lat, lng });
       });
 
-    res.status(200).send({ message: `${name} has been created` });
+    res.status(200).send({ jobId: job.id });
   } catch (e) {
     res.status(500).send(e);
     console.error('Error posting job', e);

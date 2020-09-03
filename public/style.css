@@ -32,6 +32,7 @@
 .input-field.fsField input[type='email']:focus,
 .input-field.fsField input[type='password']:focus {
   border-bottom: 1px solid #000;
+  box-shadow: 0 0 0 0 #000;
 }
 .input-field.fsField input:focus.valid,
 .input-field.fsField input[type='email']:focus.valid,
@@ -111,13 +112,18 @@
 .anchor,
 .anchor:focus {
   background: transparent;
-  border: none;
   color: #039be5;
+  border: none;
   font-style: italic;
+}
+.anchor:focus {
+  border: 1px solid #aaa;
+  border-radius: 2px;
 }
 .charcoal {
   color: #777;
   font-style: italic;
+}
 
 @media (min-width: 1500px) {
   .feedContainer {
