@@ -75,6 +75,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-geocode": "^0.2.1",
+    "react-google-places-autocomplete": "^3.0.0-alpha.1",
     "react-infinite-scroll-component": "^5.0.5",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
