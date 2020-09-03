@@ -3,15 +3,128 @@ const jobRouter = require('express').Router();
 const {
   models: { Job },
 } = require('../db');
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 
 const axios = require('axios');
 
+const getPagination = (page, size) => {
+  const limit = size ? +size : 5;
+  const offset = page ? (page - 1) * limit : 0;
+  return {
+    limit,
+    offset,
+  };
+};
+
 jobRouter.get('/', async (req, res) => {
   try {
-    const jobs = await Job.findAll();
+    const { filter, page, size, type } = req.query;
+    let jobs;
+    const { limit, offset } = getPagination(page, size);
+    if (!filter && !type) {
+      jobs = await Job.findAndCountAll({
+        limit,
+        offset,
+        order: [['updatedAt', 'DESC']],
+      });
+    } else if (!filter && type) {
+      jobs = await Job.findAndCountAll({
+        limit,
+        offset,
+        where: {
+          status: `${type}`,
+        },
+        order: [['updatedAt', 'DESC']],
+      });
+    } else if (!type) {
+      jobs = await Job.findAndCountAll({
+        limit,
+        offset,
+        where: {
+          [Op.or]: [
+            {
+              name: {
+                [Op.iLike]: `%${filter}%`,
+              },
+            },
+            {
+              description: {
+                [Op.iLike]: `%${filter}%`,
+              },
+            },
+            {
+              city: {
+                [Op.iLike]: `%${filter}%`,
+              },
+            },
+            {
+              state: {
+                [Op.iLike]: `%${filter}%`,
+              },
+            },
+          ],
+        },
+        order: [['updatedAt', 'DESC']],
+      });
+    } else if (type) {
+      jobs = await Job.findAndCountAll({
+        limit,
+        offset,
+        where: {
+          [Op.and]: [
+            {
+              [Op.or]: [
+                {
+                  name: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  description: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  city: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  state: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+              ],
+            },
+            {
+              status: `${type}`,
+            },
+          ],
+        },
+        order: [['updatedAt', 'DESC']],
+      });
+    }
     res.status(200).send(jobs);
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: 'error' });
+    console.error('Error sending jobs', e);
+  }
+});
+
+jobRouter.get('/job/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const job = await Job.findAll({
+      where: {
+        id,
+      },
+    });
+    res.status(200).send(job);
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('error finding job', e);
   }
 });
 

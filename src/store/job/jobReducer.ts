@@ -1,13 +1,29 @@
 import TYPES from '../types';
-import Job, { JobAttributes } from './jobInterface';
+import Job from './jobInterface';
 
 const defaultJobs: Job = {
-  paidJobs: [],
-  unpaidJobs: [],
-  completedJobs: [],
-  cancelledJobs: [],
-  allJobs: [],
-  filter: '',
+  jobs: [],
+  count: 0,
+  job: {
+    id: '',
+    name: '',
+    status: '',
+    price: 0,
+    city: '',
+    state: '',
+    address: '',
+    reserved: false,
+    reservedUser: '',
+    reservedUsername: '',
+    lat: 0,
+    lng: 0,
+    createdAt: '',
+    updatedAt: '',
+    userId: '',
+    image: '',
+    description: '',
+    createdUser: '',
+  },
 };
 
 const jobReducer = (state: Job = defaultJobs, action): Job => {
@@ -15,23 +31,13 @@ const jobReducer = (state: Job = defaultJobs, action): Job => {
     case TYPES.SET_JOBS:
       return {
         ...state,
-        allJobs: action.jobs,
-        paidJobs: action.jobs.filter(
-          (job: JobAttributes) => job.status === 'paid'
-        ),
-        unpaidJobs: action.jobs.filter(
-          (job: JobAttributes) => job.status === 'unpaid'
-        ),
+        jobs: action.jobs,
+        count: action.count,
       };
-    case TYPES.SET_JOB_FILTER:
+    case TYPES.SET_JOB:
       return {
         ...state,
-        filter: action.filter,
-      };
-    case TYPES.FILTER_JOBS:
-      return {
-        ...state,
-        allJobs: action.jobs,
+        job: action.job && action.job.length ? action.job[0] : {},
       };
     default:
       return state;

@@ -7,7 +7,6 @@ const LogoutForm: React.FC = () => {
   const dispatch = useDispatch();
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
-
   return (
     <button
       type="button"
