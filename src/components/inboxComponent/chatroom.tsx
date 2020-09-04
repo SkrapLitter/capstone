@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { fetchChatroomMessages } from '../../store/inbox/inboxActions';
+import { RouteComponentProps } from 'react-router';
 import User from '../../store/user/userInterface';
 import { TextField } from '@material-ui/core';
 import io from 'socket.io-client';
 import moment from 'moment';
+import { Message } from '../../store/inbox/inboxInterface';
 
-const SelectedChatroom: React.FC = (props: any) => {
-  const { id } = props.match.params;
+type TParams = { id: string };
+const SelectedChatroom: React.FC<RouteComponentProps<TParams>> = ({
+  match,
+}: RouteComponentProps<TParams>) => {
+  const { id } = match.params;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchChatroomMessages(id));
@@ -51,7 +56,7 @@ const SelectedChatroom: React.FC = (props: any) => {
           </ul>
           <ul>
             {inbox.messages && inbox.messages.length
-              ? inbox.messages.map((curMessage: any) => {
+              ? inbox.messages.map((curMessage: Message) => {
                   return (
                     <li key={curMessage.id}>
                       Time Sent:

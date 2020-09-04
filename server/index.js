@@ -40,16 +40,12 @@ io.on('connection', socket => {
     console.log('disconnected');
   });
   socket.on('join', async room => {
-    console.log(room);
     socket.join(room);
     io.emit('roomJoined', room);
   });
   socket.on('message', async data => {
     const { chatroomId, author, message, userId } = data;
 
-    const chatRoom = await Chatroom.findAll({
-      where: { id: chatroomId },
-    });
     const chatMessage = await ChatMessage.create({
       chatroomId,
       author,

@@ -22,10 +22,10 @@ chatroomRouter.get('/:id', async (req, res) => {
   }
 });
 
-chatroomRouter.get('/messageJob', async (req, res) => {
+chatroomRouter.get('/job', async (req, res) => {
   let chatroom;
   try {
-    const { userId, hostId, username, hostname } = req.query;
+    const { userId, hostId, username, hostname, jobId, jobName } = req.query;
     const [first, second] =
       userId[0] <= hostId[0] ? [userId, hostId] : [hostId, userId];
     const chatusers = `${first}/${second}`;
@@ -40,7 +40,14 @@ chatroomRouter.get('/messageJob', async (req, res) => {
     if (!chatroom) {
       chatroom = await ChatRoom.create({
         chatusers,
-        name: `Chat with ${username} and ${hostname}`,
+        name: `${jobName} with ${username} and ${hostname}`,
+        jobName,
+        jobId,
+      });
+      await ChatMessage.create({
+        message: `this is the start of your chatroom with ${username} and ${hostname}`,
+        author: 'system',
+        chatroomId: chatroom.id,
       });
     }
     res.status(200).send(chatroom);

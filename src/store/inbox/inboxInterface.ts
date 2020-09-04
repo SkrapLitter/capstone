@@ -18,3 +18,13 @@ export interface InboxRedux {
   messages: [];
   chatroom: Chatroom;
 }
+
+export interface Message {
+  author: string;
+  chatroomId: string;
+  createdAt: string;
+  id: string;
+  message: string;
+  updatedAt: string;
+  userId: string;
+}

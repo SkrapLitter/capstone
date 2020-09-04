@@ -15,6 +15,9 @@ const Chatroom = db.define('chatroom', {
   chatusers: {
     type: TEXT,
   },
+  jobName: {
+    type: STRING,
+  },
 });
 
 Chatroom.prototype.findUsers = async function () {

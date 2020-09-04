@@ -24,9 +24,28 @@ export const fetchUserInbox = (userId: string): AppThunk => {
 
 export const fetchChatroomMessages = (chatId: string): AppThunk => {
   return async dispatch => {
-    console.log(chatId);
     const messages = (await Axios.get(`/api/chat/messages/${chatId}`)).data;
-    console.log(messages);
     dispatch(setMessages(messages));
+  };
+};
+
+export const findOrCreateChat = (
+  userId: string,
+  hostId: string,
+  username: string,
+  hostname: string,
+  jobId: string,
+  jobName: string
+): AppThunk => {
+  return async dispatch => {
+    const chatroom = (
+      await Axios.get(
+        `/api/chat/job?userId=${userId}&hostId=${hostId}&username=${username}&hostname=${hostname}&jobId=${jobId}&jobName=${jobName}`
+      )
+    ).data;
+    await dispatch(setChatroom(chatroom[0]));
+    await dispatch(fetchUserInbox(userId));
+    await dispatch(fetchChatroomMessages(chatroom[0].id));
+    return chatroom[0];
   };
 };
