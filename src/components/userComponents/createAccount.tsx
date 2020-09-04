@@ -12,7 +12,8 @@ const CreateAccount: React.FC = () => {
   const setters = [setUsername, setPassword, setFirstName, setLastName];
 
   const isValid = (): boolean => {
-    return document.querySelectorAll('.valid').length === 4;
+    const form = document.getElementById('createAccountForm');
+    return form.querySelectorAll('.valid').length === 4;
   };
 
   const handleSubmit = (
@@ -54,10 +55,12 @@ const CreateAccount: React.FC = () => {
     <div
       className="container"
       style={{ maxWidth: '400px', textAlign: 'center' }}
+      id="createAccountForm"
     >
       <h4>Create Account</h4>
       <div className="input-field fsField">
         <input
+          autoComplete="off"
           value={username}
           onChange={e => handleChange(e, setUsername, 'emLabel')}
           type="email"
@@ -76,6 +79,7 @@ const CreateAccount: React.FC = () => {
       </div>
       <div className="input-field fsField">
         <input
+          autoComplete="off"
           value={password}
           onChange={e => handleChange(e, setPassword, 'pwLabel')}
           type="password"
@@ -94,6 +98,7 @@ const CreateAccount: React.FC = () => {
       </div>
       <div className="input-field fsField">
         <input
+          autoComplete="off"
           value={firstName}
           onChange={e => handleChange(e, setFirstName, 'fnLabel')}
           id="firstName"
@@ -111,6 +116,7 @@ const CreateAccount: React.FC = () => {
       </div>
       <div className="input-field fsField">
         <input
+          autoComplete="off"
           value={lastName}
           onChange={e => handleChange(e, setLastName, 'lnLabel')}
           id="lastName"
