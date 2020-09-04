@@ -2,10 +2,17 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { fetchJob } from '../../store/job/jobActions';
+import { RouteComponentProps } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
+import { findOrCreateChat } from '../../store/inbox/inboxActions';
+import { Chatroom } from '../../store/inbox/inboxInterface';
 
-const JobDetails: React.FC = (props: any) => {
-  const { id } = props.match.params;
+type TParams = { id: string };
+const JobDetails: React.FC<RouteComponentProps<TParams>> = ({
+  match,
+}: RouteComponentProps<TParams>) => {
+  const { id } = match.params;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchJob(id));
@@ -14,10 +21,31 @@ const JobDetails: React.FC = (props: any) => {
     user,
     job: { job },
   } = useSelector((state: StoreState) => state);
-  console.log(user, job);
+  const history = useHistory();
   const openChat = e => {
     e.preventDefault();
-    console.log(user.id, job ? job : job.userId);
+    return new Promise((res, rej) => {
+      try {
+        res(
+          dispatch(
+            findOrCreateChat(
+              user.id,
+              job.userId,
+              user.username,
+              job.createdUser,
+              job.id,
+              job.name
+            )
+          )
+        );
+      } catch (err) {
+        rej(err);
+      }
+    }).then((res: Chatroom) => {
+      if (res) {
+        history.push(`/inbox/${res.id}`);
+      }
+    });
   };
   return (
     <div>

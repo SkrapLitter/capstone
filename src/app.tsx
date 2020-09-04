@@ -6,23 +6,18 @@ import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import CreateJob from './components/jobComponents/createJob';
-import { ThunkDispatch } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
+import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
-import { connect } from 'react-redux';
+import SelectedChatroom from './components/inboxComponent/chatroom';
 
-interface dispatchProps {
-  dispatch: ThunkDispatch<any, any, any>;
-}
-
-type Props = dispatchProps;
-
-const App: React.FC<Props> = (props: Props) => {
+const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    props.dispatch(cookieLogin());
+    dispatch(cookieLogin());
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => {
@@ -41,6 +36,8 @@ const App: React.FC<Props> = (props: Props) => {
           <Route path="/account" render={() => <Account />} />
           <Route path="/jobs/:id" component={JobDetails} />
           <Route path="/create" component={CreateJob} />
+          <Route exact path="/inbox" component={Inbox} />
+          <Route path="/inbox/:id" component={SelectedChatroom} />
           <Redirect to="/jobs" />
         </Switch>
       </div>
@@ -49,10 +46,4 @@ const App: React.FC<Props> = (props: Props) => {
   );
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    dispatch,
-  };
-};
-
-export default connect<null, dispatchProps>(null, mapDispatchToProps)(App);
+export default App;

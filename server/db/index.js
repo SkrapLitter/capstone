@@ -3,6 +3,7 @@ require('dotenv').config();
 const { models } = require('./models');
 const db = require('./db');
 const axios = require('axios');
+const ChatRoom = require('./models/chatroom');
 
 const { User, Job } = models;
 
@@ -17,7 +18,7 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 5,
     });
-    await User.create({
+    const test = await User.create({
       username: 'test@fullstack.com',
       password: 'password',
       firstName: 'Default',
@@ -26,8 +27,15 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
     });
-    console.log(user.validPassword('password'));
-
+    const [first, second] =
+      user.id <= test.id ? [user.id, test.id] : [test.id, user.id];
+    const chatusers = `${String(first)}/${String(second)}`;
+    const testchat = await ChatRoom.create({
+      name: 'testroom',
+      chatusers,
+    });
+    testchat.addUser(user);
+    testchat.addUser(test);
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'paid',
