@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import CreateAccountOverlay from '../userComponents/createAccountOverlay';
 
 const CreateJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -12,6 +13,7 @@ const CreateJob: React.FC = () => {
   const [price, setPrice] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
+  const [shouldShowCreateUser, setShouldShowCreateUser] = useState(false);
 
   const setters: React.Dispatch<React.SetStateAction<string>>[] = [
     setName,
@@ -36,7 +38,15 @@ const CreateJob: React.FC = () => {
       : label.classList.remove('active');
   };
 
+  useEffect(() => {
+    if (user.clearance) setShouldShowCreateUser(false);
+  }, [user.clearance]);
+
   const handleSubmit = () => {
+    if (!user.clearance) {
+      setShouldShowCreateUser(true);
+      return;
+    }
     axios
       .post('/api/jobs', {
         name,
@@ -108,6 +118,7 @@ const CreateJob: React.FC = () => {
           <i className="material-icons right">account_circle</i>
         </button>
       </div>
+      {shouldShowCreateUser && <CreateAccountOverlay />}
     </div>
   );
 };

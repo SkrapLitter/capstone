@@ -129,6 +129,24 @@
   font-style: italic;
 }
 
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  transition: 0.3s;
+  position: absolute;
+  transform: translateY(-100%);
+}
+.animateForm {
+  transform: translateY(0%);
+}
+
+.white {
+  background: whitesmoke;
+}
+
 @media (min-width: 1500px) {
   .feedContainer {
     /* display: flex;
