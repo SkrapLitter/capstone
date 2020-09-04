@@ -11,6 +11,10 @@ const ChatMessage = db.define('chatMessage', {
     type: STRING,
     allowNull: false,
   },
+  author: {
+    type: STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = ChatMessage;

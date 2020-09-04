@@ -2,19 +2,21 @@ const Session = require('./session');
 const User = require('./user');
 const Job = require('./job');
 const ChatMessage = require('./chatmessage');
-const ChatRoom = require('./chatroom');
+const Chatroom = require('./chatroom');
 const UserChat = require('./userchat');
 
 Job.belongsTo(User);
 User.hasMany(Session);
 Session.belongsTo(User);
 User.hasMany(Job);
-ChatMessage.belongsTo(ChatRoom);
-ChatRoom.hasMany(ChatMessage);
+ChatMessage.belongsTo(Chatroom);
+Chatroom.hasMany(ChatMessage);
 User.hasMany(ChatMessage);
 ChatMessage.belongsTo(User);
-User.belongsToMany(ChatRoom, { through: UserChat });
-ChatRoom.belongsToMany(User, { through: UserChat });
+User.belongsToMany(Chatroom, { through: 'UserChat' });
+Chatroom.belongsToMany(User, { through: 'UserChat' });
+Chatroom.belongsTo(Job);
+Job.hasMany(Chatroom);
 
 module.exports = {
   models: {
@@ -22,6 +24,7 @@ module.exports = {
     User,
     Session,
     ChatMessage,
-    ChatRoom,
+    Chatroom,
+    UserChat,
   },
 };

@@ -6,12 +6,14 @@ import userReducer from './user/userReducer';
 import formReducer from './form/formReducer';
 import jobReducer from './job/jobReducer';
 import viewReducer from './view/viewReducer';
+import inboxReducer from './inbox/inboxReducer';
 
 export const reducer = combineReducers({
   user: userReducer,
   form: formReducer,
   job: jobReducer,
   view: viewReducer,
+  inbox: inboxReducer,
 });
 
 const middleware = [thunks, createLogger({ collapsed: true })];

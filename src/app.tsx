@@ -9,8 +9,10 @@ import CreateJob from './components/jobComponents/createJob';
 import { ThunkDispatch } from 'redux-thunk';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
+import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import { connect } from 'react-redux';
+import SelectedChatroom from './components/inboxComponent/chatroom';
 
 interface dispatchProps {
   dispatch: ThunkDispatch<any, any, any>;
@@ -41,6 +43,8 @@ const App: React.FC<Props> = (props: Props) => {
           <Route path="/account" render={() => <Account />} />
           <Route path="/jobs/:id" component={JobDetails} />
           <Route path="/create" component={CreateJob} />
+          <Route exact path="/inbox" component={Inbox} />
+          <Route path="/inbox/:id" component={SelectedChatroom} />
           <Redirect to="/jobs" />
         </Switch>
       </div>

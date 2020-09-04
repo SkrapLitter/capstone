@@ -15,6 +15,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const { findUserBySession } = require('./utils');
+const {
+  models: { Chatroom, ChatMessage },
+} = require('./db');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -33,25 +36,27 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  console.log('a user has connected');
+  socket.on('disconnect', function () {
+    console.log('disconnected');
+  });
   socket.on('join', async room => {
+    console.log(room);
     socket.join(room);
     io.emit('roomJoined', room);
   });
   socket.on('message', async data => {
-    console.log(data);
-    // const { chatRoomName, author, message } = data;
+    const { chatroomId, author, message, userId } = data;
 
-    // const chatRoom = await models.ChatRoom.findAll({
-    //   where: { name: chatRoomName },
-    // });
-    // const chatRoomId = chatRoom[0].id;
-    // const chatMessage = await models.ChatMessage.create({
-    //   chatRoomId,
-    //   author,
-    //   message: message,
-    // });
-    // io.emit('newMessage', chatMessage);
+    const chatRoom = await Chatroom.findAll({
+      where: { id: chatroomId },
+    });
+    const chatMessage = await ChatMessage.create({
+      chatroomId,
+      author,
+      message,
+      userId,
+    });
+    io.emit('newMessage', chatMessage);
   });
 });
 app.use(async (req, res, next) => {

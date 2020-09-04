@@ -1,6 +1,7 @@
 import axios from 'axios';
 import User from './userInterface';
 import { AppThunk } from '../thunkType';
+import { fetchUserInbox } from '../inbox/inboxActions';
 import TYPES from '../types';
 
 const createAccount = (user: User) => {
@@ -31,7 +32,10 @@ const loginFail = (error: string) => {
 export const cookieLogin = (): AppThunk => {
   return async dispatch => {
     const { user } = (await axios.get('/api/auth/login')).data;
-    if (user) dispatch(login(user));
+    if (user) {
+      dispatch(login(user));
+      dispatch(fetchUserInbox(user.id));
+    }
   };
 };
 
@@ -66,8 +70,9 @@ export const loginThunk = (username: string, password: string): AppThunk => {
         password,
       };
       const { data } = await axios.post('/api/auth/login', payload);
-
+      console.log(data.id);
       dispatch(login(data));
+      dispatch(fetchUserInbox(data.id));
     } catch (err) {
       const { statusText } = err.response;
       dispatch(loginFail(statusText));
