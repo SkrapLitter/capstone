@@ -22,7 +22,7 @@ const JobDetails: React.FC<RouteComponentProps<TParams>> = ({
     job: { job },
   } = useSelector((state: StoreState) => state);
   const history = useHistory();
-  const openChat = async e => {
+  const openChat = e => {
     e.preventDefault();
     return new Promise((res, rej) => {
       try {
