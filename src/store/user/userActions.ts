@@ -4,18 +4,27 @@ import { AppThunk } from '../thunkType';
 import { fetchUserInbox } from '../inbox/inboxActions';
 import TYPES from '../types';
 
+const updateAccount = (user: User) => {
+  return {
+    type: TYPES.UPDATE_ACCOUNT,
+    user,
+  };
+};
+
 const createAccount = (user: User) => {
   return {
     type: TYPES.CREATE_ACCOUNT,
     user,
   };
 };
+
 const login = (user: User) => {
   return {
     type: TYPES.LOGIN_SUCCESS,
     user,
   };
 };
+
 const logout = () => {
   return {
     type: TYPES.LOGOUT,
@@ -29,12 +38,33 @@ const loginFail = (error: string) => {
   };
 };
 
+const accountUpdateFail = (error: string) => {
+  return {
+    type: TYPES.UPDATE_ACCOUNT_FAIL,
+    error,
+  };
+};
+
 export const cookieLogin = (): AppThunk => {
   return async dispatch => {
     const { user } = (await axios.get('/api/auth/login')).data;
     if (user) {
       dispatch(login(user));
       dispatch(fetchUserInbox(user.id));
+    }
+  };
+};
+
+export const updateAccountThunk = (id: string, user: User): AppThunk => {
+  return async dispatch => {
+    try {
+      const { data } = await axios.put(`/api/auth/${id}`, user);
+
+      dispatch(updateAccount(data));
+    } catch (err) {
+      console.error(err);
+      const { statusText } = err.response;
+      dispatch(accountUpdateFail(statusText));
     }
   };
 };

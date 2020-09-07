@@ -3,7 +3,8 @@ export default interface User {
   username: string;
   firstName: string;
   lastName: string;
-  image: string;
-  clearance: number;
+  image?: string;
+  clearance?: number;
+  password?: string;
   error?: string;
 }
