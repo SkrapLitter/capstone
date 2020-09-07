@@ -2,6 +2,7 @@
 const passport = require('passport');
 const authRouter = require('express').Router();
 const { check, validationResult } = require('express-validator');
+const gravatar = require('gravatar');
 const dotenv = require('dotenv');
 const AWS = require('aws-sdk');
 const multer = require('multer');
@@ -61,9 +62,12 @@ authRouter.post(
 
     try {
       const { username, password, firstName, lastName } = req.body;
-      let { image } = req.body;
-
-      image = image || defaultImage;
+      const image =
+        gravatar.url(username, {
+          s: '200',
+          r: 'pg',
+          d: 'mm',
+        }) || defaultImage;
 
       const user = await User.create({
         username,
