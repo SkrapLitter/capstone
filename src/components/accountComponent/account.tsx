@@ -51,7 +51,6 @@ const Account: React.FC = () => {
     if (validate.isFormValid('accountForm')) {
       const { id } = user;
       const updatedUser = {
-        id: user.id,
         username,
         firstName,
         lastName,
