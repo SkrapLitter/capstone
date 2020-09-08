@@ -48,7 +48,7 @@ const JobDetails: React.FC<RouteComponentProps<TParams>> = ({
     });
   };
   return (
-    <div>
+    <div className="container">
       {job && Object.values(job).length ? (
         <>
           <h1>Job Details Page</h1>

@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.10.0",
     "@types/google-map-react": "^1.1.8",
     "@types/materialize-css": "^1.0.8",
@@ -78,6 +79,7 @@
     "react-geocode": "^0.2.1",
     "react-google-places-autocomplete": "^3.0.0-alpha.1",
     "react-infinite-scroll-component": "^5.0.5",
+    "react-material-ui-carousel": "^1.8.3",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
