@@ -220,3 +220,8 @@
   justify-content: space-evenly;
   margin-bottom: 10px;
 }
+
+.logOutBtn {
+  margin: 1em;
+  color: grey;
+}

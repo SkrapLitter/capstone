@@ -11,11 +11,7 @@ const LogoutForm: React.FC = () => {
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <button
         type="button"
-        className="btn waves-effect waves-light white"
-        style={{
-          margin: '1em',
-          color: 'grey',
-        }}
+        className="btn waves-effect waves-light white logOutBtn"
         onClick={() => dispatch(logoutThunk())}
       >
         Logout {user.username}

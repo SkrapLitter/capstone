@@ -10,8 +10,7 @@ const Account: React.FC = () => {
 
   return (
     <div className="m-t-l m-b-s container center">
-      {!!user.clearance && <EditAccount />}
-      {!user.clearance && <NotLoggedIn />}
+      {!user.clearance ? <NotLoggedIn /> : <EditAccount />}
     </div>
   );
 };
