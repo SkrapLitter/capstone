@@ -8,13 +8,19 @@ const LogoutForm: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
   return (
-    <button
-      type="button"
-      className="btn waves-effect waves-light grey accent-4"
-      onClick={() => dispatch(logoutThunk())}
-    >
-      Logout {user.username}
-    </button>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <button
+        type="button"
+        className="btn waves-effect waves-light white"
+        style={{
+          margin: '1em',
+          color: 'grey',
+        }}
+        onClick={() => dispatch(logoutThunk())}
+      >
+        Logout {user.username}
+      </button>
+    </div>
   );
 };
 
