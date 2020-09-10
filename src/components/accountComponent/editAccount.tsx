@@ -14,8 +14,6 @@ const EditAccount: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  console.log(user);
-
   useEffect(() => {
     setUsername(user.username);
     setFirstName(user.firstName);
