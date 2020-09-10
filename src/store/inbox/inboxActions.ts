@@ -27,11 +27,13 @@ export const fetchChatroomMessages = (
   userId: string
 ): AppThunk => {
   return async dispatch => {
-    const messages = (
-      await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
-    ).data;
-    console.log(messages, chatId, userId);
-    dispatch(setMessages(messages));
+    if (userId !== '0') {
+      const messages = (
+        await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
+      ).data;
+      console.log(messages, chatId, userId);
+      dispatch(setMessages(messages));
+    }
   };
 };
 

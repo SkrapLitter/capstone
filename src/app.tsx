@@ -15,6 +15,7 @@ import SelectedChatroom from './components/inboxComponent/chatroom';
 import io from 'socket.io-client';
 import { fetchChatroomMessages } from './store/inbox/inboxActions';
 import { StoreState } from './store/store';
+import { fetchNewAlerts } from './store/alert/alertActions';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -31,10 +32,15 @@ const App: React.FC = () => {
   const SOCKET_IO_URL = 'http://localhost:3000';
   const socket = io(SOCKET_IO_URL);
   socket.on('newMessage', data => {
-    setTimeout(
-      () => dispatch(fetchChatroomMessages(data.chatroomId, user.id)),
-      500
-    );
+    const users = data.chatusers.split('/');
+    if (users.includes(user.id)) {
+      setTimeout(() => dispatch(fetchChatroomMessages(data.id, user.id)), 500);
+    }
+  });
+  socket.on('alert', userId => {
+    if (userId === user.id) {
+      dispatch(fetchNewAlerts(userId));
+    }
   });
   return (
     <div>
