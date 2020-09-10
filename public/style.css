@@ -220,3 +220,9 @@
   justify-content: space-evenly;
   margin-bottom: 10px;
 }
+
+.thumbnail {
+  height: 75px;
+  width: 75px;
+  margin: 10px;
+}

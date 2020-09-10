@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job },
+  models: { Job, Image },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -130,7 +130,8 @@ jobRouter.get('/job/:id', async (req, res) => {
 
 jobRouter.post('/', async (req, res) => {
   try {
-    const { name, price, address, userId, description } = req.body;
+    const { name, price, address, userId, description, images } = req.body;
+    const ids = images.map(image => image.id);
     const status = price ? 'paid' : 'unpaid';
     const city = address.value.structured_formatting.secondary_text.split(
       ', '
@@ -160,6 +161,7 @@ jobRouter.post('/', async (req, res) => {
       city,
       state,
     });
+    await Image.update({ jobId: job.id }, { where: { id: ids } });
     res.status(200).send({ jobId: job.id });
   } catch (e) {
     res.status(500).send(e);
