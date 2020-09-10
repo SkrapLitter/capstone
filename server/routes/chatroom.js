@@ -1,24 +1,28 @@
 const chatroomRouter = require('express').Router();
 const {
-  models: { Chatroom, UserChat, User, ChatMessage },
+  models: { Chatroom, User, ChatMessage },
 } = require('../db');
 const ChatRoom = require('../db/models/chatroom');
 
-chatroomRouter.get('/:id', async (req, res) => {
+chatroomRouter.get('/chatroom/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const chatRooms = await Chatroom.findAll(
-      { include: [{ model: User, through: UserChat }] },
-      {
-        where: {
-          userId: id,
+    let chatRooms;
+    if (id !== '0') {
+      chatRooms = await Chatroom.findAll({
+        include: {
+          model: User,
+          through: 'UserChat',
+          where: {
+            id,
+          },
         },
-      }
-    );
+      });
+    }
     res.status(200).send(chatRooms);
   } catch (e) {
     res.sendStatus(500);
-    console.error(e);
+    console.error('chatroom error', e);
   }
 });
 
@@ -26,8 +30,14 @@ chatroomRouter.get('/job', async (req, res) => {
   let chatroom;
   try {
     const { userId, hostId, username, hostname, jobId, jobName } = req.query;
+    let i = 0;
+    let j = 0;
+    if (userId[i] === hostId[j]) {
+      i++;
+      j++;
+    }
     const [first, second] =
-      userId[0] <= hostId[0] ? [userId, hostId] : [hostId, userId];
+      userId[i] <= hostId[j] ? [userId, hostId] : [hostId, userId];
     const chatusers = `${first}/${second}`;
     chatroom = await ChatRoom.findAll({
       include: {
@@ -57,15 +67,30 @@ chatroomRouter.get('/job', async (req, res) => {
   }
 });
 
-chatroomRouter.get('/messages/:id', async (req, res) => {
+chatroomRouter.get('/messages', async (req, res) => {
   try {
-    const { id } = req.params;
-    const messages = await ChatMessage.findAll({
-      where: {
-        chatroomId: id,
+    let messages = [];
+    const { chatId, userId } = req.query;
+    const chatroom = await Chatroom.findAll({
+      include: {
+        model: User,
+        through: 'UserChat',
+        where: {
+          id: userId,
+        },
       },
-      order: [['createdAt', 'ASC']],
+      where: {
+        id: chatId,
+      },
     });
+    if (chatroom) {
+      messages = await ChatMessage.findAll({
+        where: {
+          chatroomId: chatId,
+        },
+        order: [['createdAt', 'ASC']],
+      });
+    }
     res.status(200).send(messages);
   } catch (e) {
     console.error(e);

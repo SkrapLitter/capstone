@@ -1,7 +1,7 @@
 export interface Inbox {
   type: string;
   inbox?: [];
-  messages?: [];
+  messages?: Message;
   chatroom?: Chatroom;
 }
 export interface Chatroom {

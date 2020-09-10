@@ -4,6 +4,7 @@ const { models } = require('./models');
 const db = require('./db');
 const axios = require('axios');
 const ChatRoom = require('./models/chatroom');
+const ChatMessage = require('./models/chatmessage');
 
 const { User, Job } = models;
 
@@ -27,8 +28,14 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
     });
+    let i = 0;
+    let j = 0;
+    if (user.id[i] === test.id[j]) {
+      i++;
+      j++;
+    }
     const [first, second] =
-      user.id <= test.id ? [user.id, test.id] : [test.id, user.id];
+      user.id[i] <= test.id[j] ? [user.id, test.id] : [test.id, user.id];
     const chatusers = `${String(first)}/${String(second)}`;
     const testchat = await ChatRoom.create({
       name: 'testroom',
@@ -36,6 +43,11 @@ const sync = async () => {
     });
     testchat.addUser(user);
     testchat.addUser(test);
+    await ChatMessage.create({
+      message: `chat created between ${user.username} and ${test.username}`,
+      author: 'System',
+      chatroomId: testchat.id,
+    });
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'paid',

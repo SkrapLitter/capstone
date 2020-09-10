@@ -6,16 +6,20 @@ import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import CreateJob from './components/jobComponents/createJob';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
 import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import SelectedChatroom from './components/inboxComponent/chatroom';
+import io from 'socket.io-client';
+import { fetchChatroomMessages } from './store/inbox/inboxActions';
+import { StoreState } from './store/store';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
+  const { user } = useSelector((state: StoreState) => state);
   useEffect(() => {
     dispatch(cookieLogin());
     const handleResize = () => setWidth(window.innerWidth);
@@ -24,7 +28,14 @@ const App: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [window.innerWidth]);
-
+  const SOCKET_IO_URL = 'http://localhost:3000';
+  const socket = io(SOCKET_IO_URL);
+  socket.on('newMessage', data => {
+    setTimeout(
+      () => dispatch(fetchChatroomMessages(data.chatroomId, user.id)),
+      500
+    );
+  });
   return (
     <div>
       <Navbar />

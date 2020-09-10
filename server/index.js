@@ -36,9 +36,6 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  socket.on('disconnect', function () {
-    console.log('disconnected');
-  });
   socket.on('join', async room => {
     socket.join(room);
     io.emit('roomJoined', room);
