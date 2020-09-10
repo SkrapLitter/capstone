@@ -54,6 +54,14 @@
   cursor: pointer;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
+.border-circle {
+  border-radius: 50%;
+}
+
 .mapModal {
   position: absolute;
   left: 50%;
@@ -224,4 +232,13 @@
 .logOutBtn {
   margin: 1em;
   color: grey;
+}
+
+.user-profile-subnav {
+  display: none;
+  padding: 0 1rem;
+  position: absolute;
+}
+.user-profile:hover .user-profile-subnav {
+  display: block;
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
-import LogoutForm from '../userComponents/logout';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
 
@@ -14,6 +13,8 @@ const EditAccount: React.FC = () => {
   const [lastName, setLastName] = useState(user.lastName);
 
   const dispatch = useDispatch();
+
+  console.log(user);
 
   useEffect(() => {
     setUsername(user.username);
@@ -79,7 +80,19 @@ const EditAccount: React.FC = () => {
   return (
     <>
       <div className="container" id="accountForm">
-        <h4>User Profile</h4>
+        <img
+          src={user.image}
+          width="50"
+          height="50"
+          className="border-circle"
+          alt={`${firstName} ${lastName}`}
+        />
+        <h4>
+          <strong>
+            {firstName} {lastName}
+          </strong>{' '}
+          Profile
+        </h4>
         <div className="row">
           <div className="col s11 input-field">
             <input
@@ -155,17 +168,6 @@ const EditAccount: React.FC = () => {
             </button>
           </div>
         </div>
-        <div className="row">
-          <div className="col s1">
-            <button
-              onClick={handleSubmit}
-              className="btn-floating btn-small waves-effect waves-light"
-              type="submit"
-            >
-              <i className="material-icons">create</i>
-            </button>
-          </div>
-        </div>
         <div className="center">
           <button
             onClick={handleSubmit}
@@ -177,7 +179,6 @@ const EditAccount: React.FC = () => {
           </button>
         </div>
       </div>
-      <LogoutForm />
     </>
   );
 };
