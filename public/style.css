@@ -221,8 +221,13 @@
   margin-bottom: 10px;
 }
 
+
 .thumbnail {
   height: 75px;
   width: 75px;
   margin: 10px;
+
+.logOutBtn {
+  margin: 1em;
+  color: grey;
 }

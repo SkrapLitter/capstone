@@ -5,6 +5,7 @@ const ChatMessage = require('./chatmessage');
 const Chatroom = require('./chatroom');
 const UserChat = require('./userchat');
 const Image = require('./image');
+const Alert = require('./alert');
 
 Job.belongsTo(User);
 User.hasMany(Session);
@@ -20,6 +21,8 @@ Chatroom.belongsTo(Job);
 Job.hasMany(Chatroom);
 Image.belongsTo(Job);
 Job.hasMany(Image);
+Alert.belongsTo(User);
+User.hasMany(Alert);
 
 module.exports = {
   models: {
@@ -30,5 +33,6 @@ module.exports = {
     Chatroom,
     UserChat,
     Image,
+    Alert,
   },
 };

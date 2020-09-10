@@ -2,30 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { fetchChatroomMessages } from '../../store/inbox/inboxActions';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import User from '../../store/user/userInterface';
 import { TextField } from '@material-ui/core';
 import io from 'socket.io-client';
 import moment from 'moment';
 import { Message } from '../../store/inbox/inboxInterface';
 
-type TParams = { id: string };
-const SelectedChatroom: React.FC<RouteComponentProps<TParams>> = ({
-  match,
-}: RouteComponentProps<TParams>) => {
-  const { id } = match.params;
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchChatroomMessages(id));
-  }, []);
+interface RouteParams {
+  id: string;
+}
+const SelectedChatroom: React.FC = () => {
+  const { id } = useParams<RouteParams>();
   const [message, setMessage] = useState('');
   const { user, inbox } = useSelector((state: StoreState) => state);
   const { chatroom } = inbox;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchChatroomMessages(id, user.id));
+  }, []);
   const SOCKET_IO_URL = 'http://localhost:3000';
   const socket = io(SOCKET_IO_URL);
-  socket.on('connect', () => {
-    socket.emit('join', chatroom.name);
-  });
   const sendMessage = e => {
     if (e.key === 'Enter') {
       socket.emit('message', {
@@ -36,13 +33,9 @@ const SelectedChatroom: React.FC<RouteComponentProps<TParams>> = ({
       });
     }
   };
-  socket.on('newMessage', data => {
-    console.log('data:', data, 'id:', id);
-    setTimeout(() => dispatch(fetchChatroomMessages(id)), 500);
-  });
   return (
     <div>
-      {user.clearance ? (
+      {user.clearance && inbox.messages.length ? (
         <>
           <h2>{chatroom.name}</h2>
           <ul>

@@ -29,12 +29,7 @@ const Navbar: React.FC<Props> = (props: Props) => {
               </Link>
             </li>
             <li>
-              <Link
-                to="/account"
-                className={props.user.clearance ? 'ghost' : ''}
-              >
-                Account
-              </Link>
+              <Link to="/account">Account</Link>
             </li>
           </ul>
         </div>

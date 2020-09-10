@@ -1,9 +1,9 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
-import { Inbox, Chatroom } from './inboxInterface';
+import { Inbox, Chatroom, Message } from './inboxInterface';
 import Axios from 'axios';
 
-const setMessages = (messages: []): Inbox => ({
+const setMessages = (messages: Message): Inbox => ({
   type: TYPES.SET_MESSAGES,
   messages,
 });
@@ -17,14 +17,20 @@ export const setChatroom = (chatroom: Chatroom): Inbox => ({
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
-    const inbox = (await Axios.get(`/api/chat/${userId}`)).data;
+    const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
     dispatch(setInbox(inbox));
   };
 };
 
-export const fetchChatroomMessages = (chatId: string): AppThunk => {
+export const fetchChatroomMessages = (
+  chatId: string,
+  userId: string
+): AppThunk => {
   return async dispatch => {
-    const messages = (await Axios.get(`/api/chat/messages/${chatId}`)).data;
+    const messages = (
+      await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
+    ).data;
+    console.log(messages, chatId, userId);
     dispatch(setMessages(messages));
   };
 };
@@ -45,7 +51,7 @@ export const findOrCreateChat = (
     ).data;
     await dispatch(setChatroom(chatroom[0]));
     await dispatch(fetchUserInbox(userId));
-    await dispatch(fetchChatroomMessages(chatroom[0].id));
+    await dispatch(fetchChatroomMessages(chatroom[0].id, userId));
     return chatroom[0];
   };
 };
