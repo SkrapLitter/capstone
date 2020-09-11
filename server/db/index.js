@@ -6,7 +6,7 @@ const axios = require('axios');
 const ChatRoom = require('./models/chatroom');
 const ChatMessage = require('./models/chatmessage');
 
-const { User, Job } = models;
+const { User, Job, Image } = models;
 
 const sync = async () => {
   try {
@@ -48,6 +48,7 @@ const sync = async () => {
       author: 'System',
       chatroomId: testchat.id,
     });
+
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'paid',
@@ -58,6 +59,7 @@ const sync = async () => {
       userId: user.id,
       description: 'Clean Up McCarren Park',
     });
+
     await axios
       .get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
@@ -70,6 +72,18 @@ const sync = async () => {
         await job1.update({ lat: lat });
         await job1.update({ lng: lng });
       });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job1.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job1.id,
+    });
 
     const job2 = await Job.create({
       name: 'Tompkins Square Park',
@@ -94,6 +108,18 @@ const sync = async () => {
         await job2.update({ lat: lat });
         await job2.update({ lng: lng });
       });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job2.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job2.id,
+    });
 
     const job3 = await Job.create({
       name: 'Cooper Park',
@@ -120,6 +146,18 @@ const sync = async () => {
         await job3.update({ lng: lng });
       });
 
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job3.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job3.id,
+    });
+
     const job4 = await Job.create({
       name: 'Domino Park',
       status: 'unpaid',
@@ -144,6 +182,18 @@ const sync = async () => {
         await job4.update({ lng: lng });
       });
 
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job4.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job4.id,
+    });
+
     const job5 = await Job.create({
       name: 'Maria Hernandez Park',
       status: 'unpaid',
@@ -167,6 +217,18 @@ const sync = async () => {
         await job5.update({ lat: lat });
         await job5.update({ lng: lng });
       });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job5.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job5.id,
+    });
   } catch (e) {
     console.error(e);
   }

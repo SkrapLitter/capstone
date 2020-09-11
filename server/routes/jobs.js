@@ -28,6 +28,11 @@ jobRouter.get('/', async (req, res) => {
         limit,
         offset,
         order: [['updatedAt', 'DESC']],
+        include: [
+          {
+            model: Image,
+          },
+        ],
       });
     } else if (!filter && type) {
       jobs = await Job.findAndCountAll({
@@ -37,6 +42,11 @@ jobRouter.get('/', async (req, res) => {
           status: `${type}`,
         },
         order: [['updatedAt', 'DESC']],
+        include: [
+          {
+            model: Image,
+          },
+        ],
       });
     } else if (!type) {
       jobs = await Job.findAndCountAll({
@@ -67,6 +77,11 @@ jobRouter.get('/', async (req, res) => {
           ],
         },
         order: [['updatedAt', 'DESC']],
+        include: [
+          {
+            model: Image,
+          },
+        ],
       });
     } else if (type) {
       jobs = await Job.findAndCountAll({
@@ -104,6 +119,11 @@ jobRouter.get('/', async (req, res) => {
           ],
         },
         order: [['updatedAt', 'DESC']],
+        include: [
+          {
+            model: Image,
+          },
+        ],
       });
     }
     res.status(200).send(jobs);

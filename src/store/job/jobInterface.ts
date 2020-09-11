@@ -1,3 +1,5 @@
+import { PhotoAttributes } from '../photos/photoInterface';
+
 export interface JobAttributes {
   id: string;
   name: string;
@@ -14,9 +16,9 @@ export interface JobAttributes {
   createdAt: string;
   updatedAt: string;
   userId: string;
-  image: string;
   description: string;
   createdUser: string;
+  images?: PhotoAttributes[];
 }
 
 export default interface Job {
