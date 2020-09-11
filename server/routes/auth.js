@@ -28,6 +28,7 @@ authRouter.post('/upload', singleUpload, async (req, res) => {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: originalname,
     Body: buffer,
+    ACL: 'public-read',
   };
 
   s3.upload(params, err => {
