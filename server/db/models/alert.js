@@ -14,7 +14,11 @@ const Alert = db.define('alert', {
   },
   global: {
     type: BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
+  },
+  seen: {
+    type: BOOLEAN,
+    defaultValue: false,
   },
 });
 

@@ -2,6 +2,7 @@ import axios from 'axios';
 import User from './userInterface';
 import { AppThunk } from '../thunkType';
 import { fetchUserInbox } from '../inbox/inboxActions';
+import { fetchAlerts } from '../alert/alertActions';
 import TYPES from '../types';
 
 const updateAccount = (user: User) => {
@@ -51,6 +52,7 @@ export const cookieLogin = (): AppThunk => {
     if (user) {
       dispatch(login(user));
       dispatch(fetchUserInbox(user.id));
+      dispatch(fetchAlerts(user.id));
     }
   };
 };
@@ -100,9 +102,9 @@ export const loginThunk = (username: string, password: string): AppThunk => {
         password,
       };
       const { data } = await axios.post('/api/auth/login', payload);
-      console.log(data.id);
       dispatch(login(data));
       dispatch(fetchUserInbox(data.id));
+      dispatch(fetchAlerts(data.id));
     } catch (err) {
       const { statusText } = err.response;
       dispatch(loginFail(statusText));
