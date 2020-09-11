@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
           <ul id="nav-mobile" className="right hide-on-small-only">
             {!!user.clearance && (
               <li className="user-profile">
-                <Link to="/">
+                <Link to="/account">
                   <img
                     src={user.image}
                     width="20"
