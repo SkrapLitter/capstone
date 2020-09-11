@@ -8,6 +8,7 @@ import jobReducer from './job/jobReducer';
 import viewReducer from './view/viewReducer';
 import inboxReducer from './inbox/inboxReducer';
 import photoReducer from './photos/photoReducer';
+import alertReducer from './alert/alertReducer';
 
 export const reducer = combineReducers({
   user: userReducer,
@@ -16,6 +17,7 @@ export const reducer = combineReducers({
   view: viewReducer,
   inbox: inboxReducer,
   photos: photoReducer,
+  alert: alertReducer,
 });
 
 const middleware = [thunks, createLogger({ collapsed: true })];

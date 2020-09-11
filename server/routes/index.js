@@ -3,6 +3,7 @@ const jobRouter = require('./jobs');
 const mapRouter = require('./map');
 const chatroomRouter = require('./chatroom');
 const photoRouter = require('./photo');
+const alertRouter = require('./alert');
 
 module.exports = [
   authRouter,
@@ -10,4 +11,5 @@ module.exports = [
   mapRouter,
   chatroomRouter,
   photoRouter,
+  alertRouter,
 ];
