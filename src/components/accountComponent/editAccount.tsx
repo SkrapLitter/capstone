@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
+import JobCard from '../feedComponent/desktopCard';
 
 import M from 'materialize-css';
 
@@ -12,6 +13,8 @@ const EditAccount: React.FC = () => {
 
   const selectJob = (state: StoreState) => state.job;
   const job = useSelector(selectJob);
+
+  console.log(job);
 
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
@@ -213,6 +216,11 @@ const EditAccount: React.FC = () => {
         <div id="jobs" className="col s12">
           <div className="m-t-l">
             <h2>My Jobs</h2>
+            {job.jobs.length ? (
+              job.jobs.map(_job => <JobCard key={_job.id} job={_job} />)
+            ) : (
+              <h2> No Jobs Yet</h2>
+            )}
           </div>
         </div>
         <div id="messages" className="col s12">
