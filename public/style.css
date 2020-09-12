@@ -229,16 +229,21 @@
   margin-bottom: 10px;
 }
 
+.thumbnail {
+  height: 75px;
+  width: 75px;
+  margin: 10px;
+}
+
 .logOutBtn {
   margin: 1em;
   color: grey;
 }
-
-.user-profile-subnav {
-  display: none;
-  padding: 0 1rem;
-  position: absolute;
+.alertPage {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
-.user-profile:hover .user-profile-subnav {
-  display: block;
+.alertList {
+  background: whitesmoke;
 }

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import CreateAccountOverlay from '../userComponents/createAccountOverlay';
+import { uploadPhoto } from '../../store/photos/photoActions';
 
 const CreateJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
+  const storeImages = (state: StoreState) => state.photos;
+  const images = useSelector(storeImages);
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const history = useHistory();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
@@ -65,8 +69,6 @@ const CreateJob: React.FC = () => {
       setShouldShowCreateUser(true);
       return;
     }
-    // form is valid and user is logged in
-    // submit form
     axios
       .post('/api/jobs', {
         name,
@@ -74,8 +76,10 @@ const CreateJob: React.FC = () => {
         address,
         description,
         userId: user.id,
+        images: images.photos,
       })
       .then(({ data }) => {
+        console.log(data);
         // get jobId for navigation
         const id = data.jobId;
         // navigate to job details page
@@ -83,6 +87,21 @@ const CreateJob: React.FC = () => {
       })
       // TODO - error handling for server errors - Toast?
       .catch(console.log);
+  };
+
+  const handleImage = e => {
+    e.preventDefault();
+    const file = new FormData();
+    file.append('image', e.target.files[0]);
+    axios
+      .post('/api/photo/jobphoto', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data; boundary=boundary',
+        },
+      })
+      .then(({ data }) => {
+        dispatch(uploadPhoto(data));
+      });
   };
 
   return (
@@ -124,6 +143,28 @@ const CreateJob: React.FC = () => {
           selectProps={{ address, onChange: setAddress }}
           apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
         />
+      </div>
+      <div className="input-field fsField">
+        <input
+          type="file"
+          name="image"
+          id="imageUpload"
+          onChange={handleImage}
+        />
+      </div>
+      <div>
+        {images.photos.length
+          ? images.photos.map(image => {
+              return (
+                <img
+                  key={image.id}
+                  className="thumbnail"
+                  src={image.url}
+                  alt="trash"
+                />
+              );
+            })
+          : null}
       </div>
       <div className="input-field fsField">
         <textarea

@@ -44,7 +44,7 @@ const MapMarker: React.FC<Props> = (props: Props) => {
             animation="slide"
           >
             {[trash1, trash2, trash3].map(url => (
-              <img className="mapCardImage" src={url} alt="trash" />
+              <img key={url} className="mapCardImage" src={url} alt="trash" />
             ))}
           </Carousel>
         </div>

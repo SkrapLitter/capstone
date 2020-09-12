@@ -28,6 +28,7 @@ authRouter.post('/upload', singleUpload, async (req, res) => {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: originalname,
     Body: buffer,
+    ACL: 'public-read',
   };
 
   s3.upload(params, err => {
@@ -77,6 +78,12 @@ authRouter.post(
         image,
       });
       req.user = user;
+      let usersSession = await Session.findByPk(req.sessionId);
+
+      if (!usersSession) {
+        usersSession = await Session.create({ id: req.sessionId });
+      }
+      await usersSession.setUser(user.id);
       res.status(201).send(user);
     } catch (err) {
       console.error(err);
