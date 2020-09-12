@@ -31,7 +31,6 @@ export const fetchChatroomMessages = (
       const messages = (
         await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
       ).data;
-      console.log(messages, chatId, userId);
       dispatch(setMessages(messages));
     }
   };

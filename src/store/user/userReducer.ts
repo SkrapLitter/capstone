@@ -2,7 +2,7 @@ import User from './userInterface';
 import TYPES from '../types';
 
 const defaultUser: User = {
-  id: '0',
+  id: '',
   username: 'guest',
   firstName: 'Guesty',
   lastName: 'McNotLoggedIn',
