@@ -72,14 +72,6 @@
   cursor: pointer;
 }
 
-.justify-center {
-  justify-content: center;
-}
-
-.border-circle {
-  border-radius: 50%;
-}
-
 .mapModal {
   position: absolute;
   left: 50%;
