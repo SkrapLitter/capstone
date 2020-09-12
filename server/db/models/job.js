@@ -70,11 +70,6 @@ const Job = db.define(
     lng: {
       type: FLOAT,
     },
-    image: {
-      type: TEXT,
-      defaultValue:
-        'https://experiencelife.com/wp-content/uploads/2003/03/Talking-Trash-1280x720.jpg',
-    },
     description: {
       type: TEXT,
       allowNull: false,

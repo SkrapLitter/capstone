@@ -20,7 +20,7 @@ const defaultJobs: Job = {
     createdAt: '',
     updatedAt: '',
     userId: '',
-    image: '',
+    images: [],
     description: '',
     createdUser: '',
   },
