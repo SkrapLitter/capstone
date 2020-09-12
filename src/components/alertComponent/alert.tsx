@@ -16,7 +16,6 @@ const Alert: React.FC = () => {
         color="primary"
         onClick={e => {
           e.preventDefault();
-          console.log(open);
           setOpen(!open);
           if (alert.newAlerts && alert.newAlerts.length) {
             dispatch(clearAlerts(alert.newAlerts, user.id));

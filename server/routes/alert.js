@@ -6,7 +6,6 @@ const {
 alertRouter.get('/user/:id', async (req, res) => {
   try {
     if (req.isAuthenticated() && req.user) {
-      console.log(req.isAuthenticated(), req.user);
       const { id } = req.params;
       const alert = await Alert.findAll({
         where: {

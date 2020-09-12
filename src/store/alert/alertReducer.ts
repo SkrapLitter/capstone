@@ -12,7 +12,6 @@ const alertReducer = (
 ): AlertReducer => {
   switch (action.type) {
     case TYPES.SET_ALERTS:
-      console.log(action.alerts, action.newAlerts);
       return {
         ...state,
         alerts: action.alerts,
@@ -21,7 +20,7 @@ const alertReducer = (
     case TYPES.SET_NEW_ALERTS:
       return {
         ...state,
-        newAlerts: [action.newAlerts, ...state.newAlerts],
+        newAlerts: action.newAlerts,
       };
     default:
       return state;
