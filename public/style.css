@@ -2,6 +2,24 @@
   background-color: whitesmoke;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
+.border-circle {
+  border-radius: 50%;
+}
+
+.user-profile-subnav {
+  display: none;
+  padding: 0 1rem;
+  position: absolute;
+}
+
+.user-profile:hover .user-profile-subnav {
+  display: block;
+}
+
 .fixedFooter {
   position: fixed;
   bottom: 0;

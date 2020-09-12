@@ -92,7 +92,7 @@ const EditAccount: React.FC = () => {
         src={user.image}
         width="50"
         height="50"
-        className="border-circle"
+        className="border-circle z-depth-1"
         alt={`${firstName} ${lastName}`}
       />
       <h4>
