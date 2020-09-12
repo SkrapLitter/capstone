@@ -1,7 +1,9 @@
+require('dotenv').config();
 const { STRING, UUID, UUIDV4, INTEGER, TEXT } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const Session = require('./session');
+const stripe = require('stripe')(process.env.STRIPE_SKEY);
 
 const User = db.define(
   'user',
@@ -47,12 +49,31 @@ const User = db.define(
     oauth: {
       type: STRING,
     },
+    stripe: {
+      type: STRING,
+    },
   },
   {
     hooks: {
-      beforeCreate: user => {
+      beforeCreate: async user => {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
+        try {
+          if (!user.stripe) {
+            const account = await stripe.accounts.create({
+              type: 'express',
+              country: 'US',
+              email: `${user.username}`,
+              capabilities: {
+                card_payments: { requested: true },
+                transfers: { requested: true },
+              },
+            });
+            user.stripe = account.id;
+          }
+        } catch (e) {
+          console.error('error with stripe', e);
+        }
       },
     },
   }
