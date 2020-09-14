@@ -16,7 +16,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const { findUserBySession } = require('./utils');
 const {
-  models: { Chatroom, ChatMessage },
+  models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
 const io = require('socket.io')(http);
 
@@ -36,9 +36,6 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  socket.on('disconnect', function () {
-    console.log('disconnected');
-  });
   socket.on('join', async room => {
     socket.join(room);
     io.emit('roomJoined', room);
@@ -52,7 +49,16 @@ io.on('connection', socket => {
       message,
       userId,
     });
-    io.emit('newMessage', chatMessage);
+    const chatroom = await Chatroom.findByPk(chatroomId);
+    const users = chatroom.chatusers.split('/').filter(user => user !== userId);
+    users.forEach(user => {
+      Alert.create({
+        subject: `New Message Received From ${author} in ${chatroom.name}`,
+        userId: user,
+      });
+      io.emit('alert', user);
+    });
+    io.emit('newMessage', chatroom);
   });
 });
 app.use(async (req, res, next) => {

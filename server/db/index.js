@@ -4,8 +4,9 @@ const { models } = require('./models');
 const db = require('./db');
 const axios = require('axios');
 const ChatRoom = require('./models/chatroom');
+const ChatMessage = require('./models/chatmessage');
 
-const { User, Job } = models;
+const { User, Job, Image } = models;
 
 const sync = async () => {
   try {
@@ -27,8 +28,14 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
     });
+    let i = 0;
+    let j = 0;
+    if (user.id[i] === test.id[j]) {
+      i++;
+      j++;
+    }
     const [first, second] =
-      user.id <= test.id ? [user.id, test.id] : [test.id, user.id];
+      user.id[i] <= test.id[j] ? [user.id, test.id] : [test.id, user.id];
     const chatusers = `${String(first)}/${String(second)}`;
     const testchat = await ChatRoom.create({
       name: 'testroom',
@@ -36,6 +43,12 @@ const sync = async () => {
     });
     testchat.addUser(user);
     testchat.addUser(test);
+    await ChatMessage.create({
+      message: `chat created between ${user.username} and ${test.username}`,
+      author: 'System',
+      chatroomId: testchat.id,
+    });
+
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'paid',
@@ -48,6 +61,7 @@ const sync = async () => {
         'Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment. Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring. Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.',
       createdUser: user.firstName,
     });
+
     await axios
       .get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
@@ -60,6 +74,18 @@ const sync = async () => {
         await job1.update({ lat: lat });
         await job1.update({ lng: lng });
       });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job1.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job1.id,
+    });
 
     const job2 = await Job.create({
       name: 'Tompkins Square Park',
@@ -87,6 +113,18 @@ const sync = async () => {
         await job2.update({ lng: lng });
       });
 
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job2.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job2.id,
+    });
+
     const job3 = await Job.create({
       name: 'Cooper Park',
       status: 'paid',
@@ -113,6 +151,18 @@ const sync = async () => {
         await job3.update({ lng: lng });
       });
 
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job3.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job3.id,
+    });
+
     const job4 = await Job.create({
       name: 'Domino Park',
       status: 'unpaid',
@@ -138,6 +188,18 @@ const sync = async () => {
         await job4.update({ lng: lng });
       });
 
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job4.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job4.id,
+    });
+
     const job5 = await Job.create({
       name: 'Maria Hernandez Park',
       status: 'unpaid',
@@ -162,6 +224,18 @@ const sync = async () => {
         await job5.update({ lat: lat });
         await job5.update({ lng: lng });
       });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job5.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job5.id,
+    });
   } catch (e) {
     console.error(e);
   }

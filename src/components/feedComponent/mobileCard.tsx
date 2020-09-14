@@ -1,5 +1,6 @@
 import React from 'react';
 import { JobAttributes } from '../../store/job/jobInterface';
+import { Parallax } from 'react-parallax';
 
 interface Props {
   job: JobAttributes;
@@ -11,7 +12,9 @@ const MobileCard: React.FC<Props> = (props: Props) => {
       <div className="col s12 m7">
         <div className="card">
           <div className="card-image">
-            <img src={props.job.image} alt="trash" />
+            <Parallax strength={300} bgImage={props.job.images[0].url}>
+              <div style={{ height: '400px' }} />
+            </Parallax>
           </div>
           <div className="card-content">
             <h5>{props.job.name}</h5>

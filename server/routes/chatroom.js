@@ -1,72 +1,102 @@
 const chatroomRouter = require('express').Router();
 const {
-  models: { Chatroom, UserChat, User, ChatMessage },
+  models: { Chatroom, User, ChatMessage },
 } = require('../db');
-const ChatRoom = require('../db/models/chatroom');
 
-chatroomRouter.get('/:id', async (req, res) => {
+chatroomRouter.get('/chatroom/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const chatRooms = await Chatroom.findAll(
-      { include: [{ model: User, through: UserChat }] },
-      {
-        where: {
-          userId: id,
-        },
+    if (req.isAuthenticated() && req.user) {
+      const { id } = req.params;
+      let chatRooms;
+      if (id !== '0') {
+        chatRooms = await Chatroom.findAll({
+          include: {
+            model: User,
+            through: 'UserChat',
+            where: {
+              id,
+            },
+          },
+        });
       }
-    );
-    res.status(200).send(chatRooms);
+      res.status(200).send(chatRooms);
+    }
   } catch (e) {
     res.sendStatus(500);
-    console.error(e);
+    console.error('chatroom error', e);
   }
 });
 
 chatroomRouter.get('/job', async (req, res) => {
   let chatroom;
   try {
-    const { userId, hostId, username, hostname, jobId, jobName } = req.query;
-    const [first, second] =
-      userId[0] <= hostId[0] ? [userId, hostId] : [hostId, userId];
-    const chatusers = `${first}/${second}`;
-    chatroom = await ChatRoom.findAll({
-      include: {
-        model: ChatMessage,
-      },
-      where: {
-        chatusers,
-      },
-    });
-    if (!chatroom) {
-      chatroom = await ChatRoom.create({
-        chatusers,
-        name: `${jobName} with ${username} and ${hostname}`,
-        jobName,
-        jobId,
+    if (req.isAuthenticated() && req.user) {
+      const { userId, hostId, username, hostname, jobId, jobName } = req.query;
+      let i = 0;
+      let j = 0;
+      if (userId[i] === hostId[j]) {
+        i++;
+        j++;
+      }
+      const [first, second] =
+        userId[i] <= hostId[j] ? [userId, hostId] : [hostId, userId];
+      const chatusers = `${first}/${second}`;
+      chatroom = await Chatroom.findAll({
+        include: {
+          model: ChatMessage,
+        },
+        where: {
+          chatusers,
+        },
       });
-      await ChatMessage.create({
-        message: `this is the start of your chatroom with ${username} and ${hostname}`,
-        author: 'system',
-        chatroomId: chatroom.id,
-      });
+      if (!chatroom) {
+        chatroom = await Chatroom.create({
+          chatusers,
+          name: `${jobName} with ${username} and ${hostname}`,
+          jobName,
+          jobId,
+        });
+        await ChatMessage.create({
+          message: `this is the start of your chatroom with ${username} and ${hostname}`,
+          author: 'system',
+          chatroomId: chatroom.id,
+        });
+      }
+      res.status(200).send(chatroom);
     }
-    res.status(200).send(chatroom);
   } catch (e) {
     res.sendStatus(500);
     console.error(e);
   }
 });
 
-chatroomRouter.get('/messages/:id', async (req, res) => {
+chatroomRouter.get('/messages', async (req, res) => {
   try {
-    const { id } = req.params;
-    const messages = await ChatMessage.findAll({
-      where: {
-        chatroomId: id,
-      },
-      order: [['createdAt', 'ASC']],
-    });
-    res.status(200).send(messages);
+    if (req.isAuthenticated() && req.user) {
+      let messages = [];
+      const { chatId, userId } = req.query;
+      const chatroom = await Chatroom.findAll({
+        include: {
+          model: User,
+          through: 'UserChat',
+          where: {
+            id: userId,
+          },
+        },
+        where: {
+          id: chatId,
+        },
+      });
+      if (chatroom) {
+        messages = await ChatMessage.findAll({
+          where: {
+            chatroomId: chatId,
+          },
+          order: [['createdAt', 'ASC']],
+        });
+      }
+      res.status(200).send(messages);
+    }
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -75,14 +105,16 @@ chatroomRouter.get('/messages/:id', async (req, res) => {
 
 chatroomRouter.post(`/messages/:id`, async (req, res) => {
   try {
-    const { id } = req.params;
-    const { message, author, userId } = req.body;
-    ChatMessage.create({
-      message,
-      author,
-      userId,
-      chatroomId: id,
-    });
+    if (req.isAuthenticated() && req.user) {
+      const { id } = req.params;
+      const { message, author, userId } = req.body;
+      ChatMessage.create({
+        message,
+        author,
+        userId,
+        chatroomId: id,
+      });
+    }
   } catch (e) {
     console.error('error posting message', e);
     res.sendStatus(500);

@@ -1,22 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { StateProps } from '../reduxTest';
-import { connect } from 'react-redux';
-import User from '../store/user/userInterface';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutThunk } from '../store/user/userActions';
+import { StoreState } from '../store/store';
+import Alert from './alertComponent/alert';
+import { Button } from '@material-ui/core';
 
-interface stateProps {
-  user: User;
-}
+const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: StoreState) => state);
 
-type Props = stateProps;
-
-const Navbar: React.FC<Props> = (props: Props) => {
   return (
     <div className="navbar-fixed">
       <nav className="green accent-4">
         <div className="nav-wrapper">
           <Link to="/stream">(LOGO HERE)</Link>
           <ul id="nav-mobile" className="right hide-on-small-only">
+            {!!user.clearance && (
+              <li className="user-profile">
+                <Link to="/account">
+                  <img
+                    src={user.image}
+                    width="20"
+                    height="20"
+                    className="border-circle"
+                    alt={`${user.firstName} ${user.lastName}`}
+                  />
+                </Link>
+                <div className="user-profile-subnav green accent-4">
+                  <button
+                    className="btn btn-small"
+                    onClick={() => dispatch(logoutThunk())}
+                    type="button"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </li>
+            )}
+            <Button>
+              <Alert />
+            </Button>
             <li>
               <Link to="/jobs">Jobs</Link>
             </li>
@@ -24,15 +48,12 @@ const Navbar: React.FC<Props> = (props: Props) => {
               <Link to="/map">Map</Link>
             </li>
             <li>
-              <Link to="/inbox" className={props.user.clearance ? '' : 'ghost'}>
+              <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
                 Inbox
               </Link>
             </li>
             <li>
-              <Link
-                to="/account"
-                className={props.user.clearance ? 'ghost' : ''}
-              >
+              <Link to="/account" className={user.clearance ? 'ghost' : ''}>
                 Account
               </Link>
             </li>
@@ -43,10 +64,4 @@ const Navbar: React.FC<Props> = (props: Props) => {
   );
 };
 
-const mapState = (state: StateProps) => {
-  return {
-    user: state.user,
-  };
-};
-
-export default connect<stateProps>(mapState)(Navbar);
+export default Navbar;
