@@ -8,6 +8,7 @@ import Carousel from 're-carousel';
 import { JobAttributes } from '../../store/job/jobInterface';
 
 interface Props {
+  key: string;
   lat: number;
   lng: number;
   text: string;
