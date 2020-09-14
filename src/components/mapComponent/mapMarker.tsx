@@ -15,6 +15,7 @@ const trash2 =
 const trash3 = 'https://i.ytimg.com/vi/XG3fb8rVjpk/maxresdefault.jpg';
 
 interface Props {
+  key: string;
   lat: number;
   lng: number;
   text: string;
@@ -44,7 +45,7 @@ const MapMarker: React.FC<Props> = (props: Props) => {
             animation="slide"
           >
             {[trash1, trash2, trash3].map(url => (
-              <img className="mapCardImage" src={url} alt="trash" />
+              <img className="mapCardImage" src={url} alt="trash" key={url} />
             ))}
           </Carousel>
         </div>

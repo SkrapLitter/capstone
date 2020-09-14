@@ -37,7 +37,7 @@ const jobReducer = (state: Job = defaultJobs, action): Job => {
     case TYPES.SET_JOB:
       return {
         ...state,
-        job: action.job && action.job.length ? action.job[0] : {},
+        job: action.job,
       };
     default:
       return state;

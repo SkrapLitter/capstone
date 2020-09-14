@@ -116,11 +116,7 @@ jobRouter.get('/', async (req, res) => {
 jobRouter.get('/job/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const job = await Job.findAll({
-      where: {
-        id,
-      },
-    });
+    const job = await Job.findByPk(id);
     res.status(200).send(job);
   } catch (e) {
     res.sendStatus(500);
@@ -172,81 +168,112 @@ jobRouter.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { type } = req.body;
     const job = await Job.findByPk(id);
-    switch (type) {
-      case 'reserve': {
-        if (req.isAuthenticated() && req.user) {
-          await Job.update(
-            {
-              reserved: true,
-              reservedUser: req.user.id,
-            },
-            {
-              where: { id },
+    if (!req.isAuthenticated || !req.user) {
+      res.status(500).send({
+        status: false,
+        message: 'You must be logged in to complete this action',
+      });
+    } else {
+      switch (type) {
+        case 'reserve': {
+          if (req.isAuthenticated() && req.user) {
+            if (!job.reserved) {
+              await job.update({
+                reserved: true,
+                reservedUser: req.user.id,
+                reservedUsername: req.user.username,
+              });
+            } else {
+              res.status(500).send({
+                status: false,
+                shouldUpdateStore: true,
+                message: 'This job is already reserved',
+                job,
+              });
             }
-          );
+          }
+          break;
         }
-        break;
-      }
-      case 'update': {
-        if (
-          (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-          (req.user && req.user.clearance === 5)
-        ) {
-          const { name, price, city, state, address, userId } = req.body;
-          const status = price ? 'paid' : 'unpaid';
-          await Job.update(
-            {
-              name,
-              price,
-              city,
-              state,
-              address,
-              userId,
-              status,
-            },
-            {
-              where: { id },
+        case 'unreserve': {
+          if (req.isAuthenticated() && req.user) {
+            if (job.reserved) {
+              await job.update({
+                reserved: false,
+                reservedUser: null,
+                reservedUsername: null,
+              });
+            } else {
+              res.status(500).send({
+                status: false,
+                shouldUpdateStore: true,
+                message: 'This job not reserved',
+                job,
+              });
             }
-          );
+          }
+          break;
         }
-        break;
-      }
-      case 'complete': {
-        if (
-          (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-          (req.user && req.user.clearance === 5)
-        ) {
-          await Job.update(
-            {
-              status: 'completed',
-            },
-            {
-              where: { id },
-            }
-          );
+        case 'update': {
+          if (
+            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
+            (req.user && req.user.clearance === 5)
+          ) {
+            const { name, price, city, state, address, userId } = req.body;
+            const status = price ? 'paid' : 'unpaid';
+            await Job.update(
+              {
+                name,
+                price,
+                city,
+                state,
+                address,
+                userId,
+                status,
+              },
+              {
+                where: { id },
+              }
+            );
+          }
+          break;
         }
-        break;
-      }
-      case 'cancel': {
-        if (
-          (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-          (req.user && req.user.clearance === 5)
-        ) {
-          await Job.update(
-            {
-              status: 'cancelled',
-            },
-            {
-              where: { id },
-            }
-          );
+        case 'complete': {
+          if (
+            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
+            (req.user && req.user.clearance === 5)
+          ) {
+            await Job.update(
+              {
+                status: 'completed',
+              },
+              {
+                where: { id },
+              }
+            );
+          }
+          break;
         }
-        break;
+        case 'cancel': {
+          if (
+            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
+            (req.user && req.user.clearance === 5)
+          ) {
+            await Job.update(
+              {
+                status: 'cancelled',
+              },
+              {
+                where: { id },
+              }
+            );
+          }
+          break;
+        }
+        default:
+          break;
       }
-      default:
-        break;
+      res.status(202).send({ status: true, job });
     }
-    res.status(202).send({ status: true });
   } catch (e) {
     res.status(500).send({ status: false });
     console.error('Error with job update', e);
