@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import { ThunkAction } from 'redux-thunk';
 import { StoreState } from '../../store/store';
 import { fetchJob, reserveJob, unreserveJob } from '../../store/job/jobActions';
 import { findOrCreateChat } from '../../store/inbox/inboxActions';
@@ -18,7 +19,9 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const dispatch = useDispatch();
+  const dispatch: (
+    a: ThunkAction<any, any, any, any>
+  ) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
     dispatch(fetchJob(id));
@@ -57,7 +60,7 @@ const JobDetails: React.FC = () => {
       }
     });
   };
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -95,7 +98,7 @@ const JobDetails: React.FC = () => {
           <div className="jCenter" style={{ maxWidth: '800px' }}>
             <div
               className="jobImage"
-              style={{ backgroundImage: `url('${job.image}')` }}
+              style={{ backgroundImage: `url('${job.images}')` }}
             />
             <div style={{ display: 'flex' }}>
               <Button
