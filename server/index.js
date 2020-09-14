@@ -36,29 +36,30 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  socket.on('join', async room => {
-    socket.join(room);
-    io.emit('roomJoined', room);
-  });
   socket.on('message', async data => {
-    const { chatroomId, author, message, userId } = data;
-
-    const chatMessage = await ChatMessage.create({
-      chatroomId,
-      author,
-      message,
-      userId,
-    });
-    const chatroom = await Chatroom.findByPk(chatroomId);
-    const users = chatroom.chatusers.split('/').filter(user => user !== userId);
-    users.forEach(user => {
-      Alert.create({
-        subject: `New Message Received From ${author} in ${chatroom.name}`,
-        userId: user,
+    try {
+      const { chatroomId, author, message, userId } = data;
+      await ChatMessage.create({
+        chatroomId,
+        author,
+        message,
+        userId,
       });
-      io.emit('alert', user);
-    });
-    io.emit('newMessage', chatroom);
+      const chatroom = await Chatroom.findByPk(chatroomId);
+      const users = chatroom.chatusers
+        .split('/')
+        .filter(user => user !== userId);
+      await users.forEach(user => {
+        Alert.create({
+          subject: `New Message Received From ${author} in ${chatroom.name}`,
+          userId: user,
+        });
+        io.emit('alert', user);
+      });
+      io.emit('newMessage', chatroom);
+    } catch (e) {
+      console.error('socket error', e);
+    }
   });
 });
 app.use(async (req, res, next) => {

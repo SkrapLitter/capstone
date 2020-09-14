@@ -17,8 +17,10 @@ export const setChatroom = (chatroom: Chatroom): Inbox => ({
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
-    const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
-    dispatch(setInbox(inbox));
+    if (userId !== '0') {
+      const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
+      dispatch(setInbox(inbox));
+    }
   };
 };
 

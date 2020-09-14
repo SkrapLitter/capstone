@@ -16,6 +16,7 @@ import io from 'socket.io-client';
 import { fetchChatroomMessages } from './store/inbox/inboxActions';
 import { StoreState } from './store/store';
 import { fetchNewAlerts } from './store/alert/alertActions';
+import Axios from 'axios';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -29,19 +30,31 @@ const App: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [window.innerWidth]);
-  const SOCKET_IO_URL = 'http://localhost:3000';
-  const socket = io(SOCKET_IO_URL);
-  socket.on('newMessage', data => {
-    const users = data.chatusers.split('/');
-    if (users.includes(user.id)) {
-      setTimeout(() => dispatch(fetchChatroomMessages(data.id, user.id)), 500);
-    }
-  });
-  socket.on('alert', userId => {
-    if (userId === user.id) {
-      dispatch(fetchNewAlerts(userId));
-    }
-  });
+  useEffect(() => {
+    const SOCKET_IO_URL = 'http://localhost:3000';
+    const socket = io(SOCKET_IO_URL);
+    socket.on('newMessage', data => {
+      const users = data.chatusers.split('/');
+      if (users.includes(user.id)) {
+        setTimeout(
+          () => dispatch(fetchChatroomMessages(data.id, user.id)),
+          500
+        );
+      }
+    });
+    socket.on('alert', userId => {
+      if (userId === user.id) {
+        dispatch(fetchNewAlerts(userId));
+      }
+    });
+    socket.on('connect', () => {
+      Axios.put(`/api/user/socketConnect/${socket.id}`);
+    });
+    return () => {
+      Axios.put(`/api/user/socketDisconnect/${socket.id}`);
+      socket.disconnect();
+    };
+  }, []);
   return (
     <div>
       <Navbar />

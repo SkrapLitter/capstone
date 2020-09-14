@@ -25,12 +25,15 @@ const SelectedChatroom: React.FC = () => {
   const socket = io(SOCKET_IO_URL);
   const sendMessage = e => {
     if (e.key === 'Enter') {
+      console.log('sending');
+      e.preventDefault();
       socket.emit('message', {
         message,
         author: user.username,
         userId: user.id,
         chatroomId: chatroom.id,
       });
+      setMessage('');
     }
   };
   return (

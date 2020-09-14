@@ -1,5 +1,7 @@
 import React from 'react';
 import { JobAttributes } from '../../store/job/jobInterface';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { Parallax } from 'react-parallax';
 
 interface Props {
