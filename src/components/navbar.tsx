@@ -10,12 +10,15 @@ import axios from 'axios';
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
-  const checkStatus = async e => {
+  const checkStatus = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     const account = (await axios.get(`/api/user/stripe/${user.id}`)).data;
     console.log(account);
     if (!account) {
-      // window.location = `${user.stripeAccount}`;
+      console.log(user.stripeAccount);
+      window.location = user.stripeAccount;
     } else {
       const userData = (await axios.post(`/api/user/stripe/${user.id}`)).data;
       user.stripeDashBoard = userData.stripeDashBoard;

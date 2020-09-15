@@ -32,6 +32,16 @@ userRouter.get('/stripe/:id', async (req, res) => {
     console.error('stripe error', e);
   }
 });
+userRouter.delete('/stripe/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await stripe.accounts.del(id);
+    res.status(200).send(deleted);
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('stripe delete', e);
+  }
+});
 userRouter.put('/socketConnect/:id', async (req, res) => {
   try {
     const { id } = req.params;

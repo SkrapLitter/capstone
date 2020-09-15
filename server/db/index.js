@@ -18,6 +18,7 @@ const sync = async () => {
       image:
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 5,
+      stripe: 'acct_1HRTYcF0qvPSD5Fz',
     });
     const test = await User.create({
       username: 'test@fullstack.com',
@@ -27,6 +28,7 @@ const sync = async () => {
       image:
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
+      stripe: 'acct_1HRTYeIoMXs5oCoJ',
     });
     let i = 0;
     let j = 0;

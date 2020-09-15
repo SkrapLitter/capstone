@@ -86,7 +86,7 @@ const User = db.define(
             const accountLinks = await stripe.accountLinks.create({
               account: user.stripe,
               refresh_url: 'http://localhost:3000/',
-              return_url: 'http://localhost:3000/account',
+              return_url: `http://localhost:3000/api/user/stripe/callback/${user.id}`,
               type: 'account_onboarding',
             });
             user.stripeAccount = accountLinks.url;
