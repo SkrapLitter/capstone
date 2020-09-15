@@ -133,6 +133,7 @@ const Feed: React.FC = () => {
           next={fetchNext}
           hasMore={size < count}
           loader={<h4>Loading...</h4>}
+          className="infiniteContainer"
         >
           {jobs.length ? (
             jobs.map((job: JobAttributes) => <JobCard key={job.id} job={job} />)

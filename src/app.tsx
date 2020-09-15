@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
@@ -18,17 +18,13 @@ import { StoreState } from './store/store';
 import { fetchNewAlerts } from './store/alert/alertActions';
 
 const App: React.FC = () => {
-  const [width, setWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
+
   useEffect(() => {
     dispatch(cookieLogin());
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window.innerWidth]);
+  }, []);
+
   const SOCKET_IO_URL = 'http://localhost:3000';
   const socket = io(SOCKET_IO_URL);
   socket.on('newMessage', data => {
@@ -58,7 +54,7 @@ const App: React.FC = () => {
           <Redirect to="/jobs" />
         </Switch>
       </div>
-      {width <= 600 ? <Footer /> : null}
+      <Footer />
     </div>
   );
 };
