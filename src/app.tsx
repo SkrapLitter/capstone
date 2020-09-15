@@ -48,10 +48,10 @@ const App: React.FC = () => {
       <div className="contentWrapper">
         <Switch>
           <Route exact path="/" render={() => <Landing />} />
-          <Route exact path="/jobs" render={() => <Feed />} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
-          <Route path="/jobs/:id?" render={() => <JobDetails />} />
+          <Route exact path="/jobs" component={Feed} />
+          <Route path="/jobs/:id" component={JobDetails} />
           <Route path="/create" component={CreateJob} />
           <Route exact path="/inbox" component={Inbox} />
           <Route path="/inbox/:id?" component={SelectedChatroom} />

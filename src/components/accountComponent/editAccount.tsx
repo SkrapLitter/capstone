@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
-import JobCard from '../feedComponent/desktopCard';
+import { fetchJobs } from '../../store/job/jobActions';
 
 import M from 'materialize-css';
 
@@ -11,13 +12,12 @@ const EditAccount: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
 
-  const selectJob = (state: StoreState) => state.job;
-  const job = useSelector(selectJob);
-
-  console.log(job);
+  const { jobs } = useSelector((state: StoreState) => state.job);
 
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
+  console.log('inbox');
+  console.log(inbox);
 
   const [username, setUsername] = useState(user.username);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -33,6 +33,10 @@ const EditAccount: React.FC = () => {
     const tabs = document.querySelector('.tabs');
     M.Tabs.init(tabs);
   }, [user]);
+
+  useEffect(() => {
+    dispatch(fetchJobs());
+  }, []);
 
   const toggleDisabled = (labelId: string): void => {
     const input = document.getElementById(labelId) as HTMLInputElement;
@@ -113,7 +117,7 @@ const EditAccount: React.FC = () => {
             </li>
             <li className="tab col s3">
               <a href="#jobs" className="green-text text-accent-4">
-                My Jobs ({job.count || 0})
+                My Jobs ({jobs.length || 0})
               </a>
             </li>
             <li className="tab col s3">
@@ -216,8 +220,21 @@ const EditAccount: React.FC = () => {
         <div id="jobs" className="col s12">
           <div className="m-t-l">
             <h2>My Jobs</h2>
-            {job.jobs.length ? (
-              job.jobs.map(_job => <JobCard key={_job.id} job={_job} />)
+            {jobs.length ? (
+              <ul className="collection">
+                {jobs.map(job => (
+                  <li key={job.id} className="collection-item left-align">
+                    <h6>
+                      <strong>{job.name}</strong>
+                    </h6>
+                    <p>
+                      {job.address}
+                      <br />
+                      {job.city}, {job.state}
+                    </p>
+                  </li>
+                ))}
+              </ul>
             ) : (
               <h2> No Jobs Yet</h2>
             )}
@@ -226,6 +243,16 @@ const EditAccount: React.FC = () => {
         <div id="messages" className="col s12">
           <div className="m-t-l">
             <h2>My Messages</h2>
+            {inbox.inbox.length ? (
+              <ul className="collection">
+                <li key="jey" className="collection-item left-align">
+                  <Link to="/">link</Link>
+                </li>
+              </ul>
+            ) : (
+              <h2> No Jobs Yet</h2>
+            )}
+            inbox e70f8003-391b-411b-861f-4c880e792c08
           </div>
         </div>
       </div>
