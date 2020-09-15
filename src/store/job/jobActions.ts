@@ -82,19 +82,37 @@ const fetchJob = (id: string): AppThunk => {
   };
 };
 
-const reserveJob = (
-  jobId: string,
-  userId: string,
-  username: string
-): AppThunk => {
-  return async dispatch => {
-    const { status } = await Axios.put(`/api/jobs/${jobId}`, {
-      type: 'reserve',
-      userId,
-      username,
-    });
-    if (status) dispatch(fetchJobs());
-    else console.log('failure reserving');
+const reserveJob = (jobId: string): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/jobs/${jobId}`, {
+        type: 'reserve',
+      });
+      if (data.status) dispatch(setJob(data.job));
+    } catch (e) {
+      console.log(e.response.data);
+      if (e.response.data.shouldUpdateStore) {
+        dispatch(setJob(e.response.data.job));
+      }
+      console.log(e.response.data.message);
+    }
+  };
+};
+
+const unreserveJob = (jobId: string): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/jobs/${jobId}`, {
+        type: 'unreserve',
+      });
+      if (data.status) dispatch(setJob(data.job));
+    } catch (e) {
+      console.log(e.response.data);
+      if (e.response.data.shouldUpdateStore) {
+        dispatch(setJob(e.response.data.job));
+      }
+      console.log(e.response.data.message);
+    }
   };
 };
 
@@ -123,4 +141,4 @@ const locationSort = (
   };
 };
 
-export { setJobs, fetchJobs, reserveJob, fetchJob, locationSort };
+export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob, locationSort };
