@@ -84,8 +84,8 @@ const JobDetails: React.FC = () => {
           setMessage('Reservation Confirmed');
           setOpen(true);
         })
-        .catch(() => {
-          setMessage('Error - Please Try Again');
+        .catch(e => {
+          setMessage(e);
           setOpen(true);
         });
     }
@@ -98,7 +98,11 @@ const JobDetails: React.FC = () => {
           <div className="jCenter" style={{ maxWidth: '800px' }}>
             <div
               className="jobImage"
-              style={{ backgroundImage: `url('${job.images}')` }}
+              style={{
+                backgroundImage: `url('${
+                  job.images && job.images.length ? job.images[0].url : ''
+                }')`,
+              }}
             />
             <div style={{ display: 'flex' }}>
               <Button
