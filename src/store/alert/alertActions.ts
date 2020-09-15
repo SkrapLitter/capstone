@@ -27,8 +27,10 @@ export const fetchAlerts = (userId: string): AppThunk => {
 };
 export const fetchNewAlerts = (userId: string): AppThunk => {
   return async dispatch => {
-    const alerts = (await Axios.get(`/api/alert/user/${userId}`)).data;
-    dispatch(setNewAlerts(alerts));
+    if (userId) {
+      const alerts = (await Axios.get(`/api/alert/user/${userId}`)).data;
+      dispatch(setNewAlerts(alerts));
+    }
   };
 };
 
@@ -39,6 +41,8 @@ export const clearAlerts = (alerts: Alert[], userId: string): AppThunk => {
         Axios.put(`/api/alert/${alert.id}`);
       }
     });
-    dispatch(fetchAlerts(userId));
+    if (userId) {
+      dispatch(fetchAlerts(userId));
+    }
   };
 };

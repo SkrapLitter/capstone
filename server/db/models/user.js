@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { STRING, UUID, UUIDV4, INTEGER, TEXT } = require('sequelize');
+const { STRING, UUID, UUIDV4, INTEGER, TEXT, BOOLEAN } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const Session = require('./session');
@@ -52,6 +52,19 @@ const User = db.define(
     stripe: {
       type: STRING,
     },
+    socket: {
+      type: STRING,
+    },
+    stripeAccount: {
+      type: STRING,
+    },
+    onboarding: {
+      type: BOOLEAN,
+      defaultValue: false,
+    },
+    stripeDashBoard: {
+      type: STRING,
+    },
   },
   {
     hooks: {
@@ -70,6 +83,13 @@ const User = db.define(
               },
             });
             user.stripe = account.id;
+            const accountLinks = await stripe.accountLinks.create({
+              account: user.stripe,
+              refresh_url: 'http://localhost:3000/',
+              return_url: 'http://localhost:3000/account',
+              type: 'account_onboarding',
+            });
+            user.stripeAccount = accountLinks.url;
           }
         } catch (e) {
           console.error('error with stripe', e);
