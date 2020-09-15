@@ -51,10 +51,10 @@ const App: React.FC = () => {
           <Route exact path="/jobs" render={() => <Feed />} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
-          <Route path="/jobs/:id" component={JobDetails} />
+          <Route path="/jobs/:id?" render={() => <JobDetails />} />
           <Route path="/create" component={CreateJob} />
           <Route exact path="/inbox" component={Inbox} />
-          <Route path="/inbox/:id" component={SelectedChatroom} />
+          <Route path="/inbox/:id?" component={SelectedChatroom} />
           <Redirect to="/jobs" />
         </Switch>
       </div>
