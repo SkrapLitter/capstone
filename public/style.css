@@ -297,8 +297,7 @@ button.m1em {
 
 .navLogo {
   margin-left: 10px;
-  font-family: 'Fredoka One', cursive;
-  font-size: 2rem;
+  font: 2rem 'Fredoka One', cursive;
 }
 
 .feedButtons {
