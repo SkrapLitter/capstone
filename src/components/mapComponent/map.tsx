@@ -32,7 +32,7 @@ const Map: React.FC<Props> = (props: Props) => {
   useEffect(() => {
     props.fetchJobs();
   }, [props.job.jobs.length]);
-  console.log('PROPS', props);
+
   return (
     <div className="container">
       <div className="mapContainer">

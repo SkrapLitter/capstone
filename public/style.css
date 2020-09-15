@@ -294,3 +294,22 @@ button.m1em {
 .alertList {
   background: whitesmoke;
 }
+
+.navLogo {
+  margin-left: 10px;
+  font: 2rem 'Fredoka One', cursive;
+}
+
+.feedButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sortIcon {
+  color: #00c853;
+}
+
+.sortIcon:hover {
+  cursor: pointer;
+}

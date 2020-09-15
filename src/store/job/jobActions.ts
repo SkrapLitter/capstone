@@ -1,6 +1,12 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
 import Axios from 'axios';
+import { booleanType } from 'aws-sdk/clients/iam';
+import { JobAttributes } from './jobInterface';
+import {
+  dateSort,
+  locationSorter,
+} from '../../components/mapComponent/mapUtils';
 
 enum jobStatus {
   'paid',
@@ -110,4 +116,29 @@ const unreserveJob = (jobId: string): AppThunk => {
   };
 };
 
-export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob };
+interface Location {
+  lat: number;
+  lng: number;
+}
+
+const locationSort = (
+  jobs: JobAttributes[],
+  location: Location,
+  sort: booleanType
+): AppThunk => {
+  return dispatch => {
+    if (sort === true) {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: locationSorter(jobs, location),
+      });
+    } else {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: dateSort(jobs),
+      });
+    }
+  };
+};
+
+export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob, locationSort };

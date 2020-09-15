@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import MapIcon from '@material-ui/icons/Map';
 import { StoreState } from '../../store/store';
-import { fetchJobs } from '../../store/job/jobActions';
+import { fetchJobs, locationSort } from '../../store/job/jobActions';
+// import { locationSort } from '../mapComponent/mapUtils';
+import { JobAttributes } from '../../store/job/jobInterface';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import JobCard from './jobCard';
 
@@ -24,11 +27,15 @@ const useStyles = makeStyles({
 
 const Feed: React.FC = () => {
   const dispatch = useDispatch();
-  const { jobs, count } = useSelector((state: StoreState) => state.job);
+  const { jobs } = useSelector((state: StoreState) => state.job);
+  const { count } = useSelector((state: StoreState) => state.job);
   const [type, setType] = useState('');
   const [input, setInput] = useState('');
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(20);
+  const [location, setLocation] = useState(null);
+  const [locSort, setLocSort] = useState(false);
+
   useEffect(() => {
     dispatch(fetchJobs());
   }, []);
@@ -47,6 +54,22 @@ const Feed: React.FC = () => {
     setSize(size + 20);
     dispatch(fetchJobs(input, page, size, type));
   };
+  useEffect(() => {
+    const success = ({ coords }) => {
+      const localCoord = {
+        lat: coords.latitude,
+        lng: coords.longitude,
+      };
+      setLocation(localCoord);
+    };
+    navigator.geolocation.getCurrentPosition(success);
+  }, []);
+
+  const sortByLocation = () => {
+    dispatch(locationSort(jobs, location, !locSort));
+    setLocSort(!locSort);
+  };
+
   const classes = useStyles();
   return (
     <div className="container">
@@ -65,28 +88,45 @@ const Feed: React.FC = () => {
             }
           }}
         />
-        <div>
-          <Button
-            className={classes.button}
-            variant={type === '' ? 'contained' : 'outlined'}
-            onClick={e => handleType(e, '')}
-          >
-            All Jobs
-          </Button>
-          <Button
-            className={classes.button}
-            variant={type === 'paid' ? 'contained' : 'outlined'}
-            onClick={e => handleType(e, 'paid')}
-          >
-            Paid Jobs
-          </Button>
-          <Button
-            className={classes.button}
-            variant={type === 'unpaid' ? 'contained' : 'outlined'}
-            onClick={e => handleType(e, 'unpaid')}
-          >
-            Unpaid Jobs
-          </Button>
+        <div className="feedButtons">
+          <div>
+            <Button
+              className={classes.button}
+              variant={type === '' ? 'contained' : 'outlined'}
+              onClick={e => handleType(e, '')}
+            >
+              All Jobs
+            </Button>
+            <Button
+              className={classes.button}
+              variant={type === 'paid' ? 'contained' : 'outlined'}
+              onClick={e => handleType(e, 'paid')}
+            >
+              Paid Jobs
+            </Button>
+            <Button
+              className={classes.button}
+              variant={type === 'unpaid' ? 'contained' : 'outlined'}
+              onClick={e => handleType(e, 'unpaid')}
+            >
+              Unpaid Jobs
+            </Button>
+          </div>
+
+          {location ? (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {locSort ? (
+                <h6>Location Sorting On</h6>
+              ) : (
+                <h6>Location Sorting Off</h6>
+              )}
+              <MapIcon
+                fontSize="large"
+                className="sortIcon"
+                onClick={sortByLocation}
+              />
+            </div>
+          ) : null}
         </div>
         <InfiniteScroll
           dataLength={count}
@@ -95,7 +135,7 @@ const Feed: React.FC = () => {
           loader={<h4>Loading...</h4>}
         >
           {jobs.length ? (
-            jobs.map(job => <JobCard key={job.id} job={job} />)
+            jobs.map((job: JobAttributes) => <JobCard key={job.id} job={job} />)
           ) : (
             <h2> No Jobs Yet</h2>
           )}
