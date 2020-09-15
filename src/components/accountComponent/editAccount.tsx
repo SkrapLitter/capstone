@@ -16,8 +16,6 @@ const EditAccount: React.FC = () => {
 
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
-  console.log('inbox');
-  console.log(inbox);
 
   const [username, setUsername] = useState(user.username);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -97,8 +95,8 @@ const EditAccount: React.FC = () => {
     <>
       <img
         src={user.image}
-        width="50"
-        height="50"
+        width="75"
+        height="75"
         className="border-circle z-depth-1"
         alt={`${firstName} ${lastName}`}
       />
@@ -225,7 +223,9 @@ const EditAccount: React.FC = () => {
                 {jobs.map(job => (
                   <li key={job.id} className="collection-item left-align">
                     <h6>
-                      <strong>{job.name}</strong>
+                      <strong>
+                        <Link to={job.id}>{job.name}</Link>
+                      </strong>
                     </h6>
                     <p>
                       {job.address}
@@ -245,14 +245,15 @@ const EditAccount: React.FC = () => {
             <h2>My Messages</h2>
             {inbox.inbox.length ? (
               <ul className="collection">
-                <li key="jey" className="collection-item left-align">
-                  <Link to="/">link</Link>
-                </li>
+                {inbox.inbox.map(chatroom => (
+                  <li key={chatroom.id} className="collection-item left-align">
+                    <Link to={chatroom.id}>{chatroom.name}</Link>
+                  </li>
+                ))}
               </ul>
             ) : (
               <h2> No Jobs Yet</h2>
             )}
-            inbox e70f8003-391b-411b-861f-4c880e792c08
           </div>
         </div>
       </div>
