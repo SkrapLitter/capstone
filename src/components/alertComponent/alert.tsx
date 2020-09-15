@@ -12,7 +12,7 @@ const Alert: React.FC = () => {
   return (
     <div className="alertPage">
       <Badge
-        badgeContent={alert.newAlerts.length}
+        badgeContent={alert.newAlerts ? alert.newAlerts.length : 0}
         color="primary"
         onClick={e => {
           e.preventDefault();

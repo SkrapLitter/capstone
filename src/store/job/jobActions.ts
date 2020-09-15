@@ -72,6 +72,7 @@ const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
 const fetchJob = (id: string): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
+    console.log(data);
     dispatch(setJob(data));
   };
 };
@@ -84,11 +85,10 @@ const reserveJob = (jobId: string): AppThunk => {
       });
       if (data.status) dispatch(setJob(data.job));
     } catch (e) {
-      console.log(e.response.data);
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));
       }
-      console.log(e.response.data.message);
+      throw e.response.data.message;
     }
   };
 };

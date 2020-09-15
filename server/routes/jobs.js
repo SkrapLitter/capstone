@@ -136,7 +136,12 @@ jobRouter.get('/', async (req, res) => {
 jobRouter.get('/job/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const job = await Job.findByPk(id);
+    const job = await Job.findOne({
+      where: {
+        id,
+      },
+      include: [Image],
+    });
     res.status(200).send(job);
   } catch (e) {
     res.sendStatus(500);
@@ -189,7 +194,10 @@ jobRouter.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { type } = req.body;
-    const job = await Job.findByPk(id);
+    const job = await Job.findOne({
+      where: { id },
+      include: [Image],
+    });
     if (!req.isAuthenticated || !req.user) {
       res.status(500).send({
         status: false,
