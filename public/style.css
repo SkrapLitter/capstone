@@ -103,6 +103,23 @@
   box-shadow: 0 0 0 0 #777;
 }
 
+.marker {
+  opacity: 0;
+  animation-name: markerAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  /* transition: ease-in; */
+}
+
+@keyframes markerAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .marker:hover {
   cursor: pointer;
 }
