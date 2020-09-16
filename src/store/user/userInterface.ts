@@ -7,4 +7,6 @@ export default interface User {
   clearance?: number;
   password?: string;
   error?: string;
+  stripe?: string;
+  balance?: number;
 }

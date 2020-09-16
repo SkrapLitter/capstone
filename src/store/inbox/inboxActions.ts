@@ -7,7 +7,7 @@ const setMessages = (messages: Message): Inbox => ({
   type: TYPES.SET_MESSAGES,
   messages,
 });
-const setInbox = (inbox: []): Inbox => ({
+const setInbox = (inbox: Array<Chatroom>): Inbox => ({
   type: TYPES.SET_INBOX,
   inbox,
 });
@@ -17,8 +17,10 @@ export const setChatroom = (chatroom: Chatroom): Inbox => ({
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
-    const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
-    dispatch(setInbox(inbox));
+    if (userId) {
+      const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
+      dispatch(setInbox(inbox));
+    }
   };
 };
 
@@ -27,7 +29,7 @@ export const fetchChatroomMessages = (
   userId: string
 ): AppThunk => {
   return async dispatch => {
-    if (userId !== '0') {
+    if (userId) {
       const messages = (
         await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
       ).data;

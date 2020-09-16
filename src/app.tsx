@@ -12,10 +12,12 @@ import JobDetails from './components/jobDetailsComponent/jobDetails';
 import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import SelectedChatroom from './components/inboxComponent/chatroom';
-import io from 'socket.io-client';
 import { fetchChatroomMessages } from './store/inbox/inboxActions';
 import { StoreState } from './store/store';
 import { fetchNewAlerts } from './store/alert/alertActions';
+import Axios from 'axios';
+import socket from './socket';
+import Stripe from './components/stripeComponent/stripe';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -29,12 +31,16 @@ const App: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [window.innerWidth]);
-  const SOCKET_IO_URL = 'http://localhost:3000';
-  const socket = io(SOCKET_IO_URL);
+  useEffect(() => {
+    socket.on('connect', () => {
+      Axios.put(`/api/user/socketConnect/${socket.id}`);
+    });
+    return () => socket.disconnect();
+  }, []);
   socket.on('newMessage', data => {
     const users = data.chatusers.split('/');
     if (users.includes(user.id)) {
-      setTimeout(() => dispatch(fetchChatroomMessages(data.id, user.id)), 500);
+      dispatch(fetchChatroomMessages(data.id, user.id));
     }
   });
   socket.on('alert', userId => {
@@ -48,6 +54,7 @@ const App: React.FC = () => {
       <div className="contentWrapper">
         <Switch>
           <Route exact path="/" render={() => <Landing />} />
+          <Route path="/stripe/:id" component={Stripe} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
           <Route exact path="/jobs" component={Feed} />

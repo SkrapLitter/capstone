@@ -99,7 +99,10 @@ authRouter.post(
         usersSession = await Session.create({ id: req.sessionId });
       }
       await usersSession.setUser(user.id);
-      res.status(201).send(user);
+      await user.update({
+        socket: usersSession.socket,
+      });
+      res.status(200).send(user);
     } catch (err) {
       console.error(err);
       res.status(500).send({ message: 'Server error' });
@@ -128,16 +131,24 @@ authRouter.post(
       });
     }
     try {
-      const userId = req.user.id;
       let usersSession = await Session.findByPk(req.sessionId);
-
       if (!usersSession) {
         usersSession = await Session.create({ id: req.sessionId });
       }
-      await usersSession.setUser(userId);
+      await User.update(
+        {
+          socket: usersSession.socket,
+        },
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      );
+      await usersSession.setUser(req.user.id);
       res.status(200).send(req.user);
     } catch (e) {
-      req.status(404).send({
+      res.status(404).send({
         message: 'user not found',
       });
     }

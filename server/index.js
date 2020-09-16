@@ -8,7 +8,7 @@ const cors = require('cors');
 const { app, http } = require('./server');
 const routers = require('./routes');
 const {
-  models: { Session },
+  models: { Session, User },
 } = require('./db');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
@@ -18,6 +18,7 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
+const { idText } = require('typescript');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -36,29 +37,41 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  socket.on('join', async room => {
-    socket.join(room);
-    io.emit('roomJoined', room);
-  });
   socket.on('message', async data => {
-    const { chatroomId, author, message, userId } = data;
-
-    const chatMessage = await ChatMessage.create({
-      chatroomId,
-      author,
-      message,
-      userId,
-    });
-    const chatroom = await Chatroom.findByPk(chatroomId);
-    const users = chatroom.chatusers.split('/').filter(user => user !== userId);
-    users.forEach(user => {
-      Alert.create({
-        subject: `New Message Received From ${author} in ${chatroom.name}`,
-        userId: user,
+    try {
+      const { chatroomId, author, message, userId } = data;
+      await ChatMessage.create({
+        chatroomId,
+        author,
+        message,
+        userId,
       });
-      io.emit('alert', user);
+      const chatroom = await Chatroom.findByPk(chatroomId);
+      const users = chatroom.chatusers.split('/').filter(id => id !== userId);
+      await users.forEach(async id => {
+        Alert.create({
+          subject: `New Message Received From ${author} in ${chatroom.name}`,
+          userId: id,
+        });
+        const user = await User.findByPk(id);
+        if (user) {
+          io.to(user.socket).emit('alert', id);
+          io.to(user.socket).emit('newMessage', chatroom);
+        }
+      });
+      io.to(socket.id).emit('newMessage', chatroom);
+    } catch (e) {
+      console.error('socket error', e);
+    }
+  });
+  socket.on('reserveJob', async data => {
+    const { jobName, userId, reservedName } = data;
+    const user = User.findByPk(userId);
+    await Alert.create({
+      subject: `${jobName} reserved by ${reservedName}`,
+      userId: user.id,
     });
-    io.emit('newMessage', chatroom);
+    io.to(user.socket).emit('alert', user.id);
   });
 });
 app.use(async (req, res, next) => {
@@ -84,6 +97,9 @@ app.use(async (req, res, next) => {
       })
       .then(user => {
         if (user) {
+          user.update({
+            socket: req.cookies.io,
+          });
           req.user = user.dataValues;
           next();
         } else {

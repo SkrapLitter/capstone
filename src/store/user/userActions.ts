@@ -61,7 +61,6 @@ export const updateAccountThunk = (id: string, user: User): AppThunk => {
   return async dispatch => {
     try {
       const { data } = await axios.put(`/api/auth/${id}`, user);
-
       dispatch(updateAccount(data));
     } catch (err) {
       console.error(err);
@@ -86,8 +85,11 @@ export const createAccountThunk = (
         lastName,
       };
       const { data } = await axios.post('/api/auth/register', payload);
-
       dispatch(createAccount(data));
+      const account = (
+        await axios.post(`/api/user/stripe/onboarding/${data.id}`)
+      ).data;
+      window.location = account;
     } catch (err) {
       console.error(err);
     }

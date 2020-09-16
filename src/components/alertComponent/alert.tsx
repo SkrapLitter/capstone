@@ -25,19 +25,17 @@ const Alert: React.FC = () => {
         <AnnouncementIcon />
       </Badge>
       <div className={open ? 'ghost' : 'alertList'}>
-        {alert.alerts.length ? (
-          alert.alerts.map(curAlert => {
-            return (
-              <div key={curAlert.id}>
-                <li>{curAlert.subject}</li>
-                <br />
-                <hr />
-              </div>
-            );
-          })
-        ) : (
-          <h4>No Alerts Yet!</h4>
-        )}
+        {alert.alerts.length
+          ? alert.alerts.map(curAlert => {
+              return (
+                <div key={curAlert.id}>
+                  <li>{curAlert.subject}</li>
+                  <br />
+                  <hr />
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );

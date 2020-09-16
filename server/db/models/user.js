@@ -1,4 +1,5 @@
-const { STRING, UUID, UUIDV4, INTEGER, TEXT } = require('sequelize');
+require('dotenv').config();
+const { STRING, UUID, UUIDV4, INTEGER, TEXT, FLOAT } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const Session = require('./session');
@@ -47,10 +48,19 @@ const User = db.define(
     oauth: {
       type: STRING,
     },
+    stripe: {
+      type: STRING,
+    },
+    socket: {
+      type: STRING,
+    },
+    balance: {
+      type: FLOAT,
+    },
   },
   {
     hooks: {
-      beforeCreate: user => {
+      beforeCreate: async user => {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
       },

@@ -2,8 +2,8 @@ const {
   models: { Session, User },
 } = require('./db');
 
-const findUserBySession = sessionId =>
-  User.findOne({
+const findUserBySession = async sessionId => {
+  const user = await User.findOne({
     include: [
       {
         model: Session,
@@ -13,5 +13,7 @@ const findUserBySession = sessionId =>
       },
     ],
   });
+  return user;
+};
 
 module.exports = { findUserBySession };
