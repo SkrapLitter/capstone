@@ -33,9 +33,8 @@ const Map: React.FC<Props> = (props: Props) => {
     props.fetchJobs();
   }, [props.job.jobs.length]);
 
-  const getMapBounds = (map, maps, places) => {
+  const getMapBounds = (maps, places) => {
     const bounds = new maps.LatLngBounds();
-    console.log(map);
     places.forEach(place => {
       bounds.extend(new maps.LatLng(place.lat, place.lng));
     });
@@ -54,7 +53,7 @@ const Map: React.FC<Props> = (props: Props) => {
   // Fit map to its bounds after the api is loaded
   const apiIsLoaded = (map, maps, places) => {
     // Get bounds by our places
-    const bounds = getMapBounds(map, maps, places);
+    const bounds = getMapBounds(maps, places);
     // Fit map to bounds
     map.fitBounds(bounds);
     // Bind the resize listener
