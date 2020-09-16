@@ -17,6 +17,7 @@ import { StoreState } from './store/store';
 import { fetchNewAlerts } from './store/alert/alertActions';
 import Axios from 'axios';
 import socket from './socket';
+import Stripe from './components/stripeComponent/stripe';
 
 const App: React.FC = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -54,6 +55,7 @@ const App: React.FC = () => {
         <Switch>
           <Route exact path="/" render={() => <Landing />} />
           <Route exact path="/jobs" render={() => <Feed />} />
+          <Route path="/stripe/:id" component={Stripe} />
           <Route path="/map" render={() => <Map />} />
           <Route path="/account" render={() => <Account />} />
           <Route path="/jobs/:id" component={JobDetails} />

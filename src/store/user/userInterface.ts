@@ -8,7 +8,5 @@ export default interface User {
   password?: string;
   error?: string;
   stripe?: string;
-  stripeAccount?: string;
-  stripeDashBoard?: string;
-  onboarding?: boolean;
+  balance?: number;
 }

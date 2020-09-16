@@ -86,6 +86,10 @@ export const createAccountThunk = (
       };
       const { data } = await axios.post('/api/auth/register', payload);
       dispatch(createAccount(data));
+      const account = (
+        await axios.post(`/api/user/stripe/onboarding/${data.id}`)
+      ).data;
+      window.location = account;
     } catch (err) {
       console.error(err);
     }

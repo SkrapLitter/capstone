@@ -87,7 +87,7 @@ authRouter.post(
       await user.update({
         socket: usersSession.socket,
       });
-      res.status(201).send(user);
+      res.status(200).send(user);
     } catch (err) {
       console.error(err);
       res.status(500).send({ message: 'Server error' });

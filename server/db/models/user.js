@@ -1,9 +1,8 @@
 require('dotenv').config();
-const { STRING, UUID, UUIDV4, INTEGER, TEXT, BOOLEAN } = require('sequelize');
+const { STRING, UUID, UUIDV4, INTEGER, TEXT, FLOAT } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const Session = require('./session');
-const stripe = require('stripe')(process.env.STRIPE_SKEY);
 
 const User = db.define(
   'user',
@@ -55,15 +54,8 @@ const User = db.define(
     socket: {
       type: STRING,
     },
-    stripeAccount: {
-      type: STRING,
-    },
-    onboarding: {
-      type: BOOLEAN,
-      defaultValue: false,
-    },
-    stripeDashBoard: {
-      type: STRING,
+    balance: {
+      type: FLOAT,
     },
   },
   {
@@ -71,29 +63,6 @@ const User = db.define(
       beforeCreate: async user => {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
-        try {
-          if (!user.stripe) {
-            const account = await stripe.accounts.create({
-              type: 'express',
-              country: 'US',
-              email: `${user.username}`,
-              capabilities: {
-                card_payments: { requested: true },
-                transfers: { requested: true },
-              },
-            });
-            user.stripe = account.id;
-            const accountLinks = await stripe.accountLinks.create({
-              account: user.stripe,
-              refresh_url: 'http://localhost:3000/',
-              return_url: `http://localhost:3000/api/user/stripe/callback/${user.id}`,
-              type: 'account_onboarding',
-            });
-            user.stripeAccount = accountLinks.url;
-          }
-        } catch (e) {
-          console.error('error with stripe', e);
-        }
       },
     },
   }

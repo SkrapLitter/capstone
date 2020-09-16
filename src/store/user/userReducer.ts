@@ -10,8 +10,7 @@ const defaultUser: User = {
   clearance: 0,
   error: '',
   stripe: '',
-  stripeAccount: '',
-  stripeDashBoard: '',
+  balance: 0,
 };
 
 const userReducer = (state: User = defaultUser, action): User => {

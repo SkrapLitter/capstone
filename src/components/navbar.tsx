@@ -5,25 +5,10 @@ import { logoutThunk } from '../store/user/userActions';
 import { StoreState } from '../store/store';
 import Alert from './alertComponent/alert';
 import { Button } from '@material-ui/core';
-import axios from 'axios';
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
-  const checkStatus = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    const account = (await axios.get(`/api/user/stripe/${user.id}`)).data;
-    console.log(account);
-    if (!account) {
-      console.log(user.stripeAccount);
-      window.location = user.stripeAccount;
-    } else {
-      const userData = (await axios.post(`/api/user/stripe/${user.id}`)).data;
-      user.stripeDashBoard = userData.stripeDashBoard;
-    }
-  };
   return (
     <div className="navbar-fixed">
       <nav className="green accent-4">
@@ -42,15 +27,6 @@ const Navbar: React.FC = () => {
                   />
                 </Link>
                 <div className="user-profile-subnav green accent-4">
-                  {!user.stripeDashBoard ? (
-                    <>
-                      <Button onClick={e => checkStatus(e)}>
-                        check Onboarding Status
-                      </Button>
-                    </>
-                  ) : (
-                    <a href={user.stripeDashBoard}>Link to Stripe Dashboard</a>
-                  )}
                   <button
                     className="btn btn-small"
                     onClick={() => dispatch(logoutThunk())}
@@ -58,6 +34,7 @@ const Navbar: React.FC = () => {
                   >
                     Logout
                   </button>
+                  <Link to={`/stripe/${user.id}`}>Stripe</Link>
                 </div>
               </li>
             )}
