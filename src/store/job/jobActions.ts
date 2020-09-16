@@ -1,6 +1,12 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
 import Axios from 'axios';
+import { booleanType } from 'aws-sdk/clients/iam';
+import { JobAttributes } from './jobInterface';
+import {
+  dateSort,
+  locationSorter,
+} from '../../components/mapComponent/mapUtils';
 
 enum jobStatus {
   'paid',
@@ -72,24 +78,67 @@ const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
 const fetchJob = (id: string): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
+    console.log(data);
     dispatch(setJob(data));
   };
 };
 
-const reserveJob = (
-  jobId: string,
-  userId: string,
-  username: string
-): AppThunk => {
-  return async dispatch => {
-    const { status } = await Axios.put(`/api/jobs/${jobId}`, {
-      type: 'reserve',
-      userId,
-      username,
-    });
-    if (status) dispatch(fetchJobs());
-    else console.log('failure reserving');
+const reserveJob = (jobId: string): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/jobs/${jobId}`, {
+        type: 'reserve',
+      });
+      if (data.status) dispatch(setJob(data.job));
+    } catch (e) {
+      if (e.response.data.shouldUpdateStore) {
+        dispatch(setJob(e.response.data.job));
+      }
+      throw e.response.data.message;
+    }
   };
 };
 
-export { setJobs, fetchJobs, reserveJob, fetchJob };
+const unreserveJob = (jobId: string): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/jobs/${jobId}`, {
+        type: 'unreserve',
+      });
+      if (data.status) dispatch(setJob(data.job));
+    } catch (e) {
+      console.log(e.response.data);
+      if (e.response.data.shouldUpdateStore) {
+        dispatch(setJob(e.response.data.job));
+      }
+      console.log(e.response.data.message);
+    }
+  };
+};
+
+interface Location {
+  lat: number;
+  lng: number;
+}
+
+const locationSort = (
+  jobs: JobAttributes[],
+  location: Location,
+  sort: booleanType
+): AppThunk => {
+  return dispatch => {
+    if (sort === true) {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: locationSorter(jobs, location),
+      });
+    } else {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: dateSort(jobs),
+      });
+    }
+  };
+};
+
+export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob, locationSort };
