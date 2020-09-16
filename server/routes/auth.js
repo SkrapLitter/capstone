@@ -20,12 +20,12 @@ authRouter.post('/upload', singleUpload, async (req, res) => {
   const { buffer, originalname } = req.file;
 
   const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ID,
-    secretAccessKey: process.env.AWS_SECRET,
+    accessKeyId: process.env.AWS_ID2,
+    secretAccessKey: process.env.AWS_SECRET2,
   });
 
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: process.env.AWS_BUCKET_NAME2,
     Key: originalname,
     Body: buffer,
     ACL: 'public-read',
@@ -79,6 +79,21 @@ authRouter.post(
       });
       req.user = user;
       let usersSession = await Session.findByPk(req.sessionId);
+
+      // Create S3 Bucket
+      const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_ID2,
+        secretAccessKey: process.env.AWS_SECRET2,
+      });
+
+      const params = {
+        Bucket: user.id,
+      };
+
+      s3.createBucket(params, (err, data) => {
+        if (err) console.log(err, err.stack);
+        else console.log(data);
+      });
 
       if (!usersSession) {
         usersSession = await Session.create({ id: req.sessionId });

@@ -1,5 +1,6 @@
 import TYPES from '../types';
 import Job from './jobInterface';
+import { AnyAction } from 'redux';
 
 const defaultJobs: Job = {
   jobs: [],
@@ -26,7 +27,7 @@ const defaultJobs: Job = {
   },
 };
 
-const jobReducer = (state: Job = defaultJobs, action): Job => {
+const jobReducer = (state: Job = defaultJobs, action: AnyAction): Job => {
   switch (action.type) {
     case TYPES.SET_JOBS:
       return {
@@ -37,7 +38,12 @@ const jobReducer = (state: Job = defaultJobs, action): Job => {
     case TYPES.SET_JOB:
       return {
         ...state,
-        job: action.job && action.job.length ? action.job[0] : {},
+        job: action.job,
+      };
+    case TYPES.LOCATION_SORT:
+      return {
+        ...state,
+        jobs: action.jobs,
       };
     default:
       return state;

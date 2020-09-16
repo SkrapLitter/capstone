@@ -13,7 +13,9 @@ const Navbar: React.FC = () => {
     <div className="navbar-fixed">
       <nav className="green accent-4">
         <div className="nav-wrapper">
-          <Link to="/stream">(LOGO HERE)</Link>
+          <Link to="/stream" className="navLogo">
+            skräp
+          </Link>
           <ul id="nav-mobile" className="right hide-on-small-only">
             {!!user.clearance && (
               <li className="user-profile">
