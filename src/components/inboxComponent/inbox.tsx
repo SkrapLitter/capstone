@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { Link } from 'react-router-dom';
 import { fetchUserInbox, setChatroom } from '../../store/inbox/inboxActions';
-import { Chatroom } from '../../store/inbox/inboxInterface';
 import { Button } from '@material-ui/core';
+import { Chatroom } from '../../store/inbox/inboxInterface';
 
 const Inbox: React.FC = () => {
   const dispatch = useDispatch();

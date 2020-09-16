@@ -7,7 +7,7 @@ const setMessages = (messages: Message): Inbox => ({
   type: TYPES.SET_MESSAGES,
   messages,
 });
-const setInbox = (inbox: []): Inbox => ({
+const setInbox = (inbox: Array<Chatroom>): Inbox => ({
   type: TYPES.SET_INBOX,
   inbox,
 });

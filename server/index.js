@@ -18,6 +18,7 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
+const { idText } = require('typescript');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -36,7 +37,6 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  console.log(socket.id);
   socket.on('message', async data => {
     try {
       const { chatroomId, author, message, userId } = data;
@@ -47,18 +47,16 @@ io.on('connection', socket => {
         userId,
       });
       const chatroom = await Chatroom.findByPk(chatroomId);
-      const users = chatroom.chatusers
-        .split('/')
-        .filter(user => user !== userId);
-      await users.forEach(async user => {
+      const users = chatroom.chatusers.split('/').filter(id => id !== userId);
+      await users.forEach(async id => {
         Alert.create({
           subject: `New Message Received From ${author} in ${chatroom.name}`,
-          userId: user,
+          userId: id,
         });
-        const userData = await User.findByPk(user);
-        if (userData) {
-          io.to(userData.socket).emit('alert', user);
-          io.to(userData.socket).emit('newMessage', chatroom);
+        const user = await User.findByPk(id);
+        if (user) {
+          io.to(user.socket).emit('alert', id);
+          io.to(user.socket).emit('newMessage', chatroom);
         }
       });
       io.to(socket.id).emit('newMessage', chatroom);

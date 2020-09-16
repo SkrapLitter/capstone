@@ -23,7 +23,6 @@ const SelectedChatroom: React.FC = () => {
   }, []);
   const sendMessage = e => {
     if (e.key === 'Enter') {
-      console.log('sending');
       e.preventDefault();
       socket.emit('message', {
         message,
