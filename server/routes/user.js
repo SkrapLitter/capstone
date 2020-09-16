@@ -52,7 +52,6 @@ userRouter.get(`/stripe/callback/`, async (req, res) => {
     const balance = await stripe.balance.retrieve({
       stripeAccount: response.stripe_user_id,
     });
-    console.log(balance);
     user.update({
       stripe: response.stripe_user_id,
       balance: balance.available[0].amount,
