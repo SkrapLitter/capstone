@@ -236,6 +236,17 @@ const sync = async () => {
         'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
       jobId: job5.id,
     });
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
+      jobId: job5.id,
+    });
+
+    await Image.create({
+      url:
+        'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
+      jobId: job5.id,
+    });
   } catch (e) {
     console.error(e);
   }

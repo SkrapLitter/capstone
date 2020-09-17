@@ -38,7 +38,7 @@ const MapMarker: React.FC<Props> = (props: Props) => {
               {props.job.address}, {props.job.city}, {props.job.state}
             </h6>
             <p>
-              <i>"{props.job.description}"</i>
+              <i>"{props.job.summary}"</i>
             </p>
           </div>
           <div className="mapCardButtons">
@@ -47,9 +47,7 @@ const MapMarker: React.FC<Props> = (props: Props) => {
                 <strong>${props.job.price}</strong>
               </h4>
             ) : (
-              <h6>
-                <i>This job is unpaid</i>
-              </h6>
+                <p className='charcoal' style={{fontSize:'1.2em'}}>Volunteer</p>
             )}
             <button
               className="waves-effect waves-light btn green accent-4 cardButton"

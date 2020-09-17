@@ -84,7 +84,7 @@ const Job = db.define(
   {
     hooks: {
       beforeCreate: job => {
-        job.summary = job.description.slice(0, 30 || job.description.length);
+        job.summary = `${job.description.split(" ").filter((word, i) => i < 10).join(" ")}...`;
       },
     },
   }
