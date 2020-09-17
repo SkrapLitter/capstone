@@ -15,7 +15,7 @@ const Alert: React.FC = () => {
         badgeContent={alert.newAlerts ? alert.newAlerts.length : 0}
         color="primary"
         onClick={e => {
-          e.preventDefault();
+          e.stopPropagation();
           setOpen(!open);
           if (alert.newAlerts && alert.newAlerts.length) {
             dispatch(clearAlerts(alert.newAlerts, user.id));
@@ -25,19 +25,17 @@ const Alert: React.FC = () => {
         <AnnouncementIcon />
       </Badge>
       <div className={open ? 'ghost' : 'alertList'}>
-        {alert.alerts.length ? (
-          alert.alerts.map(curAlert => {
-            return (
-              <div key={curAlert.id}>
-                <li>{curAlert.subject}</li>
-                <br />
-                <hr />
-              </div>
-            );
-          })
-        ) : (
-          <h4>No Alerts Yet!</h4>
-        )}
+        {alert.alerts.length
+          ? alert.alerts.map(curAlert => {
+              return (
+                <div key={curAlert.id}>
+                  <li>{curAlert.subject}</li>
+                  <br />
+                  <hr />
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );

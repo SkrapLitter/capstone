@@ -30,7 +30,6 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
         chatroom: action.chatroom,
       };
     case TYPES.SET_MESSAGES:
-      console.log(action.messages);
       return {
         ...state,
         messages: action.messages,

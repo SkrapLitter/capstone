@@ -1,6 +1,6 @@
 export interface Inbox {
   type: string;
-  inbox?: [];
+  inbox?: Array<Chatroom>;
   messages?: Message;
   chatroom?: Chatroom;
 }
@@ -14,8 +14,8 @@ export interface Chatroom {
   users: [];
 }
 export interface InboxRedux {
-  inbox: [];
-  messages: [];
+  inbox: Array<Chatroom>;
+  messages: Message[];
   chatroom: Chatroom;
 }
 

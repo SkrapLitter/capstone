@@ -9,6 +9,7 @@ import viewReducer from './view/viewReducer';
 import inboxReducer from './inbox/inboxReducer';
 import photoReducer from './photos/photoReducer';
 import alertReducer from './alert/alertReducer';
+import stripeReducer from './stripe/stripeReducer';
 
 export const reducer = combineReducers({
   user: userReducer,
@@ -18,6 +19,7 @@ export const reducer = combineReducers({
   inbox: inboxReducer,
   photos: photoReducer,
   alert: alertReducer,
+  stripe: stripeReducer,
 });
 
 const middleware = [thunks, createLogger({ collapsed: true })];

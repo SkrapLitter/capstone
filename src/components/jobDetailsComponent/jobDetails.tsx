@@ -56,6 +56,7 @@ const JobDetails: React.FC = () => {
       }
     }).then((res: Chatroom) => {
       if (res) {
+        console.log(res);
         history.push(`/inbox/${res.id}`);
       }
     });

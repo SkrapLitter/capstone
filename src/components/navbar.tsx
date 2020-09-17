@@ -9,7 +9,6 @@ import { Button } from '@material-ui/core';
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
-
   return (
     <div className="navbar-fixed">
       <nav className="green accent-4">
@@ -37,6 +36,7 @@ const Navbar: React.FC = () => {
                   >
                     Logout
                   </button>
+                  <Link to={`/stripe/${user.id}`}>Stripe</Link>
                 </div>
               </li>
             )}

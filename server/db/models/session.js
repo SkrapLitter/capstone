@@ -1,4 +1,4 @@
-const { UUID, UUIDV4 } = require('sequelize');
+const { UUID, UUIDV4, BOOLEAN, STRING } = require('sequelize');
 const db = require('../db');
 
 const Session = db.define('session', {
@@ -6,6 +6,12 @@ const Session = db.define('session', {
     primaryKey: true,
     type: UUID,
     defaultValue: UUIDV4,
+  },
+  socket: {
+    type: STRING,
+  },
+  active: {
+    type: BOOLEAN,
   },
 });
 
