@@ -33,9 +33,8 @@ const Map: React.FC<Props> = (props: Props) => {
     props.fetchJobs();
   }, [props.job.jobs.length]);
 
-  const getMapBounds = (map, maps, places) => {
+  const getMapBounds = (maps, places) => {
     const bounds = new maps.LatLngBounds();
-    console.log(map);
     places.forEach(place => {
       bounds.extend(new maps.LatLng(place.lat, place.lng));
     });
@@ -54,18 +53,17 @@ const Map: React.FC<Props> = (props: Props) => {
   // Fit map to its bounds after the api is loaded
   const apiIsLoaded = (map, maps, places) => {
     // Get bounds by our places
-    const bounds = getMapBounds(map, maps, places);
+    const bounds = getMapBounds(maps, places);
     // Fit map to bounds
     map.fitBounds(bounds);
     // Bind the resize listener
     bindResizeListener(map, maps, bounds);
   };
 
-  const handleMapChange = (center, zoom, bounds, marginBounds) => {
-    console.log('CENTER', center);
-    console.log('ZOOM', zoom);
+  const handleMapChange = bounds => {
     console.log('BOUNDS', bounds);
-    console.log('MARGIN BOUNDS', marginBounds);
+    // lat less than north, greater than south
+    // lng less than west, greater than east
   };
 
   return (
@@ -82,9 +80,7 @@ const Map: React.FC<Props> = (props: Props) => {
             onGoogleApiLoaded={({ map, maps }) =>
               apiIsLoaded(map, maps, props.job.jobs)
             }
-            onChange={({ center, zoom, bounds, marginBounds }) =>
-              handleMapChange(center, zoom, bounds, marginBounds)
-            }
+            onChange={({ bounds }) => handleMapChange(bounds)}
           >
             {props.job.jobs.map(job => {
               return (

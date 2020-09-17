@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
@@ -20,23 +20,23 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 
 const App: React.FC = () => {
-  const [width, setWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
+
   useEffect(() => {
     dispatch(cookieLogin());
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window.innerWidth]);
+  }, []);
+
+  const SOCKET_IO_URL = 'http://localhost:3000';
+  const socket = io(SOCKET_IO_URL);
+
   useEffect(() => {
     socket.on('connect', () => {
       Axios.put(`/api/user/socketConnect/${socket.id}`);
     });
     return () => socket.disconnect();
   }, []);
+
   socket.on('newMessage', data => {
     const users = data.chatusers.split('/');
     if (users.includes(user.id)) {
@@ -65,7 +65,7 @@ const App: React.FC = () => {
           <Redirect to="/jobs" />
         </Switch>
       </div>
-      {width <= 600 ? <Footer /> : null}
+      <Footer />
     </div>
   );
 };

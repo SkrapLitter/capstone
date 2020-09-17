@@ -24,6 +24,13 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .fixedFooter {
+    display: none;
+  }
 }
 
 .footerIcons {
@@ -212,6 +219,7 @@ button.m1em {
 }
 .cardButtons {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .cardButton {
@@ -312,4 +320,30 @@ button.m1em {
 
 .sortIcon:hover {
   cursor: pointer;
+}
+
+.infiniteContainer {
+  padding: 10px;
+}
+
+.jobCard {
+  margin: 10px 0;
+}
+
+.feedJobImage {
+  padding: 10px;
+}
+
+.feedTextContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.volunteerIcon {
+  width: 30px;
+  height: auto;
+  margin-right: 5px;
 }
