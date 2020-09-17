@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { StoreState } from '../../store/store';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/styles';
 import { fetchMapJobs } from '../../store/job/jobActions';
 import Job from '../../store/job/jobInterface';
 import GoogleMapReact from 'google-map-react';
 import MapMarker from './mapMarker';
+
+const useStyles = makeStyles({
+  createButton: {
+    color: '#ffffff',
+    backgroundColor: '#00c853',
+  },
+});
 
 interface Props {
   job: Job;
@@ -72,6 +83,7 @@ const Map: React.FC<Props> = (props: Props) => {
     const west = bounds.nw.lng;
     props.fetchMapJobs(north, south, east, west);
   };
+  const classes = useStyles();
   return (
     <div className="container">
       <div className="mapContainer">
@@ -101,6 +113,13 @@ const Map: React.FC<Props> = (props: Props) => {
             })}
           </GoogleMapReact>
         )}
+      </div>
+      <div className="createButtonContainer">
+        <Link to="/create">
+          <Fab className={classes.createButton}>
+            <AddIcon />
+          </Fab>
+        </Link>
       </div>
     </div>
   );
