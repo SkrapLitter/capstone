@@ -8,7 +8,7 @@ chatroomRouter.get('/chatroom/:id', async (req, res) => {
     if (req.isAuthenticated() && req.user) {
       const { id } = req.params;
       let chatRooms;
-      if (id !== '0') {
+      if (id) {
         chatRooms = await Chatroom.findAll({
           include: {
             model: User,

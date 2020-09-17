@@ -24,6 +24,13 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .fixedFooter {
+    display: none;
+  }
 }
 
 .footerIcons {
@@ -94,6 +101,23 @@
 .input-field input.valid {
   border-bottom: 2px solid #0f0;
   box-shadow: 0 0 0 0 #777;
+}
+
+.marker {
+  opacity: 0;
+  animation-name: markerAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  /* transition: ease-in; */
+}
+
+@keyframes markerAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .marker:hover {
@@ -212,6 +236,7 @@ button.m1em {
 }
 .cardButtons {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .cardButton {
@@ -312,4 +337,46 @@ button.m1em {
 
 .sortIcon:hover {
   cursor: pointer;
+}
+
+.infiniteContainer {
+  padding: 10px;
+}
+
+.jobCard {
+  margin: 10px 0;
+}
+
+.feedJobImage {
+  padding: 10px;
+}
+
+.feedTextContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.volunteerIcon {
+  width: 30px;
+  height: auto;
+  margin-right: 5px;
+}
+
+.createButtonContainer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  .createButtonContainer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 0 20px calc(20px + 50px) 0;
+  }
 }

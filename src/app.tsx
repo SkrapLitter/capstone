@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
@@ -20,32 +20,29 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 
 const App: React.FC = () => {
-  const [width, setWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
+
   useEffect(() => {
     dispatch(cookieLogin());
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window.innerWidth]);
+  }, []);
+
   useEffect(() => {
     socket.on('connect', () => {
       Axios.put(`/api/user/socketConnect/${socket.id}`);
     });
     return () => socket.disconnect();
   }, []);
+
   socket.on('newMessage', data => {
     const users = data.chatusers.split('/');
     if (users.includes(user.id)) {
       dispatch(fetchChatroomMessages(data.id, user.id));
     }
   });
-  socket.on('alert', userId => {
-    if (userId === user.id) {
-      dispatch(fetchNewAlerts(userId));
+  socket.on('alert', id => {
+    if (id === user.id) {
+      dispatch(fetchNewAlerts(id));
     }
   });
   return (
@@ -65,7 +62,7 @@ const App: React.FC = () => {
           <Redirect to="/jobs" />
         </Switch>
       </div>
-      {width <= 600 ? <Footer /> : null}
+      <Footer />
     </div>
   );
 };
