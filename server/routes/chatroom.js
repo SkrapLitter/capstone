@@ -8,7 +8,7 @@ chatroomRouter.get('/chatroom/:id', async (req, res) => {
     if (req.isAuthenticated() && req.user) {
       const { id } = req.params;
       let chatRooms;
-      if (id !== '0') {
+      if (id) {
         chatRooms = await Chatroom.findAll({
           include: {
             model: User,
@@ -34,16 +34,16 @@ chatroomRouter.get('/job', async (req, res) => {
       const { userId, hostId, username, hostname, jobId, jobName } = req.query;
       let i = 0;
       let j = 0;
-      if (userId[i] === hostId[j]) {
+      while (userId[i] === hostId[j]) {
         i++;
         j++;
       }
       const [first, second] =
         userId[i] <= hostId[j] ? [userId, hostId] : [hostId, userId];
       const chatusers = `${first}/${second}`;
-      chatroom = await Chatroom.findAll({
+      chatroom = await Chatroom.findOne({
         include: {
-          model: ChatMessage,
+          model: User,
         },
         where: {
           chatusers,
@@ -60,6 +60,16 @@ chatroomRouter.get('/job', async (req, res) => {
           message: `this is the start of your chatroom with ${username} and ${hostname}`,
           author: 'system',
           chatroomId: chatroom.id,
+        });
+        chatroom.addUser(first);
+        chatroom.addUser(second);
+        chatroom = await Chatroom.findOne({
+          include: {
+            model: User,
+          },
+          where: {
+            chatusers,
+          },
         });
       }
       res.status(200).send(chatroom);

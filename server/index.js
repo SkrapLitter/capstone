@@ -18,7 +18,6 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
-const { idText } = require('typescript');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -49,7 +48,7 @@ io.on('connection', socket => {
       const chatroom = await Chatroom.findByPk(chatroomId);
       const users = chatroom.chatusers.split('/').filter(id => id !== userId);
       await users.forEach(async id => {
-        Alert.create({
+        await Alert.create({
           subject: `New Message Received From ${author} in ${chatroom.name}`,
           userId: id,
         });

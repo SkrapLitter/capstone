@@ -19,7 +19,9 @@ const SelectedChatroom: React.FC = () => {
   const { chatroom } = inbox;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchChatroomMessages(id, user.id));
+    if (user.id) {
+      dispatch(fetchChatroomMessages(id, user.id));
+    }
   }, []);
   const sendMessage = e => {
     if (e.key === 'Enter') {
@@ -39,13 +41,15 @@ const SelectedChatroom: React.FC = () => {
         <>
           <h2>{chatroom.name}</h2>
           <ul>
-            {chatroom.users.map((curUser: User) => {
-              return (
-                <li key={curUser.id}>
-                  {curUser.firstName} {curUser.lastName}
-                </li>
-              );
-            })}
+            {chatroom && chatroom.users.length
+              ? chatroom.users.map((curUser: User) => {
+                  return (
+                    <li key={curUser.id}>
+                      {curUser.firstName} {curUser.lastName}
+                    </li>
+                  );
+                })
+              : null}
           </ul>
           <ul>
             {inbox.messages && inbox.messages.length
