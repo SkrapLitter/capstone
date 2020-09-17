@@ -54,20 +54,26 @@ const JobImages: React.FC = () => {
       curImg = null;
     }, 300);
   };
-
+  const handleTouchStart = (e: TouchEvent): void => {
+    curImg = e.target;
+    startX = e.touches[0].clientX;
+  };
+  const handleTouchMove = (e: TouchEvent): void => {
+    dif = e.touches[0].clientX - startX;
+    curImg.style.left = `${dif}px`;
+  };
   useEffect(() => {
     const gallery = document.getElementById('galleryImgContainer');
     if (gallery) {
-      gallery.addEventListener('touchstart', (e: TouchEvent): void => {
-        curImg = e.target;
-        startX = e.touches[0].clientX;
-      });
+      gallery.addEventListener('touchstart', handleTouchStart);
       gallery.addEventListener('touchend', handleTouch);
-      gallery.addEventListener('touchmove', (e: TouchEvent): void => {
-        dif = e.touches[0].clientX - startX;
-        curImg.style.left = `${dif}px`;
-      });
+      gallery.addEventListener('touchmove', handleTouchMove);
     }
+    return () => {
+      gallery.removeEventListener('touchstart', handleTouchStart);
+      gallery.removeEventListener('touchend', handleTouch);
+      gallery.removeEventListener('touchmove', handleTouchMove);
+    };
   }, [showGallery]);
 
   const generateClassName = (i: number): string => {
