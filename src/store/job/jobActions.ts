@@ -75,6 +75,20 @@ const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
   };
 };
 
+const fetchMapJobs = (
+  north: number,
+  south: number,
+  east: number,
+  west: number
+): AppThunk => {
+  return async dispatch => {
+    const { data } = await Axios.get(
+      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}`
+    );
+    dispatch(setJobs(0, data));
+  };
+};
+
 const fetchJob = (id: string): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
@@ -141,4 +155,12 @@ const locationSort = (
   };
 };
 
-export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob, locationSort };
+export {
+  setJobs,
+  fetchJobs,
+  reserveJob,
+  fetchJob,
+  unreserveJob,
+  locationSort,
+  fetchMapJobs,
+};

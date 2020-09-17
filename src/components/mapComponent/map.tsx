@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { fetchJobs } from '../../store/job/jobActions';
+import { fetchMapJobs } from '../../store/job/jobActions';
 import Job from '../../store/job/jobInterface';
 import GoogleMapReact from 'google-map-react';
 import MapMarker from './mapMarker';
 
 interface Props {
   job: Job;
-  fetchJobs: () => Job;
+  fetchMapJobs: (
+    north: number,
+    south: number,
+    east: number,
+    west: number
+  ) => Job;
 }
 
 const Map: React.FC<Props> = (props: Props) => {
@@ -29,9 +34,9 @@ const Map: React.FC<Props> = (props: Props) => {
     setLocationLoaded(true);
   }, []);
 
-  useEffect(() => {
-    props.fetchJobs();
-  }, [props.job.jobs.length]);
+  // useEffect(() => {
+  //   props.fetchJobs();
+  // }, [props.job.jobs.length]);
 
   const getMapBounds = (maps, places) => {
     const bounds = new maps.LatLngBounds();
@@ -61,11 +66,12 @@ const Map: React.FC<Props> = (props: Props) => {
   };
 
   const handleMapChange = bounds => {
-    console.log('BOUNDS', bounds);
-    // lat less than north, greater than south
-    // lng less than west, greater than east
+    const north = bounds.ne.lat;
+    const south = bounds.se.lat;
+    const east = bounds.ne.lng;
+    const west = bounds.nw.lng;
+    props.fetchMapJobs(north, south, east, west);
   };
-
   return (
     <div className="container">
       <div className="mapContainer">
@@ -104,6 +110,6 @@ const mapStateToProps = (state: StoreState) => ({
   job: state.job,
 });
 
-const mapDispatchToProps = { fetchJobs };
+const mapDispatchToProps = { fetchMapJobs };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
