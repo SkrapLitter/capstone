@@ -52,9 +52,12 @@ export const findOrCreateChat = (
         `/api/chat/job?userId=${userId}&hostId=${hostId}&username=${username}&hostname=${hostname}&jobId=${jobId}&jobName=${jobName}`
       )
     ).data;
-    await dispatch(setChatroom(chatroom[0]));
-    await dispatch(fetchUserInbox(userId));
-    await dispatch(fetchChatroomMessages(chatroom[0].id, userId));
-    return chatroom[0];
+    if (chatroom) {
+      console.log(chatroom);
+      await dispatch(setChatroom(chatroom));
+      await dispatch(fetchChatroomMessages(chatroom.id, userId));
+      await dispatch(fetchUserInbox(userId));
+      return chatroom;
+    }
   };
 };
