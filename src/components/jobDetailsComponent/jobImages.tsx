@@ -40,7 +40,15 @@ const JobImages: React.FC = () => {
     idxRef.current = index;
     setCurImgIndex(index);
   };
-  const handleTouch = (): void => {
+  const handleTouchStart = (e: TouchEvent): void => {
+    curImg = e.target;
+    startX = e.touches[0].clientX;
+  };
+  const handleTouchMove = (e: TouchEvent): void => {
+    dif = e.touches[0].clientX - startX;
+    curImg.style.left = `${dif}px`;
+  };
+  const handleTouchEnd = (): void => {
     startX = 0;
     if (dif < -150) {
       incImgIndex(idxRef.current);
@@ -51,28 +59,22 @@ const JobImages: React.FC = () => {
     }
     setTimeout(() => {
       curImg.style.left = 0;
-      curImg = null;
     }, 300);
   };
-  const handleTouchStart = (e: TouchEvent): void => {
-    curImg = e.target;
-    startX = e.touches[0].clientX;
-  };
-  const handleTouchMove = (e: TouchEvent): void => {
-    dif = e.touches[0].clientX - startX;
-    curImg.style.left = `${dif}px`;
-  };
+
   useEffect(() => {
     const gallery = document.getElementById('galleryImgContainer');
     if (gallery) {
       gallery.addEventListener('touchstart', handleTouchStart);
-      gallery.addEventListener('touchend', handleTouch);
       gallery.addEventListener('touchmove', handleTouchMove);
+      gallery.addEventListener('touchend', handleTouchEnd);
     }
     return () => {
-      gallery.removeEventListener('touchstart', handleTouchStart);
-      gallery.removeEventListener('touchend', handleTouch);
-      gallery.removeEventListener('touchmove', handleTouchMove);
+      if (gallery) {
+        gallery.removeEventListener('touchstart', handleTouchStart);
+        gallery.removeEventListener('touchmove', handleTouchMove);
+        gallery.removeEventListener('touchend', handleTouchEnd);
+      }
     };
   }, [showGallery]);
 
