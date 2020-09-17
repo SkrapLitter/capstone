@@ -6,6 +6,20 @@
   justify-content: center;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.f-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .border-circle {
   border-radius: 50%;
 }
@@ -465,4 +479,47 @@ button:focus {
     bottom: 0;
     margin: 0 20px calc(20px + 50px) 0;
   }
+}
+
+.hero-text {
+  color: #fff;
+  font: 2rem 'Fredoka One', cursive;
+  left: 0;
+  padding: 4rem 2rem;
+  position: absolute;
+  right: 0;
+}
+
+.hero-text h1,
+.hero-text h2 {
+  margin: 0;
+}
+
+.stripe {
+  align-items: center;
+  font-family: 'Fredoka One', cursive;
+  padding: 1rem;
+}
+
+.stripe ul {
+  margin: 0 2rem;
+}
+
+.stripe ul li {
+  padding: 0 0.5rem;
+}
+
+.achieve {
+  align-items: center;
+  display: flex;
+  font-size: 1.6rem;
+  height: 100px;
+  justify-content: center;
+  text-align: center;
+  width: 100px;
+}
+
+.achieve-meta {
+  max-width: 100px;
+  padding: 0 1rem;
 }
