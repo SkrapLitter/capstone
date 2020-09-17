@@ -15,7 +15,7 @@ const Alert: React.FC = () => {
         badgeContent={alert.newAlerts ? alert.newAlerts.length : 0}
         color="primary"
         onClick={e => {
-          e.preventDefault();
+          e.stopPropagation();
           setOpen(!open);
           if (alert.newAlerts && alert.newAlerts.length) {
             dispatch(clearAlerts(alert.newAlerts, user.id));

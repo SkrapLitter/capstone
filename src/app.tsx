@@ -43,9 +43,9 @@ const App: React.FC = () => {
       dispatch(fetchChatroomMessages(data.id, user.id));
     }
   });
-  socket.on('alert', userId => {
-    if (userId === user.id) {
-      dispatch(fetchNewAlerts(userId));
+  socket.on('alert', id => {
+    if (id === user.id) {
+      dispatch(fetchNewAlerts(id));
     }
   });
   return (

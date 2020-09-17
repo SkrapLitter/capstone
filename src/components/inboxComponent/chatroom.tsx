@@ -19,7 +19,9 @@ const SelectedChatroom: React.FC = () => {
   const { chatroom } = inbox;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchChatroomMessages(id, user.id));
+    if (user.id) {
+      dispatch(fetchChatroomMessages(id, user.id));
+    }
   }, []);
   const sendMessage = e => {
     if (e.key === 'Enter') {

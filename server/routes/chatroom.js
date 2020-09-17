@@ -8,8 +8,8 @@ chatroomRouter.get('/chatroom/:id', async (req, res) => {
     if (req.isAuthenticated() && req.user) {
       const { id } = req.params;
       let chatRooms;
-      if (id !== '0') {
-        chatRooms = await Chatroom.findOne({
+      if (id) {
+        chatRooms = await Chatroom.findAll({
           include: {
             model: User,
             through: 'UserChat',
