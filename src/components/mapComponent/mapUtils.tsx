@@ -24,6 +24,6 @@ export const locationSorter = (
 
 export const dateSort = (jobs: JobAttributes[]): JobAttributes[] => {
   return jobs.sort((a, b) => {
-    return Number(a.updatedAt) - Number(b.updatedAt);
+    return a.createdAt < b.createdAt ? 1 : -1;
   });
 };
