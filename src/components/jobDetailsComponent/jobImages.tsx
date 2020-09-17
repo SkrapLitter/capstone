@@ -21,7 +21,7 @@ const JobImages: React.FC = () => {
   let dif = 0;
   const idxRef: React.MutableRefObject<number> = useRef(curImgIndex);
   const incImgIndex = (ci: number): void => {
-    let index;
+    let index: number;
     if (ci === job.images.length - 1) {
       index = 0;
     } else {
@@ -31,7 +31,7 @@ const JobImages: React.FC = () => {
     setCurImgIndex(index);
   };
   const decImgIndex = (ci: number): void => {
-    let index;
+    let index: number;
     if (ci === 0) {
       index = job.images.length - 1;
     } else {
@@ -42,9 +42,9 @@ const JobImages: React.FC = () => {
   };
   const handleTouch = (): void => {
     startX = 0;
-    if (dif < -200) {
+    if (dif < -150) {
       incImgIndex(idxRef.current);
-    } else if (dif > 200) {
+    } else if (dif > 150) {
       decImgIndex(idxRef.current);
     } else if (dif >= -200 && dif <= 200) {
       curImg.style.left = 0;
@@ -58,12 +58,12 @@ const JobImages: React.FC = () => {
   useEffect(() => {
     const gallery = document.getElementById('galleryImgContainer');
     if (gallery) {
-      gallery.addEventListener('touchstart', e => {
-        curImg = document.querySelector('.curImg');
+      gallery.addEventListener('touchstart', (e: TouchEvent): void => {
+        curImg = e.target;
         startX = e.touches[0].clientX;
       });
       gallery.addEventListener('touchend', handleTouch);
-      gallery.addEventListener('touchmove', e => {
+      gallery.addEventListener('touchmove', (e: TouchEvent): void => {
         dif = e.touches[0].clientX - startX;
         curImg.style.left = `${dif}px`;
       });
@@ -72,10 +72,12 @@ const JobImages: React.FC = () => {
 
   const generateClassName = (i: number): string => {
     if (job.images.length <= 2) {
+      // Don't animate out, just swap images
       if (i === curImgIndex) {
         return 'jobGalleryImg curImg';
       }
     } else {
+      // Animation logic
       if (i === curImgIndex) {
         return 'jobGalleryImg curImg';
       } else if (
@@ -90,6 +92,7 @@ const JobImages: React.FC = () => {
         return 'jobGalleryImg moveRight';
       }
     }
+    // Otherwise, Make it Invisible
     return 'dNone';
   };
 
@@ -132,7 +135,7 @@ const JobImages: React.FC = () => {
         <div className="overlay">
           <div className="closeIcon">
             <CancelPresentationIcon
-              style={{ fontSize: 40, color: '#fff' }}
+              style={{ fontSize: 60, color: '#fff' }}
               onClick={hide}
             />
           </div>
