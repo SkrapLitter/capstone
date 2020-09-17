@@ -27,9 +27,6 @@ const App: React.FC = () => {
     dispatch(cookieLogin());
   }, []);
 
-  const SOCKET_IO_URL = 'http://localhost:3000';
-  const socket = io(SOCKET_IO_URL);
-
   useEffect(() => {
     socket.on('connect', () => {
       Axios.put(`/api/user/socketConnect/${socket.id}`);

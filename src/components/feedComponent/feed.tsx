@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { Button, TextField, Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import MapIcon from '@material-ui/icons/Map';
 import { StoreState } from '../../store/store';
 import { fetchJobs, locationSort } from '../../store/job/jobActions';
-// import { locationSort } from '../mapComponent/mapUtils';
 import { JobAttributes } from '../../store/job/jobInterface';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import JobCard from './jobCard';
@@ -22,6 +23,10 @@ const useStyles = makeStyles({
   },
   search: {
     marginTop: '10px',
+  },
+  createButton: {
+    color: '#ffffff',
+    backgroundColor: '#00c853',
   },
 });
 
@@ -141,6 +146,13 @@ const Feed: React.FC = () => {
             <h2> No Jobs Yet</h2>
           )}
         </InfiniteScroll>
+      </div>
+      <div className="createButtonContainer">
+        <Link to="/create">
+          <Fab className={classes.createButton}>
+            <AddIcon />
+          </Fab>
+        </Link>
       </div>
     </div>
   );
