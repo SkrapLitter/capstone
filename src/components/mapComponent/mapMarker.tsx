@@ -47,7 +47,9 @@ const MapMarker: React.FC<Props> = (props: Props) => {
                 <strong>${props.job.price}</strong>
               </h4>
             ) : (
-                <p className='charcoal' style={{fontSize:'1.2em'}}>Volunteer</p>
+              <p className="charcoal" style={{ fontSize: '1.2em' }}>
+                Volunteer
+              </p>
             )}
             <button
               className="waves-effect waves-light btn green accent-4 cardButton"

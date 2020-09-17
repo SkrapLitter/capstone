@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ThunkAction } from 'redux-thunk';
 import GoogleMapReact from 'google-map-react';
 import { StoreState } from '../../store/store';
-import { fetchJob} from '../../store/job/jobActions';
+import { fetchJob } from '../../store/job/jobActions';
 import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
@@ -24,11 +24,14 @@ const JobDetails: React.FC = () => {
     dispatch(fetchJob(id));
   }, []);
 
-  const {user, job: { job }} = useSelector((state: StoreState) => state);
-  
+  const {
+    user,
+    job: { job },
+  } = useSelector((state: StoreState) => state);
+
   const renderButtons = () => {
-    return job.userId === user.id ? <PosterButtons /> : <UserButtons />
-  }
+    return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
+  };
 
   return (
     <div className="container jCenter">
@@ -37,22 +40,22 @@ const JobDetails: React.FC = () => {
           <h4 className="center-align">{job.name}</h4>
           <div className="jCenter" style={{ maxWidth: '800px' }}>
             <JobImages />
-            {
-              renderButtons()
-            }
+            {renderButtons()}
             <div className="container">
-              <div className='flexRow'>
-                <div className='flexRow'>
-                <h6 className="charcoal">Posted By: {job.createdUser}</h6>
-                <img
-                  src={job.user && job.user.image}
-                  width="50"
-                  height="50"
-                  className="border-circle z-depth-1"
-                  alt={`${user.firstName} ${user.lastName}`}
-                />
+              <div className="flexRow">
+                <div className="flexRow">
+                  <h6 className="charcoal">Posted By: {job.createdUser}</h6>
+                  <img
+                    src={job.user && job.user.image}
+                    width="50"
+                    height="50"
+                    className="border-circle z-depth-1"
+                    alt={`${user.firstName} ${user.lastName}`}
+                  />
                 </div>
-                <h4 id='jobPrice'>{job.price > 0 ? `$${job.price}` : 'Volunteer'}</h4>
+                <h4 id="jobPrice">
+                  {job.price > 0 ? `$${job.price}` : 'Volunteer'}
+                </h4>
               </div>
               <p>{job.description}</p>
             </div>
@@ -76,9 +79,7 @@ const JobDetails: React.FC = () => {
             </div>
           </div>
         </>
-      ) : (
-        null
-      )}
+      ) : null}
     </div>
   );
 };

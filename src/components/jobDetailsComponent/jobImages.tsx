@@ -19,8 +19,8 @@ const JobImages: React.FC = () => {
   let curImg = null;
   let startX = 0;
   let dif = 0;
-  const idxRef = useRef(curImgIndex);
-  const incImgIndex = (ci: number) => {
+  const idxRef: React.MutableRefObject<number> = useRef(curImgIndex);
+  const incImgIndex = (ci: number): void => {
     let index;
     if (ci === job.images.length - 1) {
       index = 0;
@@ -30,7 +30,7 @@ const JobImages: React.FC = () => {
     idxRef.current = index;
     setCurImgIndex(index);
   };
-  const decImgIndex = (ci: number) => {
+  const decImgIndex = (ci: number): void => {
     let index;
     if (ci === 0) {
       index = job.images.length - 1;
@@ -40,7 +40,7 @@ const JobImages: React.FC = () => {
     idxRef.current = index;
     setCurImgIndex(index);
   };
-  const handleTouch = () => {
+  const handleTouch = (): void => {
     startX = 0;
     if (dif < -200) {
       incImgIndex(idxRef.current);
@@ -93,7 +93,7 @@ const JobImages: React.FC = () => {
     return 'dNone';
   };
 
-  const createImgArray = () => {
+  const createImgArray = (): JSX.Element[] => {
     return job.images.map((img, i) => {
       return (
         <div
@@ -107,12 +107,12 @@ const JobImages: React.FC = () => {
     });
   };
 
-  const show = () => {
+  const show = (): void => {
     setCurImgIndex(0);
     setShowGallery(true);
   };
 
-  const hide = () => {
+  const hide = (): void => {
     setShowGallery(false);
   };
 

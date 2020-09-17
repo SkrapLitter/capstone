@@ -321,7 +321,7 @@ button:focus {
 .overlay {
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -330,13 +330,14 @@ button:focus {
   z-index: 100000;
   padding: 1em 0;
 }
-.closeIcon{
+.closeIcon {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
   height: 10vh;
 }
-.closeIcon svg, #gallery svg {
+.closeIcon svg,
+#gallery svg {
   cursor: pointer;
   width: 10vw;
 }
@@ -372,10 +373,10 @@ button:focus {
 }
 
 .moveLeft {
-  transform: translateX(-100vw)
+  transform: translateX(-100vw);
 }
 .moveRight {
-  transform: translateX(100vw)
+  transform: translateX(100vw);
 }
 .dNone {
   display: none;

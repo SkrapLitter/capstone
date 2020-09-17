@@ -84,7 +84,10 @@ const Job = db.define(
   {
     hooks: {
       beforeCreate: job => {
-        job.summary = `${job.description.split(" ").filter((word, i) => i < 10).join(" ")}...`;
+        job.summary = `${job.description
+          .split(' ')
+          .filter((word, i) => i < 10)
+          .join(' ')}...`;
       },
     },
   }
