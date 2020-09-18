@@ -231,8 +231,7 @@ button.m1em {
     /* display: flex;
     justify-content: center; */
     /* max-width: 700px; */
-    margin-right: 20%;
-    margin-left: 20%;
+    margin: 0 20%;
   }
 }
 .cardButtons {
@@ -405,6 +404,7 @@ button:focus {
 }
 .dNone {
   display: none;
+}
 
 .navLogo {
   margin-left: 10px;
@@ -433,8 +433,61 @@ button:focus {
   margin: 10px 0;
 }
 
-.feedJobImage {
-  padding: 10px;
+.feedJobImageContainer {
+  height: 600px;
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.feedSingleImage {
+  height: 100%;
+  width: 100%;
+  margin: 10px;
+  object-fit: cover;
+  background-position: center;
+}
+
+.feedDoubleImageLeft {
+  margin: 10px 5px 10px 10px;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  background-position: center;
+}
+
+.feedDoubleImageRight {
+  margin: 10px 10px 10px 5px;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.feedTopRightImage {
+  height: 50%;
+  object-fit: cover;
+  background-position: center;
+  margin-bottom: 5px;
+}
+
+.feedBottomRightImage {
+  height: 50%;
+  object-fit: cover;
+  background-position: center;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 730px) {
+  .feedJobImageContainer {
+    height: 400px;
+    width: 400px;
+  }
 }
 
 .feedTextContainer {
