@@ -1,6 +1,3 @@
-/* eslint no-lonely-if: 0 */
-/* eslint no-else-return: 0 */
-
 import React, { useState, useEffect, useRef } from 'react';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -78,32 +75,6 @@ const JobImages: React.FC<Props> = (props: Props) => {
     };
   }, []);
 
-  const generateClassName = (i: number): string => {
-    if (images.length <= 2) {
-      // Don't animate out, just swap images
-      if (i === curImgIndex) {
-        return 'jobGalleryImg curImg';
-      }
-    } else {
-      // Animation logic
-      if (i === curImgIndex) {
-        return 'jobGalleryImg curImg';
-      } else if (
-        i === curImgIndex - 1 ||
-        (i === images.length - 1 && curImgIndex === 0)
-      ) {
-        return 'jobGalleryImg moveLeft';
-      } else if (
-        i === curImgIndex + 1 ||
-        (curImgIndex === images.length - 1 && i === 0)
-      ) {
-        return 'jobGalleryImg moveRight';
-      }
-    }
-    // Otherwise, Make it Invisible
-    return 'dNone';
-  };
-
   const hide = (): void => {
     setShowGallery(false);
   };
@@ -124,10 +95,7 @@ const JobImages: React.FC<Props> = (props: Props) => {
               onClick={() => decImgIndex(curImgIndex)}
             />
           )}
-          <CreateImgArray
-            images={images}
-            generateClassName={generateClassName}
-          />
+          <CreateImgArray images={images} curImgIndex={curImgIndex} />
           {images.length > 1 && (
             <ArrowForwardIosIcon
               style={{ fontSize: 40, color: '#fff' }}
