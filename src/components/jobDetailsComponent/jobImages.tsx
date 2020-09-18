@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import CreateImgArray from './createImgArray';
 
 interface Props {
   setShowGallery: React.Dispatch<React.SetStateAction<boolean>>;
@@ -103,20 +104,6 @@ const JobImages: React.FC<Props> = (props: Props) => {
     return 'dNone';
   };
 
-  const createImgArray = (): JSX.Element[] => {
-    return images.map((img, i) => {
-      return (
-        <div
-          className={generateClassName(i)}
-          key={img.slice(i)}
-          style={{
-            backgroundImage: `url('${img}')`,
-          }}
-        />
-      );
-    });
-  };
-
   const hide = (): void => {
     setShowGallery(false);
   };
@@ -137,8 +124,10 @@ const JobImages: React.FC<Props> = (props: Props) => {
               onClick={() => decImgIndex(curImgIndex)}
             />
           )}
-
-          <div id="galleryImgContainer">{createImgArray()}</div>
+          <CreateImgArray
+            images={images}
+            generateClassName={generateClassName}
+          />
           {images.length > 1 && (
             <ArrowForwardIosIcon
               style={{ fontSize: 40, color: '#fff' }}
