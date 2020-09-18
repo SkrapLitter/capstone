@@ -31,6 +31,7 @@ const JobDetails: React.FC = () => {
 
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
+
   };
 
   return (

@@ -9,6 +9,8 @@ const defaultUser: User = {
   image: '',
   clearance: 0,
   error: '',
+  stripe: '',
+  balance: 0,
 };
 
 const userReducer = (state: User = defaultUser, action): User => {

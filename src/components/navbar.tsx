@@ -9,12 +9,13 @@ import { Button } from '@material-ui/core';
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
-
   return (
     <div className="navbar-fixed">
       <nav className="green accent-4">
         <div className="nav-wrapper">
-          <Link to="/stream">(LOGO HERE)</Link>
+          <Link to="/stream" className="navLogo">
+            skräp
+          </Link>
           <ul id="nav-mobile" className="right hide-on-small-only">
             {!!user.clearance && (
               <li className="user-profile">
@@ -35,6 +36,7 @@ const Navbar: React.FC = () => {
                   >
                     Logout
                   </button>
+                  <Link to={`/stripe/${user.id}`}>Stripe</Link>
                 </div>
               </li>
             )}

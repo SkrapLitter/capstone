@@ -1,6 +1,12 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
 import Axios from 'axios';
+import { booleanType } from 'aws-sdk/clients/iam';
+import { JobAttributes } from './jobInterface';
+import {
+  dateSort,
+  locationSorter,
+} from '../../components/mapComponent/mapUtils';
 
 enum jobStatus {
   'paid',
@@ -69,6 +75,20 @@ const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
   };
 };
 
+const fetchMapJobs = (
+  north: number,
+  south: number,
+  east: number,
+  west: number
+): AppThunk => {
+  return async dispatch => {
+    const { data } = await Axios.get(
+      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}`
+    );
+    dispatch(setJobs(0, data));
+  };
+};
+
 const fetchJob = (id: string): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
@@ -110,4 +130,37 @@ const unreserveJob = (jobId: string): AppThunk => {
   };
 };
 
-export { setJobs, fetchJobs, reserveJob, fetchJob, unreserveJob };
+interface Location {
+  lat: number;
+  lng: number;
+}
+
+const locationSort = (
+  jobs: JobAttributes[],
+  location: Location,
+  sort: booleanType
+): AppThunk => {
+  return dispatch => {
+    if (sort === true) {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: locationSorter(jobs, location),
+      });
+    } else {
+      dispatch({
+        type: TYPES.LOCATION_SORT,
+        jobs: dateSort(jobs),
+      });
+    }
+  };
+};
+
+export {
+  setJobs,
+  fetchJobs,
+  reserveJob,
+  fetchJob,
+  unreserveJob,
+  locationSort,
+  fetchMapJobs,
+};

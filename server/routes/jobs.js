@@ -134,6 +134,31 @@ jobRouter.get('/', async (req, res) => {
   }
 });
 
+jobRouter.get('/map', async (req, res) => {
+  try {
+    const { north, south, east, west } = req.query;
+    const jobs = await Job.findAll({
+      where: {
+        lat: {
+          [Op.and]: [{ [Op.lte]: +north }, { [Op.gte]: +south }],
+        },
+        lng: {
+          [Op.and]: [{ [Op.lte]: +east }, { [Op.gte]: +west }],
+        },
+      },
+      include: [
+        {
+          model: Image,
+        },
+      ],
+    });
+    res.status(200).send(jobs);
+  } catch (e) {
+    res.status(500).send({ message: 'error' });
+    console.log('Error sending jobs', e);
+  }
+});
+
 jobRouter.get('/job/:id', async (req, res) => {
   try {
     const { id } = req.params;
