@@ -1,4 +1,7 @@
-import React, { useEffect } from 'react';
+/* eslint jsx-a11y/click-events-have-key-events: 0 */
+/* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
+
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThunkAction } from 'redux-thunk';
@@ -16,6 +19,9 @@ interface RouteParams {
 
 const JobDetails: React.FC = () => {
   const zoom = 16;
+
+  const [showGallery, setShowGallery] = useState(false);
+
   const dispatch: (
     a: ThunkAction<any, any, any, any>
   ) => Promise<any> = useDispatch();
@@ -31,8 +37,8 @@ const JobDetails: React.FC = () => {
 
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
-
   };
+  const images = job.images.map(img => img.url);
 
   return (
     <div className="container jCenter">
@@ -40,7 +46,19 @@ const JobDetails: React.FC = () => {
         <>
           <h4 className="center-align">{job.name}</h4>
           <div className="jCenter" style={{ maxWidth: '800px' }}>
-            <JobImages />
+            <div
+              className="jobImage"
+              style={{
+                backgroundImage: `url('${
+                  job.images && job.images.length && job.images[0].url
+                }')`,
+              }}
+              onClick={() => setShowGallery(true)}
+              role="navigation"
+            />
+            {showGallery && (
+              <JobImages setShowGallery={setShowGallery} images={images} />
+            )}
             {renderButtons()}
             <div className="container">
               <div className="flexRow">
