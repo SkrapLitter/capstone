@@ -51,7 +51,7 @@ const sync = async () => {
 
     const job1 = await Job.create({
       name: 'McCarren Park',
-      status: 'paid',
+      status: 'funded',
       price: 20.0,
       city: 'Brooklyn',
       state: 'New York',
@@ -89,7 +89,7 @@ const sync = async () => {
 
     const job2 = await Job.create({
       name: 'Tompkins Square Park',
-      status: 'paid',
+      status: 'funded',
       price: 20.0,
       city: 'New York',
       state: 'New York',
@@ -127,7 +127,7 @@ const sync = async () => {
 
     const job3 = await Job.create({
       name: 'Cooper Park',
-      status: 'paid',
+      status: 'funded',
       price: 20.0,
       city: 'Brooklyn',
       state: 'New York',
@@ -165,7 +165,7 @@ const sync = async () => {
 
     const job4 = await Job.create({
       name: 'Domino Park',
-      status: 'unpaid',
+      status: 'volunteer',
       city: 'Brooklyn',
       state: 'New York',
       address: 'Domino Park',
@@ -202,7 +202,7 @@ const sync = async () => {
 
     const job5 = await Job.create({
       name: 'Maria Hernandez Park',
-      status: 'unpaid',
+      status: 'volunteer',
       city: 'Brooklyn',
       state: 'New York',
       address: 'Maria Hernandez Park',

@@ -18,7 +18,8 @@ export interface JobAttributes {
   userId: string;
   description: string;
   createdUser: string;
-  images?: PhotoAttributes[];
+  funded?: number;
+  images?: Array<PhotoAttributes>;
 }
 
 export default interface Job {

@@ -25,7 +25,7 @@ const Job = db.define(
       },
     },
     status: {
-      type: ENUM('paid', 'unpaid', 'cancelled', 'completed'),
+      type: ENUM('funded', 'pending', 'volunteer', 'cancelled', 'completed'),
       allowNull: false,
     },
     price: {
@@ -79,6 +79,10 @@ const Job = db.define(
     },
     createdUser: {
       type: STRING,
+    },
+    funded: {
+      type: FLOAT,
+      defaultValue: 0,
     },
   },
   {

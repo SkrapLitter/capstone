@@ -6,6 +6,7 @@ import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import CreateAccountOverlay from '../userComponents/createAccountOverlay';
 import { uploadPhoto } from '../../store/photos/photoActions';
+import { fetchJob } from '../../store/job/jobActions';
 
 const CreateJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -22,7 +23,7 @@ const CreateJob: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>,
+    set: React.Dispatch<React.SetStateAction<string | number>>,
     labelId: string
   ): void => {
     // control form field value
@@ -69,6 +70,9 @@ const CreateJob: React.FC = () => {
       setShouldShowCreateUser(true);
       return;
     }
+    console.log(price.length && price !== '0');
+    const status = price.length && price !== '0' ? 'pending' : 'volunteer';
+    console.log(status);
     axios
       .post('/api/jobs', {
         name,
@@ -77,13 +81,20 @@ const CreateJob: React.FC = () => {
         description,
         userId: user.id,
         images: images.photos,
+        status,
       })
       .then(({ data }) => {
-        console.log(data);
         // get jobId for navigation
         const id = data.jobId;
-        // navigate to job details page
-        history.push(`/jobs/${id}`);
+        if (status === 'volunteer') {
+          // navigate to job details page
+          history.push(`/jobs/${id}`);
+        } else {
+          console.log(status);
+          return new Promise(res => {
+            res(dispatch(fetchJob(id)));
+          }).then(() => history.push(`/checkout/${id}`));
+        }
       })
       // TODO - error handling for server errors - Toast?
       .catch(console.log);
@@ -130,7 +141,7 @@ const CreateJob: React.FC = () => {
           id="price"
           autoComplete="off"
           className={
-            price.length ? (/^[0-9]+$/.test(price) ? 'valid' : 'invalid') : ''
+            price.length ? (/^[\d.,]+$/.test(price) ? 'valid' : 'invalid') : ''
           }
         />
         <label htmlFor="price" id="priceLabel">
@@ -193,6 +204,7 @@ const CreateJob: React.FC = () => {
           Create Job
           <i className="material-icons right">account_circle</i>
         </button>
+        )
       </div>
       {shouldShowCreateUser && <CreateAccountOverlay />}
     </div>

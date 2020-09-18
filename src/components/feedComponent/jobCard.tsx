@@ -20,7 +20,10 @@ const JobCard: React.FC<Props> = (props: Props) => {
       <Grid container direction="row">
         <Grid item xs={12} sm={6} lg={6} md={6}>
           <div className="feedJobImage">
-            <Parallax strength={300} bgImage={props.job.images[0].url}>
+            <Parallax
+              strength={300}
+              bgImage={props.job.images.length ? props.job.images[0].url : null}
+            >
               <div style={{ height: '300px' }} />
             </Parallax>
           </div>

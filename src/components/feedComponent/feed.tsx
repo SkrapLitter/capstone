@@ -55,7 +55,6 @@ const Feed: React.FC = () => {
     setType(filter);
   };
   const fetchNext = () => {
-    setPage(page + 1);
     setSize(size + 20);
     dispatch(fetchJobs(input, page, size, type));
   };
@@ -104,17 +103,17 @@ const Feed: React.FC = () => {
             </Button>
             <Button
               className={classes.button}
-              variant={type === 'paid' ? 'contained' : 'outlined'}
-              onClick={e => handleType(e, 'paid')}
+              variant={type === 'funded' ? 'contained' : 'outlined'}
+              onClick={e => handleType(e, 'funded')}
             >
               Paid Jobs
             </Button>
             <Button
               className={classes.button}
-              variant={type === 'unpaid' ? 'contained' : 'outlined'}
-              onClick={e => handleType(e, 'unpaid')}
+              variant={type === 'volunteer' ? 'contained' : 'outlined'}
+              onClick={e => handleType(e, 'volunteer')}
             >
-              Unpaid Jobs
+              Volunteer Jobs
             </Button>
           </div>
 
