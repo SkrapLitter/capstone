@@ -7,6 +7,7 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import CreateAccountOverlay from '../userComponents/createAccountOverlay';
 import { uploadPhoto } from '../../store/photos/photoActions';
 import { fetchJob } from '../../store/job/jobActions';
+import { validate } from '../validation';
 
 const CreateJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -70,9 +71,7 @@ const CreateJob: React.FC = () => {
       setShouldShowCreateUser(true);
       return;
     }
-    console.log(price.length && price !== '0');
     const status = price.length && price !== '0' ? 'pending' : 'volunteer';
-    console.log(status);
     axios
       .post('/api/jobs', {
         name,
@@ -90,7 +89,6 @@ const CreateJob: React.FC = () => {
           // navigate to job details page
           history.push(`/jobs/${id}`);
         } else {
-          console.log(status);
           return new Promise(res => {
             res(dispatch(fetchJob(id)));
           }).then(() => history.push(`/checkout/${id}`));
@@ -141,11 +139,7 @@ const CreateJob: React.FC = () => {
           id="price"
           autoComplete="off"
           className={
-            price.length
-              ? /^\$?(\d{1,3}(\d{3})*|(\d+))(\.\d{2})?$/.test(price)
-                ? 'valid'
-                : 'invalid'
-              : ''
+            price.length && validate.isPrice(price) ? 'valid' : 'invalid'
           }
         />
         <label htmlFor="price" id="priceLabel">
