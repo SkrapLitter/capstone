@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+/* eslint jsx-a11y/click-events-have-key-events: 0 */
+/* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
+
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
 import { ThunkAction } from 'redux-thunk';
-import { StoreState } from '../../store/store';
-import { fetchJob, reserveJob, unreserveJob } from '../../store/job/jobActions';
-import { findOrCreateChat } from '../../store/inbox/inboxActions';
-import { Chatroom } from '../../store/inbox/inboxInterface';
 import GoogleMapReact from 'google-map-react';
+import { StoreState } from '../../store/store';
+import { fetchJob } from '../../store/job/jobActions';
+import UserButtons from './userButtons';
+import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
+import JobImages from './jobImages';
 
 interface RouteParams {
   id: string;
@@ -17,8 +19,9 @@ interface RouteParams {
 
 const JobDetails: React.FC = () => {
   const zoom = 16;
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
+
+  const [showGallery, setShowGallery] = useState(false);
+
   const dispatch: (
     a: ThunkAction<any, any, any, any>
   ) => Promise<any> = useDispatch();
@@ -32,65 +35,11 @@ const JobDetails: React.FC = () => {
     job: { job },
   } = useSelector((state: StoreState) => state);
 
-  const history = useHistory();
-  const openChat = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): Promise<any> => {
-    e.preventDefault();
-    return new Promise((res, rej) => {
-      try {
-        res(
-          dispatch(
-            findOrCreateChat(
-              user.id,
-              job.userId,
-              user.username,
-              job.createdUser,
-              job.id,
-              job.name
-            )
-          )
-        );
-      } catch (err) {
-        rej(err);
-      }
-    }).then((res: Chatroom) => {
-      if (res) {
-        console.log(res);
-        history.push(`/inbox/${res.id}`);
-      }
-    });
+  const renderButtons = () => {
+    return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
-  const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-  const handleReserve = (): void => {
-    if (job.reserved) {
-      // TODO - ARE YOU SURE? YOU'LL LOSE YOUR DEPOSIT
-      dispatch(unreserveJob(job.id))
-        .then(() => {
-          setMessage('Reservation Cancelled');
-          setOpen(true);
-        })
-        .catch(() => {
-          setMessage('Error - Please Try Again');
-          setOpen(true);
-        });
-    } else {
-      dispatch(reserveJob(job.id))
-        .then(() => {
-          setMessage('Reservation Confirmed');
-          setOpen(true);
-        })
-        .catch(e => {
-          setMessage(e);
-          setOpen(true);
-        });
-    }
-  };
+  const images = job.images.map(img => img.url);
+
   return (
     <div className="container jCenter">
       {job && Object.values(job).length ? (
@@ -101,25 +50,32 @@ const JobDetails: React.FC = () => {
               className="jobImage"
               style={{
                 backgroundImage: `url('${
-                  job.images && job.images.length ? job.images[0].url : ''
+                  job.images && job.images.length && job.images[0].url
                 }')`,
               }}
+              onClick={() => setShowGallery(true)}
+              role="navigation"
             />
-            <div style={{ display: 'flex' }}>
-              <Button
-                variant="outlined"
-                onClick={handleReserve}
-                className="m1em"
-              >
-                {job.reserved ? 'Cancel' : 'Reserve'}
-              </Button>
-              <Button variant="outlined" onClick={openChat} className="m1em">
-                {' '}
-                Message Poster
-              </Button>
-            </div>
+            {showGallery && (
+              <JobImages setShowGallery={setShowGallery} images={images} />
+            )}
+            {renderButtons()}
             <div className="container">
-              <p className="charcoal">Posted By: {job.createdUser}</p>
+              <div className="flexRow">
+                <div className="flexRow">
+                  <h6 className="charcoal">Posted By: {job.createdUser}</h6>
+                  <img
+                    src={job.user && job.user.image}
+                    width="50"
+                    height="50"
+                    className="border-circle z-depth-1"
+                    alt={`${user.firstName} ${user.lastName}`}
+                  />
+                </div>
+                <h4 id="jobPrice">
+                  {job.price > 0 ? `$${job.price}` : 'Volunteer'}
+                </h4>
+              </div>
               <p>{job.description}</p>
             </div>
           </div>
@@ -142,15 +98,7 @@ const JobDetails: React.FC = () => {
             </div>
           </div>
         </>
-      ) : (
-        <h2>No Job Selected Yet</h2>
-      )}
-      <Snackbar
-        open={open}
-        onClose={handleClose}
-        autoHideDuration={3000}
-        message={message}
-      />
+      ) : null}
     </div>
   );
 };
