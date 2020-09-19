@@ -141,7 +141,11 @@ const CreateJob: React.FC = () => {
           id="price"
           autoComplete="off"
           className={
-            price.length ? (/^[\d.,]+$/.test(price) ? 'valid' : 'invalid') : ''
+            price.length
+              ? /^\$?(\d{1,3}(\d{3})*|(\d+))(\.\d{2})?$/.test(price)
+                ? 'valid'
+                : 'invalid'
+              : ''
           }
         />
         <label htmlFor="price" id="priceLabel">
