@@ -2,9 +2,7 @@ import React from 'react';
 import { JobAttributes } from '../../store/job/jobInterface';
 import { Grid, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Parallax } from 'react-parallax';
+import FeedImageRender from './feedImageRender';
 
 const VOLUNTEER_ICON =
   'https://treehugger-capstone.s3.us-east-2.amazonaws.com/volunteerIcon.svg';
@@ -14,18 +12,16 @@ interface Props {
 }
 
 const JobCard: React.FC<Props> = (props: Props) => {
+  const images: string[] = props.job.images.map(img => img.url);
+  console.log(images);
   const history = useHistory();
   return (
     <Paper elevation={3} className="jobCard">
-      <Grid container direction="row">
-        <Grid item xs={12} sm={6} lg={6} md={6}>
-          <div className="feedJobImage">
-            <Parallax strength={300} bgImage={props.job.images[0].url}>
-              <div style={{ height: '300px' }} />
-            </Parallax>
-          </div>
+      <Grid container direction="column">
+        <Grid container item xs={12} direction="row" justify="center">
+          <FeedImageRender images={images} />
         </Grid>
-        <Grid item xs={12} sm={6} lg={6} md={6}>
+        <Grid item xs={12}>
           <div className="feedTextContainer">
             <div>
               <h4>{props.job.name}</h4>
