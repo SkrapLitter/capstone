@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router';
 import { fetchJob } from '../../store/job/jobActions';
@@ -11,11 +11,13 @@ import {
   TableCell,
   Paper,
   TableRow,
+  TextField,
 } from '@material-ui/core';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { JobAttributes } from '../../store/job/jobInterface';
 
 interface RouteParams {
   id: string;
@@ -25,14 +27,21 @@ const Checkout: React.FC = () => {
   const dispatch = useDispatch();
   const { user, job } = useSelector((state: StoreState) => state);
   const { id } = useParams<RouteParams>();
-  console.log(job.job);
+  const [price, setPrice] = useState('');
   useEffect(() => {
-    dispatch(fetchJob(id));
+    const getJob = () => {
+      return new Promise(res => {
+        res(dispatch(fetchJob(id)));
+      }).then((data: JobAttributes) => {
+        setPrice(String(data.price));
+      });
+    };
+    getJob();
   }, []);
-  const difference = parseFloat((job.job.price - job.job.funded).toFixed(2));
-  const applicationFee = parseFloat(
-    Math.max((job.job.price - job.job.funded) * 0.1, 1.0).toFixed(2)
+  const difference = parseFloat(
+    (parseFloat(price) - job.job.funded).toFixed(2)
   );
+  const applicationFee = parseFloat(Math.max(difference * 0.1, 1.0).toFixed(2));
   const total = difference + applicationFee;
   const history = useHistory();
   const handleToken = async (token, addresses) => {
@@ -42,6 +51,7 @@ const Checkout: React.FC = () => {
       total,
       user,
       job: job.job,
+      price: price,
     });
     const { status } = response.data;
     if (status === 'success') {
@@ -57,6 +67,15 @@ const Checkout: React.FC = () => {
         <h1>Loading</h1>
       ) : (
         <div>
+          <h2>{job.job.name} Checkout Page</h2>
+          <TextField
+            value={price}
+            onChange={e => {
+              e.stopPropagation();
+              setPrice(e.target.value);
+            }}
+            label="Target Price"
+          />
           <TableContainer component={Paper}>
             <Table stickyHeader>
               <TableHead>
@@ -74,7 +93,7 @@ const Checkout: React.FC = () => {
                   <TableCell component="th" scope="row">
                     {job.job.name}
                   </TableCell>
-                  <TableCell align="right">{job.job.price}</TableCell>
+                  <TableCell align="right">{price}</TableCell>
                   <TableCell align="right">{job.job.funded}</TableCell>
                   <TableCell align="right">{difference}</TableCell>
                   <TableCell align="right">{user.username}</TableCell>

@@ -92,8 +92,8 @@ const fetchMapJobs = (
 const fetchJob = (id: string): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
-    console.log(data);
     dispatch(setJob(data));
+    return data;
   };
 };
 

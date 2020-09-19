@@ -47,6 +47,7 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       {
         status: 'funded',
         price,
+        funded: price,
       },
       {
         where: {
