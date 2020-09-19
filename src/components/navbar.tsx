@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
     <div className="navbar-fixed">
       <nav className="green accent-4">
         <div className="nav-wrapper">
-          <Link to="/stream" className="navLogo">
+          <Link to="/" className="navLogo">
             skräp
           </Link>
           <ul id="nav-mobile" className="right hide-on-small-only">
