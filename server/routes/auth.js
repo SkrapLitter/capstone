@@ -202,28 +202,6 @@ authRouter.put(
   }
 );
 
-authRouter.get(
-  '/facebook',
-  passport.authenticate('facebook'),
-  async (req, res) => {
-    try {
-      const userId = req.user.id;
-      let usersSession = await Session.findByPk(req.sessionId);
-
-      if (!usersSession) {
-        usersSession = await Session.create({ id: req.sessionId });
-      }
-      await usersSession.setUser(userId);
-
-      return res.redirect('/');
-    } catch (e) {
-      req.status(404).send({
-        message: 'user not found',
-      });
-    }
-  }
-);
-
 authRouter.get('/google', passport.authenticate('google'), async (req, res) => {
   try {
     const userId = req.user.id;
