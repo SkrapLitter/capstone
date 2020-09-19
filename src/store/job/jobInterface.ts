@@ -1,4 +1,5 @@
 import { PhotoAttributes } from '../photos/photoInterface';
+import User from '../user/userInterface';
 
 export interface JobAttributes {
   id: string;
@@ -20,6 +21,8 @@ export interface JobAttributes {
   createdUser: string;
   funded?: number;
   images?: Array<PhotoAttributes>;
+  summary?: string;
+  user?: User;
 }
 
 export default interface Job {

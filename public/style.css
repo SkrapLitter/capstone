@@ -62,6 +62,7 @@
   max-width: 400px;
   max-height: 400px;
   background-size: cover;
+  cursor: pointer;
 }
 
 .jCenter {
@@ -271,6 +272,13 @@ button.m1em {
   display: flex;
   flex-direction: column;
 }
+.jobImages {
+  height: 200px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
 
 .mapCardImage {
   width: 100%;
@@ -319,7 +327,85 @@ button.m1em {
 .alertList {
   background: whitesmoke;
 }
+.flexRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+.flexRow img {
+  margin: 0 1em;
+}
+#jobPrice {
+  margin: 0;
+}
 
+button:focus {
+  background-color: transparent;
+}
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  padding: 1em 0;
+}
+.closeIcon {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 10vh;
+}
+.closeIcon svg,
+#gallery svg {
+  cursor: pointer;
+  width: 10vw;
+}
+#gallery {
+  display: flex;
+  justify-content: space-between;
+  height: 80vh;
+  align-items: center;
+}
+.jobGalleryImg {
+  width: 100%;
+  height: 80vh;
+  max-height: 80vh;
+  max-width: 100%;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.3s transform;
+  position: absolute;
+  top: 5vh;
+  left: 0;
+}
+
+#galleryImgContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  flex-grow: grow;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.moveLeft {
+  transform: translateX(-100vw);
+}
+.moveRight {
+  transform: translateX(100vw);
+}
+.dNone {
+  display: none;
+}
 .navLogo {
   margin-left: 10px;
   font: 2rem 'Fredoka One', cursive;

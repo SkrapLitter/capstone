@@ -8,6 +8,7 @@ const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 const axios = require('axios');
+const User = require('../db/models/user');
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -175,7 +176,7 @@ jobRouter.get('/job/:id', async (req, res) => {
       where: {
         id,
       },
-      include: [Image],
+      include: [Image, User],
     });
     res.status(200).send(job);
   } catch (e) {
