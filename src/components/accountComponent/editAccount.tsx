@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
-import { fetchJobs } from '../../store/job/jobActions';
+import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 
 import M from 'materialize-css';
 
@@ -31,10 +31,6 @@ const EditAccount: React.FC = () => {
     const tabs = document.querySelector('.tabs');
     M.Tabs.init(tabs);
   }, [user]);
-
-  useEffect(() => {
-    dispatch(fetchJobs());
-  }, []);
 
   const toggleDisabled = (labelId: string): void => {
     const input = document.getElementById(labelId) as HTMLInputElement;
@@ -217,27 +213,7 @@ const EditAccount: React.FC = () => {
         </div>
         <div id="jobs" className="col s12">
           <div className="m-t-l">
-            <h2>My Jobs</h2>
-            {jobs.length ? (
-              <ul className="collection">
-                {jobs.map(job => (
-                  <li key={job.id} className="collection-item left-align">
-                    <h6>
-                      <strong>
-                        <Link to={job.id}>{job.name}</Link>
-                      </strong>
-                    </h6>
-                    <p>
-                      {job.address}
-                      <br />
-                      {job.city}, {job.state}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h2> No Jobs Yet</h2>
-            )}
+            <JobsDetailsPreview />
           </div>
         </div>
         <div id="messages" className="col s12">
@@ -252,7 +228,7 @@ const EditAccount: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <h2> No Jobs Yet</h2>
+              <h2>No Jobs Yet</h2>
             )}
           </div>
         </div>
