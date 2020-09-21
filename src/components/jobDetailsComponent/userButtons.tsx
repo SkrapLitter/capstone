@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../store/thunkType';
 import { StoreState } from '../../store/store';
 import { findOrCreateChat } from '../../store/inbox/inboxActions';
 import { Chatroom } from '../../store/inbox/inboxInterface';
@@ -15,9 +15,7 @@ const UserButtons: React.FC = () => {
 
   const history = useHistory();
 
-  const dispatch: (
-    a: ThunkAction<any, any, any, any>
-  ) => Promise<any> = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
 
   const {
     user,

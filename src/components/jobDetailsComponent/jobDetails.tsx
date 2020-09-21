@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
 import { StoreState } from '../../store/store';
 import { fetchJob } from '../../store/job/jobActions';
@@ -25,9 +25,7 @@ const JobDetails: React.FC = () => {
   const [showGallery, setShowGallery] = useState(false);
   const [showVerUpload, setShowVerUpload] = useState(false);
 
-  const dispatch: (
-    a: ThunkAction<any, any, any, any>
-  ) => Promise<any> = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
     dispatch(fetchJob(id));
