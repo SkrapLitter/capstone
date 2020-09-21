@@ -179,6 +179,9 @@
 .m-t-l {
   margin-top: 3rem;
 }
+.m-t-b {
+  margin: 2em 0;
+}
 .m-b-s {
   margin-bottom: 1rem;
 }
@@ -456,6 +459,26 @@ button:focus {
   right: 0;
   bottom: 0;
   margin: 20px;
+}
+
+#descriptionLabel {
+  margin: 0 1em;
+}
+#descriptionLabel.active {
+  margin: 0 0 0.5em;
+}
+
+.thumbGallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.thumbGallery > div.thumb {
+  width: 95px;
+  height: 95px;
+  margin: 5px;
+  background-size: cover;
+  background-position: center;
 }
 
 @media screen and (max-width: 600px) {
