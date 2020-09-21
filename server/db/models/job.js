@@ -101,6 +101,12 @@ const Job = db.define(
           .filter((word, i) => i < 10)
           .join(' ')}...`;
       },
+      afterUpdate: job => {
+        job.summary = `${job.description
+          .split(' ')
+          .filter((word, i) => i < 10)
+          .join(' ')}...`;
+      },
     },
   }
 );

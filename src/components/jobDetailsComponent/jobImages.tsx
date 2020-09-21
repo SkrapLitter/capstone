@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
+import CloseIcon from '@material-ui/icons/Close';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CreateImgArray from './createImgArray';
@@ -51,16 +51,19 @@ const JobImages: React.FC<Props> = (props: Props) => {
       incImgIndex(idxRef.current);
     } else if (dif > 150) {
       decImgIndex(idxRef.current);
-    } else if (dif >= -200 && dif <= 200) {
+    } else if (dif >= -150 && dif <= 150) {
       curImg.style.left = 0;
     }
     setTimeout(() => {
-      curImg.style.left = 0;
+      if (curImg) {
+        curImg.style.left = 0;
+        curImg = null;
+      }
     }, 300);
   };
 
   useEffect(() => {
-    const gallery = document.getElementById('galleryImgContainer');
+    const gallery: HTMLElement = document.getElementById('galleryImgContainer');
     if (gallery) {
       gallery.addEventListener('touchstart', handleTouchStart);
       gallery.addEventListener('touchmove', handleTouchMove);
@@ -83,10 +86,7 @@ const JobImages: React.FC<Props> = (props: Props) => {
     <div>
       <div className="overlay">
         <div className="closeIcon">
-          <CancelPresentationIcon
-            style={{ fontSize: 60, color: '#fff' }}
-            onClick={hide}
-          />
+          <CloseIcon style={{ fontSize: 60, color: '#fff' }} onClick={hide} />
         </div>
         <div id="gallery">
           {images.length > 1 && (
