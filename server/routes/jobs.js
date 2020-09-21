@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job, Image },
+  models: { Job, Image, Verification },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -166,7 +166,7 @@ jobRouter.get('/job/:id', async (req, res) => {
       where: {
         id,
       },
-      include: [Image, User],
+      include: [Image, User, Verification],
     });
     res.status(200).send(job);
   } catch (e) {
