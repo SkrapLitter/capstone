@@ -29,6 +29,16 @@ jobRouter.get('/', async (req, res) => {
         limit,
         offset,
         order: [['updatedAt', 'DESC']],
+        where: {
+          [Op.or]: [
+            {
+              status: 'funded',
+            },
+            {
+              status: 'volunteer',
+            },
+          ],
+        },
         include: [
           {
             model: Image,
@@ -177,9 +187,16 @@ jobRouter.get('/job/:id', async (req, res) => {
 
 jobRouter.post('/', async (req, res) => {
   try {
-    const { name, price, address, userId, description, images } = req.body;
+    const {
+      name,
+      price,
+      address,
+      userId,
+      description,
+      images,
+      status,
+    } = req.body;
     const ids = images.map(image => image.id);
-    const status = price ? 'paid' : 'unpaid';
     const city = address.value.structured_formatting.secondary_text.split(
       ', '
     )[0];

@@ -1,19 +1,11 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { Button, Paper } from '@material-ui/core';
 import axios from 'axios';
-import { fetchStripeAccount } from '../../store/stripe/stripeActions';
 
 const Stripe: React.FC = () => {
-  const { user, stripe } = useSelector((store: StoreState) => store);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (user.stripe) {
-      dispatch(fetchStripeAccount(user.id));
-    }
-  }, []);
-  console.log(stripe);
+  const { user } = useSelector((store: StoreState) => store);
   const onboarding = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

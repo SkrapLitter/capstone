@@ -6,6 +6,7 @@ const {
   ENUM,
   BOOLEAN,
   TEXT,
+  DECIMAL,
 } = require('sequelize');
 const db = require('../db');
 
@@ -36,7 +37,7 @@ const Job = db.define(
       allowNull: false,
     },
     price: {
-      type: FLOAT,
+      type: DECIMAL(20, 2),
       defaultValue: 0,
     },
     city: {
@@ -86,6 +87,10 @@ const Job = db.define(
     },
     createdUser: {
       type: STRING,
+    },
+    funded: {
+      type: FLOAT,
+      defaultValue: 0,
     },
   },
   {

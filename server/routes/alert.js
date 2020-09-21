@@ -66,9 +66,26 @@ alertRouter.put('/:id', async (req, res) => {
           },
         }
       );
+      res.sendStatus(200);
     }
   } catch (e) {
     console.error('error with /alert put', e);
+    res.sendStatus(500);
+  }
+});
+alertRouter.delete('/:id', async (req, res) => {
+  try {
+    if (req.isAuthenticated() && req.user) {
+      const { id } = req.params;
+      await Alert.destroy({
+        where: {
+          id,
+        },
+      });
+      res.sendStatus(200);
+    }
+  } catch (e) {
+    console.error('error with /alert delete', e);
     res.sendStatus(500);
   }
 });

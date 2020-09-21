@@ -13,7 +13,6 @@ interface Props {
 
 const JobCard: React.FC<Props> = (props: Props) => {
   const images: string[] = props.job.images.map(img => img.url);
-  console.log(images);
   const history = useHistory();
   return (
     <Paper elevation={3} className="jobCard">
