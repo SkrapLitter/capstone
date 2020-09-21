@@ -1,4 +1,4 @@
-const { UUID, UUIDV4, FLOAT, STRING, ENUM } = require('sequelize');
+const { UUID, UUIDV4, STRING, ENUM, DECIMAL } = require('sequelize');
 const db = require('../db');
 
 const Payment = db.define('payment', {
@@ -8,7 +8,7 @@ const Payment = db.define('payment', {
     primaryKey: true,
   },
   amount: {
-    type: FLOAT,
+    type: DECIMAL(20, 2),
     allowNull: false,
   },
   subject: {

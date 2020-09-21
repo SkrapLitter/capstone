@@ -18,6 +18,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { JobAttributes } from '../../store/job/jobInterface';
+import { validate } from '../validation';
 
 interface RouteParams {
   id: string;
@@ -45,20 +46,22 @@ const Checkout: React.FC = () => {
   const total = difference + applicationFee;
   const history = useHistory();
   const handleToken = async (token, addresses) => {
-    const response = await axios.post('/api/payment/stripe/checkout', {
-      token,
-      addresses,
-      total,
-      user,
-      job: job.job,
-      price: price,
-    });
-    const { status } = response.data;
-    if (status === 'success') {
-      toast('Success! You have checked out!', { type: 'success' });
-      history.push('/account');
-    } else {
-      toast('Error checking out!', { type: 'error' });
+    if (validate.isPrice(price)) {
+      const response = await axios.post('/api/payment/stripe/checkout', {
+        token,
+        addresses,
+        total,
+        user,
+        job: job.job,
+        price: price,
+      });
+      const { status } = response.data;
+      if (status === 'success') {
+        toast('Success! You have checked out!', { type: 'success' });
+        history.push('/account');
+      } else {
+        toast('Error checking out!', { type: 'error' });
+      }
     }
   };
   return (
