@@ -6,6 +6,20 @@
   justify-content: center;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.f-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .border-circle {
   border-radius: 50%;
 }
@@ -234,8 +248,7 @@ button.m1em {
     /* display: flex;
     justify-content: center; */
     /* max-width: 700px; */
-    margin-right: 20%;
-    margin-left: 20%;
+    margin: 0 20%;
   }
 }
 .cardButtons {
@@ -409,6 +422,7 @@ button:focus {
 .dNone {
   display: none;
 }
+
 .navLogo {
   margin-left: 10px;
   font: 2rem 'Fredoka One', cursive;
@@ -436,8 +450,61 @@ button:focus {
   margin: 10px 0;
 }
 
-.feedJobImage {
-  padding: 10px;
+.feedJobImageContainer {
+  height: 600px;
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.feedSingleImage {
+  height: 100%;
+  width: 100%;
+  margin: 10px;
+  object-fit: cover;
+  background-position: center;
+}
+
+.feedDoubleImageLeft {
+  margin: 10px 5px 10px 10px;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  background-position: center;
+}
+
+.feedDoubleImageRight {
+  margin: 10px 10px 10px 5px;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.feedTopRightImage {
+  height: 50%;
+  object-fit: cover;
+  background-position: center;
+  margin-bottom: 5px;
+}
+
+.feedBottomRightImage {
+  height: 50%;
+  object-fit: cover;
+  background-position: center;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 730px) {
+  .feedJobImageContainer {
+    height: 400px;
+    width: 400px;
+  }
 }
 
 .feedTextContainer {
@@ -488,4 +555,51 @@ button:focus {
     bottom: 0;
     margin: 0 20px calc(20px + 50px) 0;
   }
+}
+
+.hero-text {
+  color: #fff;
+  font: 2rem 'Fredoka One', cursive;
+  left: 0;
+  padding: 4rem 2rem;
+  position: absolute;
+  right: 0;
+}
+
+.hero-text h1,
+.hero-text h2 {
+  margin: 0;
+}
+
+.stripe {
+  align-items: center;
+  font-family: 'Fredoka One', cursive;
+  padding: 1rem;
+}
+
+.stripe ul {
+  margin: 0 2rem;
+}
+
+.stripe ul li {
+  padding: 0 0.5rem;
+}
+
+.achieve {
+  align-items: center;
+  display: flex;
+  font-size: 1.6rem;
+  height: 100px;
+  justify-content: center;
+  text-align: center;
+  width: 100px;
+}
+
+.achieve-meta {
+  max-width: 100px;
+  padding: 0 1rem;
+}
+
+#jobs .badge {
+  text-transform: uppercase;
 }
