@@ -72,8 +72,6 @@
     "multer": "^1.4.2",
     "node-dev": "^5.2.0",
     "passport": "^0.4.1",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.3.3",
     "re-carousel": "^2.4.0",

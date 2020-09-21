@@ -258,7 +258,6 @@ const seed = async (force = true) => {
       await sync();
     }
     console.log('seed was successful');
-    process.exit();
   } catch (e) {
     throw new Error('seed unsuccessful', e);
   }
