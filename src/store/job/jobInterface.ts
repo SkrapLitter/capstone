@@ -4,7 +4,7 @@ import User from '../user/userInterface';
 export interface JobAttributes {
   id: string;
   name: string;
-  status: string; // paid unpaid completed cancelled
+  status: string; // funded pending volunteer completed cancelled pendingVerification
   price: number;
   city: string;
   state: string;
@@ -24,9 +24,17 @@ export interface JobAttributes {
   summary?: string;
   user?: User;
 }
+export interface UserJobs {
+  completed?: Array<JobAttributes>;
+  cancelled?: Array<JobAttributes>;
+  pendingVerification?: Array<JobAttributes>;
+  pending?: Array<JobAttributes>;
+  active?: Array<JobAttributes>;
+}
 
 export default interface Job {
   jobs: JobAttributes[];
   count: number;
   job: JobAttributes;
+  userJobs: UserJobs;
 }

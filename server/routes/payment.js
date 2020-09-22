@@ -2,13 +2,12 @@ require('dotenv').config();
 const paymentRouter = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_SKEY);
 const {
-  models: { Job, Payment },
+  models: { Job, Payment, User },
 } = require('../db');
 
 paymentRouter.post('/stripe/checkout', async (req, res) => {
   try {
     const { user, job, token, total, price } = req.body;
-
     const customer = await stripe.customers.create({
       email: token.email,
       source: token.id,
@@ -21,7 +20,7 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       subject: `funding job ${job.name}, id: ${job.id}`,
     });
     const idempotencyKey = payment.id;
-    await stripe.charges.create(
+    const charge = await stripe.charges.create(
       {
         amount: total * 100,
         currency: 'usd',
@@ -43,6 +42,9 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
         idempotencyKey,
       }
     );
+    await payment.update({
+      chargeId: charge.id,
+    });
     await Job.update(
       {
         status: 'funded',
@@ -56,10 +58,106 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       }
     );
     const status = 'success';
-    res.status(202).send({ status });
+    res.status(202).send(status);
   } catch (e) {
     const status = 'failure';
-    res.status(202).send({ status });
+    res.status(202).send(status);
+  }
+});
+
+paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
+  let status = false;
+  try {
+    const { id } = req.params;
+    const job = await Job.findByPk(id);
+    if (job) {
+      if (job.status === 'volunteer' || job.status === 'pending') {
+        await Job.destroy({
+          where: {
+            id,
+          },
+        });
+        status = true;
+      } else if (job.funded > 0 && job.status === 'funded' && !job.reserved) {
+        const payments = await Payment.findAll({
+          where: {
+            jobId: id,
+            type: 'deposit',
+          },
+          include: [
+            {
+              model: User,
+            },
+          ],
+        });
+        await payments.forEach(async payment => {
+          await stripe.refunds.create({
+            charge: 'ch_1HSYwXE7ag3tHwto1gL7LvsA',
+            amount: job.funded * 100,
+          });
+          await payment.update({
+            type: 'refund',
+          });
+        });
+        await job.update({
+          status: 'cancelled',
+          funded: 0,
+        });
+        status = true;
+      }
+    }
+    res.status(200).send(status);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(status);
+  }
+});
+
+paymentRouter.put('/stripe/completed/:id', async (req, res) => {
+  let status = false;
+  try {
+    const { id } = req.params;
+    const job = await Job.findOne({
+      where: {
+        id,
+        status: 'pendingVerification',
+      },
+    });
+    if (job) {
+      if (job.funded > 0) {
+        const user = await User.findByPk(job.reservedUser);
+        await stripe.transfers.create({
+          amount: job.funded * 0.9 * 100,
+          currency: 'usd',
+          destination: user.stripe,
+        });
+        const payments = await Payment.findAll({
+          where: {
+            jobId: id,
+            type: 'deposit',
+          },
+          include: [
+            {
+              model: User,
+            },
+          ],
+        });
+        await payments.forEach(async payment => {
+          await payment.update({
+            type: 'payment',
+          });
+        });
+      }
+      await job.update({
+        status: 'completed',
+        funded: 0,
+      });
+      status = true;
+    }
+    res.status(200).send(status);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(status);
   }
 });
 

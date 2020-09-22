@@ -185,6 +185,22 @@ jobRouter.get('/job/:id', async (req, res) => {
   }
 });
 
+jobRouter.get('/job/user/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const jobs = await Job.findAll({
+      where: {
+        userId: id,
+      },
+      include: [Image, User],
+    });
+    res.status(200).send(jobs);
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('error finding job', e);
+  }
+});
+
 jobRouter.post('/', async (req, res) => {
   try {
     const {
@@ -302,38 +318,6 @@ jobRouter.put('/:id', async (req, res) => {
                 address,
                 userId,
                 status,
-              },
-              {
-                where: { id },
-              }
-            );
-          }
-          break;
-        }
-        case 'complete': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'completed',
-              },
-              {
-                where: { id },
-              }
-            );
-          }
-          break;
-        }
-        case 'cancel': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'cancelled',
               },
               {
                 where: { id },

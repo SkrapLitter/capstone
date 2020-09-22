@@ -24,6 +24,14 @@ const defaultJobs: Job = {
     images: [],
     description: '',
     createdUser: '',
+    funded: 0,
+  },
+  userJobs: {
+    completed: [],
+    pending: [],
+    pendingVerification: [],
+    cancelled: [],
+    active: [],
   },
 };
 
@@ -44,6 +52,11 @@ const jobReducer = (state: Job = defaultJobs, action: AnyAction): Job => {
       return {
         ...state,
         jobs: action.jobs,
+      };
+    case TYPES.SET_USER_JOBS:
+      return {
+        ...state,
+        userJobs: action.userJobs,
       };
     default:
       return state;
