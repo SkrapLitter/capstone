@@ -2,7 +2,7 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThunkAction } from 'redux-thunk';
 import GoogleMapReact from 'google-map-react';
@@ -12,7 +12,6 @@ import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
-import PhotoVerification from './photoVerification';
 import { Button } from '@material-ui/core';
 
 interface RouteParams {
@@ -23,7 +22,7 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
 
   const [showGallery, setShowGallery] = useState(false);
-  const [showVerUpload, setShowVerUpload] = useState(false);
+  const history = useHistory();
 
   const dispatch: (
     a: ThunkAction<any, any, any, any>
@@ -43,11 +42,7 @@ const JobDetails: React.FC = () => {
   };
   const images = job.images.map(img => img.url);
 
-  const toggleVerificationUpload = e => {
-    e.preventDefault();
-    setShowVerUpload(!showVerUpload);
-  };
-
+  console.log('JOB', job);
   return (
     <div className="container jCenter">
       {job && Object.values(job).length ? (
@@ -72,15 +67,12 @@ const JobDetails: React.FC = () => {
               {job.reservedUser === user.id ? (
                 <Button
                   variant="outlined"
-                  onClick={toggleVerificationUpload}
+                  onClick={() => history.push(`/verify/${job.id}`)}
                   className="m1em"
                 >
                   Job Complete?
                 </Button>
               ) : null}
-            </div>
-            <div className="container">
-              {showVerUpload ? <PhotoVerification job={job} /> : null}
             </div>
             <div className="container">
               <div className="flexRow">
