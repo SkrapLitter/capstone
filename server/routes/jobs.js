@@ -275,8 +275,7 @@ jobRouter.put('/:id', async (req, res) => {
             (req.user && req.user.clearance === 5)
           ) {
             // eslint-disable-next-line
-            const { name, price, address, description, userId } = req.body;
-            const status = price ? 'paid' : 'unpaid';
+            const { name, address, description, userId } = req.body;
             let city;
             let state;
             let lat;
@@ -300,7 +299,7 @@ jobRouter.put('/:id', async (req, res) => {
               lng = geocodeData.results[0].geometry.location.lng;
             }
             const options = () => {
-              const optionObj = { status };
+              const optionObj = {};
               const keys = Object.keys(req.body);
               keys.forEach(key => {
                 if (key !== 'type') {
@@ -364,6 +363,26 @@ jobRouter.put('/:id', async (req, res) => {
   } catch (e) {
     res.status(500).send({ status: false });
     console.error('Error with job update', e);
+  }
+});
+
+jobRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { jobId } = req.query;
+  // TODO - DELETE PHOTO FROM AMAZON
+  try {
+    const image = await Image.findByPk(id);
+    await image.destroy();
+    const job = await Job.findOne({
+      where: {
+        id: jobId,
+      },
+      include: [Image],
+    });
+    res.status(200).send(job);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
   }
 });
 

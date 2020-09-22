@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { fetchJob, addPhotoToJob } from '../../store/job/jobActions';
+import { AppThunk } from '../../store/thunkType';
+import {
+  fetchJob,
+  addPhotoToJob,
+  deletePhotoFromJob,
+} from '../../store/job/jobActions';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 
 interface RouteParams {
   id: string;
@@ -12,14 +18,11 @@ interface RouteParams {
 
 const EditJob: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
-  const storeImages = (state: StoreState) => state.photos;
-  const images = useSelector(storeImages);
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   const history = useHistory();
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
   const [address, setAddress] = useState(null);
   const [description, setDescription] = useState('');
 
@@ -34,7 +37,6 @@ const EditJob: React.FC = () => {
   useEffect(() => {
     console.log('JOB', job);
     setName(job.name);
-    setPrice(job.price.toString());
     setDescription(job.description);
   }, [job]);
 
@@ -62,7 +64,7 @@ const EditJob: React.FC = () => {
     const form = document.getElementById('createJobForm');
     const validFields = form.querySelectorAll('.valid');
     // 2 inputs + textarea are valid and address object returned from Google
-    return validFields.length === 3;
+    return validFields.length === 2;
   };
 
   const handleSubmit = (): void => {
@@ -84,7 +86,6 @@ const EditJob: React.FC = () => {
     axios
       .put(`/api/jobs/${id}`, {
         name,
-        price,
         address,
         description,
         userId: user.id,
@@ -104,7 +105,9 @@ const EditJob: React.FC = () => {
     file.append('image', e.target.files[0]);
     dispatch(addPhotoToJob(id, file));
   };
-
+  const handleDeleteImage = (photoId: string, jobId: string) => {
+    dispatch(deletePhotoFromJob(photoId, jobId));
+  };
   return (
     <div
       className="container"
@@ -125,28 +128,6 @@ const EditJob: React.FC = () => {
         </label>
       </div>
       <div className="input-field fsField">
-        <input
-          value={price}
-          onChange={e => handleChange(e, setPrice, 'priceLabel')}
-          id="price"
-          autoComplete="off"
-          className={
-            price.length
-              ? /^[0-9]+(\.[0-9]{2})?$/.test(price)
-                ? 'valid'
-                : 'invalid'
-              : ''
-          }
-        />
-        <label
-          htmlFor="price"
-          id="priceLabel"
-          className={price ? 'active' : ''}
-        >
-          Price
-        </label>
-      </div>
-      <div className="input-field fsField">
         <p style={{ textAlign: 'left', color: 'gray' }}>Location</p>
         <GooglePlacesAutocomplete
           selectProps={{ address, onChange: setAddress }}
@@ -155,12 +136,17 @@ const EditJob: React.FC = () => {
       </div>
       <div className="thumbGallery">
         {job &&
-          job.images.map((img, i) => (
+          job.images.map(img => (
             <div
-              key={img.url.slice(i)}
+              key={img.id}
               style={{ backgroundImage: `url('${img.url}')` }}
               className="thumb"
-            />
+            >
+              <DeleteForeverOutlinedIcon
+                style={{ color: 'red' }}
+                onClick={() => handleDeleteImage(img.id, job.id)}
+              />
+            </div>
           ))}
       </div>
       <div className="m-t-b">
@@ -171,20 +157,6 @@ const EditJob: React.FC = () => {
             id="imageUpload"
             onChange={handleImage}
           />
-        </div>
-        <div>
-          {images.photos.length
-            ? images.photos.map(image => {
-                return (
-                  <img
-                    key={image.id}
-                    className="thumbnail"
-                    src={image.url}
-                    alt="trash"
-                  />
-                );
-              })
-            : null}
         </div>
       </div>
       <div className="input-field fsField">

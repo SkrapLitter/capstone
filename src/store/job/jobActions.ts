@@ -169,7 +169,16 @@ const addPhotoToJob = (id: string, file: FormData): AppThunk => {
   };
 };
 
+const deletePhotoFromJob = (photoId: string, jobId: string): AppThunk => {
+  return async dispatch => {
+    Axios.delete(`/api/jobs/${photoId}?jobId=${jobId}`)
+      .then(({ data }) => dispatch(setJob(data)))
+      .catch(console.log);
+  };
+};
+
 export {
+  setJob,
   setJobs,
   fetchJobs,
   reserveJob,
@@ -178,4 +187,5 @@ export {
   locationSort,
   fetchMapJobs,
   addPhotoToJob,
+  deletePhotoFromJob,
 };

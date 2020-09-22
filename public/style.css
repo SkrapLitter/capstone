@@ -546,6 +546,23 @@ button:focus {
   margin: 5px;
   background-size: cover;
   background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+div.thumb > svg {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+}
+
+div.thumb:hover svg {
+  display: block;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {
