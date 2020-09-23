@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job, Image },
+  models: { Job, Image, Payment },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -192,9 +192,24 @@ jobRouter.get('/job/user/:id', async (req, res) => {
       where: {
         userId: id,
       },
-      include: [Image, User],
+      include: [Image, Payment],
     });
-    res.status(200).send(jobs);
+    const completed = jobs.filter(job => job.status === 'completed');
+    const cancelled = jobs.filter(job => job.status === 'cancelled');
+    const pendingVerification = jobs.filter(
+      job => job.status === 'pendingVerification'
+    );
+    const pending = jobs.filter(job => job.status === 'pending');
+    const active = jobs.filter(
+      job => job.status === 'volunteer' || job.status === 'funded'
+    );
+    res.status(200).send({
+      completed,
+      cancelled,
+      pendingVerification,
+      pending,
+      active,
+    });
   } catch (e) {
     res.sendStatus(500);
     console.error('error finding job', e);

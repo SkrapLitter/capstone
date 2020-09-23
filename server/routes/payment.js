@@ -143,8 +143,12 @@ paymentRouter.put('/stripe/completed/:id', async (req, res) => {
           ],
         });
         await payments.forEach(async payment => {
-          await payment.update({
+          await Payment.create({
             type: 'payment',
+            subject: `${job.name} has been completed and recipient has been paid`,
+            amount: payment.amount,
+            userId: payment.userId,
+            jobId: payment.jobId,
           });
         });
       }

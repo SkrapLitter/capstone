@@ -77,24 +77,7 @@ export const fetchJobsByUser = (userId: string): AppThunk => {
   return async (dispatch): Promise<any> => {
     try {
       const jobs = (await Axios.get(`/api/jobs/user/${userId}`)).data;
-      const completed = jobs.filter(job => job.status === 'completed');
-      const cancelled = jobs.filter(job => job.status === 'cancelled');
-      const pendingVerification = jobs.filter(
-        job => job.status === 'pendingVerification'
-      );
-      const pending = jobs.filter(job => job.status === 'pending');
-      const active = jobs.filter(
-        job => job.status === 'volunteer' || job.status === 'funded'
-      );
-      dispatch(
-        setUserJobs({
-          completed,
-          cancelled,
-          pendingVerification,
-          pending,
-          active,
-        })
-      );
+      dispatch(setUserJobs(jobs));
     } catch (e) {
       console.error(e);
     }
