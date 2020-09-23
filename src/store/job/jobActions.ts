@@ -140,6 +140,20 @@ const locationSort = (
   };
 };
 
+const addPhotoToJob = (id: string, file: FormData): AppThunk => {
+  return async dispatch => {
+    Axios.post(`/api/photo/jobphoto/${id}`, file, {
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=boundary',
+      },
+    })
+      .then(({ data }) => {
+        dispatch(setJob(data));
+      })
+      .catch(console.log);
+  };
+};
+
 export {
   setJobs,
   fetchJobs,
@@ -148,4 +162,5 @@ export {
   unreserveJob,
   locationSort,
   fetchMapJobs,
+  addPhotoToJob,
 };

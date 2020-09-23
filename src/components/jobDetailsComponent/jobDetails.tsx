@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
 import { StoreState } from '../../store/store';
 import { fetchJob } from '../../store/job/jobActions';
@@ -12,6 +12,8 @@ import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
+import PhotoVerification from './photoVerification';
+import { Button } from '@material-ui/core';
 
 interface RouteParams {
   id: string;
@@ -21,10 +23,9 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
 
   const [showGallery, setShowGallery] = useState(false);
+  const [showVerUpload, setShowVerUpload] = useState(false);
 
-  const dispatch: (
-    a: ThunkAction<any, any, any, any>
-  ) => Promise<any> = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
     dispatch(fetchJob(id));
@@ -39,6 +40,11 @@ const JobDetails: React.FC = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
   const images = job.images.map(img => img.url);
+
+  const toggleVerificationUpload = e => {
+    e.preventDefault();
+    setShowVerUpload(!showVerUpload);
+  };
 
   return (
     <div className="container jCenter">
@@ -59,7 +65,21 @@ const JobDetails: React.FC = () => {
             {showGallery && (
               <JobImages setShowGallery={setShowGallery} images={images} />
             )}
-            {renderButtons()}
+            <div style={{ display: 'flex' }}>
+              {renderButtons()}
+              {job.reservedUser === user.id ? (
+                <Button
+                  variant="outlined"
+                  onClick={toggleVerificationUpload}
+                  className="m1em"
+                >
+                  Job Complete?
+                </Button>
+              ) : null}
+            </div>
+            <div className="container">
+              {showVerUpload ? <PhotoVerification job={job} /> : null}
+            </div>
             <div className="container">
               <div className="flexRow">
                 <div className="flexRow">
