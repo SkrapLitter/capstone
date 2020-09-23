@@ -44,6 +44,7 @@ chatroomRouter.get('/job', async (req, res) => {
       chatroom = await Chatroom.findOne({
         include: {
           model: User,
+          through: 'UserChat',
         },
         where: {
           chatusers,
@@ -66,6 +67,7 @@ chatroomRouter.get('/job', async (req, res) => {
         chatroom = await Chatroom.findOne({
           include: {
             model: User,
+            through: 'UserChat',
           },
           where: {
             chatusers,

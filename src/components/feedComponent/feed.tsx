@@ -55,7 +55,6 @@ const Feed: React.FC = () => {
     setType(filter);
   };
   const fetchNext = () => {
-    setPage(page + 1);
     setSize(size + 20);
     dispatch(fetchJobs(input, page, size, type));
   };

@@ -2,57 +2,33 @@ import TYPES from '../types';
 import { AppThunk } from '../thunkType';
 import Axios from 'axios';
 import { booleanType } from 'aws-sdk/clients/iam';
-import { JobAttributes } from './jobInterface';
+import { JobAttributes, UserJobs } from './jobInterface';
 import {
   dateSort,
   locationSorter,
 } from '../../components/mapComponent/mapUtils';
 
-enum jobStatus {
-  'paid',
-  'unpaid',
-  'completed',
-  'cancelled',
-}
-interface Jobject {
-  id: string;
-  name: string;
-  status: jobStatus;
-  price: number;
-  city: string;
-  state: string;
-  address: string;
-  reserved: boolean;
-  reservedUser?: string;
-  reservedUsername?: string;
-  lat: number;
-  lng: number;
-  createdAt: string;
-  updatedAt: string;
-  userId: string;
-  image: string;
-  description: string;
-  createdUser: string;
-}
-
 interface Jobs {
   type: string;
-  count: number;
-  jobs: Jobject[];
+  count?: number;
+  jobs?: Array<JobAttributes>;
+  job?: JobAttributes;
+  userJobs?: UserJobs;
 }
-interface Job {
-  type: string;
-  job: Jobject;
-}
-const setJobs = (count: number, jobs: Jobject[]): Jobs => ({
+const setJobs = (count: number, jobs: Array<JobAttributes>): Jobs => ({
   type: TYPES.SET_JOBS,
   count,
   jobs,
 });
 
-const setJob = (job: Jobject): Job => ({
+const setJob = (job: JobAttributes): Jobs => ({
   type: TYPES.SET_JOB,
   job,
+});
+
+const setUserJobs = (userJobs: UserJobs): Jobs => ({
+  type: TYPES.SET_USER_JOBS,
+  userJobs,
 });
 
 const fetchJobs = (filter = '', page = 1, size = 20, type = ''): AppThunk => {
@@ -90,13 +66,23 @@ const fetchMapJobs = (
 };
 
 const fetchJob = (id: string): AppThunk => {
-  return async dispatch => {
+  return async (dispatch): Promise<any> => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
-    console.log(data);
     dispatch(setJob(data));
+    return data;
   };
 };
 
+export const fetchJobsByUser = (userId: string): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const jobs = (await Axios.get(`/api/jobs/user/${userId}`)).data;
+      dispatch(setUserJobs(jobs));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+};
 const reserveJob = (jobId: string): AppThunk => {
   return async (dispatch): Promise<any> => {
     try {
@@ -121,7 +107,6 @@ const unreserveJob = (jobId: string): AppThunk => {
       });
       if (data.status) dispatch(setJob(data.job));
     } catch (e) {
-      console.log(e.response.data);
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));
       }
@@ -155,7 +140,30 @@ const locationSort = (
   };
 };
 
+const addPhotoToJob = (id: string, file: FormData): AppThunk => {
+  return async dispatch => {
+    Axios.post(`/api/photo/jobphoto/${id}`, file, {
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=boundary',
+      },
+    })
+      .then(({ data }) => {
+        dispatch(setJob(data));
+      })
+      .catch(console.log);
+  };
+};
+
+const deletePhotoFromJob = (photoId: string, jobId: string): AppThunk => {
+  return async dispatch => {
+    Axios.delete(`/api/jobs/${photoId}?jobId=${jobId}`)
+      .then(({ data }) => dispatch(setJob(data)))
+      .catch(console.log);
+  };
+};
+
 export {
+  setJob,
   setJobs,
   fetchJobs,
   reserveJob,
@@ -163,4 +171,6 @@ export {
   unreserveJob,
   locationSort,
   fetchMapJobs,
+  addPhotoToJob,
+  deletePhotoFromJob,
 };

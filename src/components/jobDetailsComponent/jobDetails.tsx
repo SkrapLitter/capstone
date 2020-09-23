@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
 import { StoreState } from '../../store/store';
 import { fetchJob } from '../../store/job/jobActions';
@@ -13,6 +13,7 @@ import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
 import { Button } from '@material-ui/core';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 interface RouteParams {
   id: string;
@@ -22,11 +23,13 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
 
   const [showGallery, setShowGallery] = useState(false);
+
   const history = useHistory();
 
-  const dispatch: (
-    a: ThunkAction<any, any, any, any>
-  ) => Promise<any> = useDispatch();
+  const [showVerificationGallery, setShowVerificationGallery] = useState(false);
+  const [showVerUpload, setShowVerUpload] = useState(false);
+
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
     dispatch(fetchJob(id));
@@ -42,7 +45,6 @@ const JobDetails: React.FC = () => {
   };
   const images = job.images.map(img => img.url);
 
-  console.log('JOB', job);
   return (
     <div className="container jCenter">
       {job && Object.values(job).length ? (
@@ -74,6 +76,34 @@ const JobDetails: React.FC = () => {
                 </Button>
               ) : null}
             </div>
+            {job.verifications && job.verifications.length ? (
+              <div className="container">
+                <div className="d-flex" style={{ alignItems: 'center' }}>
+                  <p style={{ fontSize: '1.5rem' }}>Verification</p>
+                  <VerifiedUserIcon fontSize="large" />
+                </div>
+                <div className="verificationContainer f-centered">
+                  <div
+                    className="jobImage"
+                    style={{
+                      backgroundImage: `url('${
+                        job.verifications &&
+                        job.verifications.length &&
+                        job.verifications[0].url
+                      }')`,
+                    }}
+                    onClick={() => setShowVerificationGallery(true)}
+                    role="navigation"
+                  />
+                  {showVerificationGallery && (
+                    <JobImages
+                      setShowGallery={setShowVerificationGallery}
+                      images={job.verifications.map(img => img.url)}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : null}
             <div className="container">
               <div className="flexRow">
                 <div className="flexRow">

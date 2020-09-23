@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job, Image, Verification },
+  models: { Job, Image, Payment, Verification },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -29,6 +29,16 @@ jobRouter.get('/', async (req, res) => {
         limit,
         offset,
         order: [['updatedAt', 'DESC']],
+        where: {
+          [Op.or]: [
+            {
+              status: 'funded',
+            },
+            {
+              status: 'volunteer',
+            },
+          ],
+        },
         include: [
           {
             model: Image,
@@ -175,11 +185,49 @@ jobRouter.get('/job/:id', async (req, res) => {
   }
 });
 
+jobRouter.get('/job/user/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const jobs = await Job.findAll({
+      where: {
+        userId: id,
+      },
+      include: [Image, Payment],
+    });
+    const completed = jobs.filter(job => job.status === 'completed');
+    const cancelled = jobs.filter(job => job.status === 'cancelled');
+    const pendingVerification = jobs.filter(
+      job => job.status === 'pendingVerification'
+    );
+    const pending = jobs.filter(job => job.status === 'pending');
+    const active = jobs.filter(
+      job => job.status === 'volunteer' || job.status === 'funded'
+    );
+    res.status(200).send({
+      completed,
+      cancelled,
+      pendingVerification,
+      pending,
+      active,
+    });
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('error finding job', e);
+  }
+});
+
 jobRouter.post('/', async (req, res) => {
   try {
-    const { name, price, address, userId, description, images } = req.body;
+    const {
+      name,
+      price,
+      address,
+      userId,
+      description,
+      images,
+      status,
+    } = req.body;
     const ids = images.map(image => image.id);
-    const status = price ? 'paid' : 'unpaid';
     const city = address.value.structured_formatting.secondary_text.split(
       ', '
     )[0];
@@ -274,54 +322,52 @@ jobRouter.put('/:id', async (req, res) => {
             (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
             (req.user && req.user.clearance === 5)
           ) {
-            const { name, price, city, state, address, userId } = req.body;
-            const status = price ? 'paid' : 'unpaid';
-            await Job.update(
-              {
-                name,
-                price,
-                city,
-                state,
-                address,
-                userId,
-                status,
-              },
-              {
-                where: { id },
-              }
-            );
-          }
-          break;
-        }
-        case 'complete': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'completed',
-              },
-              {
-                where: { id },
-              }
-            );
-          }
-          break;
-        }
-        case 'cancel': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'cancelled',
-              },
-              {
-                where: { id },
-              }
-            );
+            // eslint-disable-next-line
+            const { name, address, description, userId } = req.body;
+            let city;
+            let state;
+            let lat;
+            let lng;
+            if (address) {
+              city = address.value.structured_formatting.secondary_text.split(
+                ', '
+              )[0];
+              state = address.value.structured_formatting.secondary_text.split(
+                ', '
+              )[1];
+              const geocodeData = await axios
+                .get(
+                  `https://maps.googleapis.com/maps/api/geocode/json?place_id=${encodeURI(
+                    `${address.value.place_id}`
+                  )}&key=${process.env.GEOCODE_KEY}`
+                )
+                .then(response => response.data);
+
+              lat = geocodeData.results[0].geometry.location.lat;
+              lng = geocodeData.results[0].geometry.location.lng;
+            }
+            const options = () => {
+              const optionObj = {};
+              const keys = Object.keys(req.body);
+              keys.forEach(key => {
+                if (key !== 'type') {
+                  if (req.body[key] && req.body[key] !== job[key])
+                    optionObj[key] = req.body[key];
+                  if (key === 'address') {
+                    if (address) {
+                      optionObj.city = city;
+                      optionObj.state = state;
+                      optionObj.lat = lat;
+                      optionObj.lng = lng;
+                      optionObj.address =
+                        address.value.structured_formatting.main_text;
+                    }
+                  }
+                }
+              });
+              return optionObj;
+            };
+            await job.update(options());
           }
           break;
         }
@@ -333,6 +379,26 @@ jobRouter.put('/:id', async (req, res) => {
   } catch (e) {
     res.status(500).send({ status: false });
     console.error('Error with job update', e);
+  }
+});
+
+jobRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { jobId } = req.query;
+  // TODO - DELETE PHOTO FROM AMAZON
+  try {
+    const image = await Image.findByPk(id);
+    await image.destroy();
+    const job = await Job.findOne({
+      where: {
+        id: jobId,
+      },
+      include: [Image],
+    });
+    res.status(200).send(job);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
   }
 });
 
