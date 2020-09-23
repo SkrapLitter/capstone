@@ -22,6 +22,7 @@ export interface JobAttributes {
   summary?: string;
   images?: PhotoAttributes[];
   user?: User;
+  verifications?: PhotoAttributes[];
 }
 
 export default interface Job {
