@@ -619,3 +619,10 @@ div.thumb:hover svg {
 #jobs .badge {
   text-transform: uppercase;
 }
+
+.verificationContainer {
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 450px;
+  width: auto;
+}
