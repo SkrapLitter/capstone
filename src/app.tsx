@@ -19,7 +19,9 @@ import { fetchNewAlerts } from './store/alert/alertActions';
 import Axios from 'axios';
 import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
+import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
+
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -62,6 +64,7 @@ const App: React.FC = () => {
           <Route path="/create" component={CreateJob} />
           <Route exact path="/inbox" component={Inbox} />
           <Route path="/inbox/:id?" component={SelectedChatroom} />
+          <Route path="/verify/:id" component={PhotoVerification} />
           <Route path="/checkout/:id" component={Checkout} />
           <Redirect to="/jobs" />
         </Switch>
