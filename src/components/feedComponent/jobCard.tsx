@@ -59,6 +59,7 @@ const JobCard: React.FC<Props> = (props: Props) => {
                 <button
                   className="waves-effect waves-light btn green accent-4 cardButton"
                   type="button"
+                  disabled={props.job.reserved}
                 >
                   Reserve Job
                 </button>

@@ -3,9 +3,9 @@ const db = require('../db');
 
 const Payment = db.define('payment', {
   id: {
+    primaryKey: true,
     type: UUID,
     defaultValue: UUIDV4,
-    primaryKey: true,
   },
   amount: {
     type: DECIMAL(20, 2),
@@ -17,6 +17,9 @@ const Payment = db.define('payment', {
   type: {
     type: ENUM('payment', 'deposit', 'refund'),
     allowNull: false,
+  },
+  chargeId: {
+    type: STRING,
   },
 });
 

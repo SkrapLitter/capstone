@@ -47,15 +47,17 @@ const Checkout: React.FC = () => {
   const history = useHistory();
   const handleToken = async (token, addresses) => {
     if (validate.isPrice(price)) {
-      const response = await axios.post('/api/payment/stripe/checkout', {
-        token,
-        addresses,
-        total,
-        user,
-        job: job.job,
-        price: price,
-      });
-      const { status } = response.data;
+      const status = (
+        await axios.post('/api/payment/stripe/checkout', {
+          token,
+          addresses,
+          total: difference,
+          applicationFee,
+          user,
+          job: job.job,
+          price: price,
+        })
+      ).data;
       if (status === 'success') {
         toast('Success! You have checked out!', { type: 'success' });
         history.push('/account');
@@ -71,14 +73,15 @@ const Checkout: React.FC = () => {
       ) : (
         <div>
           <h2>{job.job.name} Checkout Page</h2>
-          <TextField
-            value={price}
-            onChange={e => {
-              e.stopPropagation();
-              setPrice(e.target.value);
-            }}
-            label="Target Price"
-          />
+          {job.job.funded !== 0 ? (
+            <TextField
+              value={price}
+              onChange={e => {
+                setPrice(e.target.value);
+              }}
+              label="Target Price"
+            />
+          ) : null}
           <TableContainer component={Paper}>
             <Table stickyHeader>
               <TableHead>
@@ -88,7 +91,6 @@ const Checkout: React.FC = () => {
                   <TableCell align="right">Funded</TableCell>
                   <TableCell align="right">Amount Needed</TableCell>
                   <TableCell align="right">User</TableCell>
-                  {/* <TableCell align="right">Image</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -100,14 +102,6 @@ const Checkout: React.FC = () => {
                   <TableCell align="right">{job.job.funded}</TableCell>
                   <TableCell align="right">{difference}</TableCell>
                   <TableCell align="right">{user.username}</TableCell>
-                  {/* <TableCell align="right">
-                    <img
-                      src={job.job.images[0].url}
-                      alt="job"
-                      height={125}
-                      width={155}
-                    />
-                  </TableCell> */}
                 </TableRow>
               </TableBody>
             </Table>
@@ -116,13 +110,11 @@ const Checkout: React.FC = () => {
             <h3>Total</h3>
             <br />
             <hr />
-            <span>Amount Needed: ${difference}</span>
-            <br />
+            <p>Amount Needed: ${difference.toFixed(2)}</p>
             <hr />
-            <span>Application Fee: ${applicationFee} </span>
-            <br />
+            <p>Application Fee: ${applicationFee.toFixed(2)} </p>
             <hr />
-            <span>Total: {total}</span>
+            <p>Total: {total.toFixed(2)}</p>
             <hr />
             <StripeCheckout
               stripeKey="pk_test_51HQb6CE7ag3tHwtoywBsVrSo0kouJGEUUBUT6wVztfN4vo7qpNv1tHFjMj5JbBAQy0ytr1SvzjS3fvQ7AR4eJqYA00AYgeIALr"

@@ -139,7 +139,7 @@ const CreateJob: React.FC = () => {
           id="price"
           autoComplete="off"
           className={
-            price.length && validate.isPrice(price) ? 'valid' : 'invalid'
+            price.length ? (validate.isPrice(price) ? 'valid' : 'invalid') : ''
           }
         />
         <label htmlFor="price" id="priceLabel">
@@ -204,7 +204,6 @@ const CreateJob: React.FC = () => {
           Create Job
           <i className="material-icons right">work</i>
         </button>
-        )
       </div>
       {shouldShowCreateUser && <CreateAccountOverlay />}
     </div>

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job, Image, Verification },
+  models: { Job, Image, Payment, Verification },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -185,6 +185,37 @@ jobRouter.get('/job/:id', async (req, res) => {
   }
 });
 
+jobRouter.get('/job/user/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const jobs = await Job.findAll({
+      where: {
+        userId: id,
+      },
+      include: [Image, Payment],
+    });
+    const completed = jobs.filter(job => job.status === 'completed');
+    const cancelled = jobs.filter(job => job.status === 'cancelled');
+    const pendingVerification = jobs.filter(
+      job => job.status === 'pendingVerification'
+    );
+    const pending = jobs.filter(job => job.status === 'pending');
+    const active = jobs.filter(
+      job => job.status === 'volunteer' || job.status === 'funded'
+    );
+    res.status(200).send({
+      completed,
+      cancelled,
+      pendingVerification,
+      pending,
+      active,
+    });
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('error finding job', e);
+  }
+});
+
 jobRouter.post('/', async (req, res) => {
   try {
     const {
@@ -338,38 +369,6 @@ jobRouter.put('/:id', async (req, res) => {
               return optionObj;
             };
             await job.update(options());
-          }
-          break;
-        }
-        case 'complete': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'completed',
-              },
-              {
-                where: { id },
-              }
-            );
-          }
-          break;
-        }
-        case 'cancel': {
-          if (
-            (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
-            (req.user && req.user.clearance === 5)
-          ) {
-            await Job.update(
-              {
-                status: 'cancelled',
-              },
-              {
-                where: { id },
-              }
-            );
           }
           break;
         }
