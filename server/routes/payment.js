@@ -7,7 +7,7 @@ const {
 
 paymentRouter.post('/stripe/checkout', async (req, res) => {
   try {
-    const { user, job, token, total, price } = req.body;
+    const { user, job, token, total, price, applicationFee } = req.body;
     const customer = await stripe.customers.create({
       email: token.email,
       source: token.id,
@@ -22,7 +22,7 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
     const idempotencyKey = payment.id;
     const charge = await stripe.charges.create(
       {
-        amount: total * 100,
+        amount: (total + applicationFee) * 100,
         currency: 'usd',
         customer: customer.id,
         receipt_email: token.email,
@@ -93,10 +93,14 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
         await payments.forEach(async payment => {
           await stripe.refunds.create({
             charge: 'ch_1HSYwXE7ag3tHwto1gL7LvsA',
-            amount: job.funded * 100,
+            amount: payment.amount * 100,
           });
-          await payment.update({
+          await Payment.create({
             type: 'refund',
+            subject: `${job.name} has been cancelled and a refund has been issued`,
+            amount: payment.amount,
+            userId: payment.userId,
+            jobId: payment.jobId,
           });
         });
         await job.update({
@@ -150,6 +154,15 @@ paymentRouter.put('/stripe/completed/:id', async (req, res) => {
             userId: payment.userId,
             jobId: payment.jobId,
           });
+        });
+        await Payment.create({
+          type: 'payment',
+          subject: `${job.name} has been completed $${
+            job.funded * 0.9
+          } dollars has been transferred to your account`,
+          amount: job.funded * 0.9,
+          userId: job.reservedUser,
+          jobId: job.id,
         });
       }
       await job.update({

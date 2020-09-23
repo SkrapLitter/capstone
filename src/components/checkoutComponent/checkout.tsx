@@ -51,7 +51,8 @@ const Checkout: React.FC = () => {
         await axios.post('/api/payment/stripe/checkout', {
           token,
           addresses,
-          total: total,
+          total: difference,
+          applicationFee,
           user,
           job: job.job,
           price: price,
