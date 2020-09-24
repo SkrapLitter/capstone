@@ -27,7 +27,7 @@ const JobDetails: React.FC = () => {
   const history = useHistory();
 
   const [showVerificationGallery, setShowVerificationGallery] = useState(false);
-  const [showVerUpload, setShowVerUpload] = useState(false);
+  // const [showVerUpload, setShowVerUpload] = useState(false);
 
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
