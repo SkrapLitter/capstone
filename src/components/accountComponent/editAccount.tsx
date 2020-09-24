@@ -5,6 +5,10 @@ import { StoreState } from '../../store/store';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Edit from '@material-ui/icons/Edit';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import M from 'materialize-css';
 
@@ -37,6 +41,8 @@ const EditAccount: React.FC = () => {
 
     if (input.disabled) {
       input.disabled = false;
+      input.classList.remove('Mui-disabled');
+      input.parentElement.classList.remove('Mui-disabled');
     }
   };
 
@@ -66,6 +72,8 @@ const EditAccount: React.FC = () => {
         lastName,
       };
 
+      console.log(updatedUser);
+
       dispatch(updateAccountThunk(id, updatedUser));
 
       setDisabled('accountForm');
@@ -74,18 +82,10 @@ const EditAccount: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>,
-    labelId: string
+    set: React.Dispatch<React.SetStateAction<string>>
   ): void => {
     // control form field value
     set(e.target.value);
-    // get the label
-    const label = document.getElementById(labelId);
-    // toggle class for label animation
-    /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
-    e.target.value
-      ? label.classList.add('active')
-      : label.classList.remove('active');
   };
   return (
     <>
@@ -101,6 +101,7 @@ const EditAccount: React.FC = () => {
           {firstName} {lastName}
         </strong>
       </h4>
+
       <div className="row">
         <div className="col s12">
           <ul className="tabs">
@@ -126,88 +127,96 @@ const EditAccount: React.FC = () => {
             <h2>Edit Profile</h2>
             <div className="row">
               <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={firstName}
-                  onChange={e => handleChange(e, setFirstName, 'fnLabel')}
-                  type="text"
-                  className={validate.setClassName(validate.isName(firstName))}
+                <TextField
                   id="firstName"
+                  label="First Name"
+                  disabled
+                  defaultValue={firstName}
+                  fullWidth
+                  error={!validate.isName(firstName)}
+                  onChange={e => handleChange(e, setFirstName)}
+                  helperText={
+                    !validate.isName(firstName) ? 'Invalid Field' : ' '
+                  }
                 />
-                <label htmlFor="firstName" className="active" id="fnLabel">
-                  First Name
-                </label>
               </div>
               <div className="col s1">
-                <button
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="secondary"
                   onClick={() => toggleDisabled('firstName')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
+                  startIcon={<Edit />}
                 >
-                  <i className="material-icons">create</i>
-                </button>
+                  Edit
+                </Button>
               </div>
             </div>
             <div className="row">
               <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={lastName}
-                  onChange={e => handleChange(e, setLastName, 'lnLabel')}
-                  type="text"
-                  className={validate.setClassName(validate.isName(lastName))}
+                <TextField
                   id="lastName"
+                  label="Last Name"
+                  disabled
+                  defaultValue={lastName}
+                  fullWidth
+                  error={!validate.isName(lastName)}
+                  onChange={e => handleChange(e, setLastName)}
+                  helperText={
+                    !validate.isName(lastName) ? 'Invalid Field' : ' '
+                  }
                 />
-                <label htmlFor="lastName" className="active" id="lnLabel">
-                  Last Name
-                </label>
               </div>
               <div className="col s1">
-                <button
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="secondary"
                   onClick={() => toggleDisabled('lastName')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
+                  startIcon={<Edit />}
                 >
-                  <i className="material-icons">create</i>
-                </button>
+                  Edit
+                </Button>
               </div>
             </div>
             <div className="row">
               <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={username}
-                  onChange={e => handleChange(e, setUsername, 'emLabel')}
-                  type="email"
-                  className={validate.setClassName(validate.isEmail(username))}
+                <TextField
                   id="email"
+                  label="Email"
+                  disabled
+                  defaultValue={username}
+                  fullWidth
+                  error={!validate.isEmail(username)}
+                  onChange={e => handleChange(e, setUsername)}
+                  helperText={
+                    !validate.isEmail(username) ? 'Invalid Field' : ' '
+                  }
                 />
-                <label htmlFor="email" className="active" id="emLabel">
-                  Email
-                </label>
               </div>
               <div className="col s1">
-                <button
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="secondary"
                   onClick={() => toggleDisabled('email')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
+                  startIcon={<Edit />}
                 >
-                  <i className="material-icons">create</i>
-                </button>
+                  Edit
+                </Button>
               </div>
             </div>
             <div className="center">
-              <button
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                className="green accent-4"
                 onClick={handleSubmit}
-                className="btn waves-effect waves-light green accent-4"
-                type="submit"
+                startIcon={<AccountCircle />}
               >
                 Update Account
-                <i className="material-icons right">account_circle</i>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
