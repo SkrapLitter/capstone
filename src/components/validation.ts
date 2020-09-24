@@ -25,5 +25,4 @@ export const validate = {
   isPrice,
   setClassName,
   isFormValid,
-  isPrice,
 };

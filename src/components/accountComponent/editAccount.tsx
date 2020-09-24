@@ -223,7 +223,7 @@ const EditAccount: React.FC = () => {
               <ul className="collection">
                 {inbox.inbox.map(chatroom => (
                   <li key={chatroom.id} className="collection-item left-align">
-                    <Link to={chatroom.id}>{chatroom.name}</Link>
+                    <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
                   </li>
                 ))}
               </ul>
