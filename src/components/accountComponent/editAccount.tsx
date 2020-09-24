@@ -7,7 +7,8 @@ import { updateAccountThunk } from '../../store/user/userActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Edit from '@material-ui/icons/Edit';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import M from 'materialize-css';
@@ -141,15 +142,14 @@ const EditAccount: React.FC = () => {
                 />
               </div>
               <div className="col s1">
-                <Button
-                  variant="contained"
+                <Fab
                   size="small"
                   color="secondary"
+                  aria-label="add"
                   onClick={() => toggleDisabled('firstName')}
-                  startIcon={<Edit />}
                 >
-                  Edit
-                </Button>
+                  <EditIcon />
+                </Fab>
               </div>
             </div>
             <div className="row">
@@ -168,15 +168,14 @@ const EditAccount: React.FC = () => {
                 />
               </div>
               <div className="col s1">
-                <Button
-                  variant="contained"
+                <Fab
                   size="small"
                   color="secondary"
+                  aria-label="add"
                   onClick={() => toggleDisabled('lastName')}
-                  startIcon={<Edit />}
                 >
-                  Edit
-                </Button>
+                  <EditIcon />
+                </Fab>
               </div>
             </div>
             <div className="row">
@@ -195,15 +194,14 @@ const EditAccount: React.FC = () => {
                 />
               </div>
               <div className="col s1">
-                <Button
-                  variant="contained"
+                <Fab
                   size="small"
                   color="secondary"
+                  aria-label="add"
                   onClick={() => toggleDisabled('email')}
-                  startIcon={<Edit />}
                 >
-                  Edit
-                </Button>
+                  <EditIcon />
+                </Fab>
               </div>
             </div>
             <div className="center">
