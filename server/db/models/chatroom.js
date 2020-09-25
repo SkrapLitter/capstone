@@ -1,4 +1,4 @@
-const { STRING, UUID, UUIDV4, TEXT } = require('sequelize');
+const { UUID, UUIDV4 } = require('sequelize');
 const db = require('../db');
 const User = require('./user');
 
@@ -8,16 +8,16 @@ const Chatroom = db.define('chatroom', {
     type: UUID,
     defaultValue: UUIDV4,
   },
-  name: {
-    type: STRING,
-    allowNull: false,
-  },
-  chatusers: {
-    type: TEXT,
-  },
-  jobName: {
-    type: STRING,
-  },
+  // name: {
+  //   type: STRING,
+  //   allowNull: false,
+  // },
+  // chatusers: {
+  //   type: TEXT,
+  // },
+  // jobName: {
+  //   type: STRING,
+  // },
 });
 
 Chatroom.prototype.findUsers = async function () {
