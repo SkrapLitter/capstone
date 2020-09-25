@@ -22,7 +22,6 @@ import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
 
-
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);

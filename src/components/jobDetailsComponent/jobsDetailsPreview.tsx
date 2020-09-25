@@ -13,18 +13,20 @@ const jobsDetailsPreview: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <h3>My Jobs</h3>
-      {jobs.length ? (
-        <ul className="collection">
-          {jobs.map(job => (
-            <JobDetailsPreview key={job.id} job={job} />
-          ))}
-        </ul>
-      ) : (
-        <h2> No Jobs Yet</h2>
-      )}
-    </>
+    <div id="jobs" className="col s12">
+      <div className="m-t-l">
+        <h3>My Jobs</h3>
+        {jobs.length ? (
+          <ul className="collection">
+            {jobs.map(job => (
+              <JobDetailsPreview key={job.id} job={job} />
+            ))}
+          </ul>
+        ) : (
+          <h2> No Jobs Yet</h2>
+        )}
+      </div>
+    </div>
   );
 };
 

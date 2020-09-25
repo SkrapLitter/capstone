@@ -1,17 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { validate } from '../validation';
-import { updateAccountThunk } from '../../store/user/userActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import EditAccountForm from './editAccountForm';
+import InboxPreview from '../inboxComponent/inboxPreview';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import Message from '@material-ui/icons/Message';
+import Work from '@material-ui/icons/Work';
+import { makeStyles } from '@material-ui/core/styles';
 
-import M from 'materialize-css';
+interface Props {
+  index: any;
+  value: any;
+}
+
+const TabPanel = (props: Props) => {
+  const { children, value, index } = props;
+
+  return (
+    <div
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      className="s3"
+    >
+      {value === index && <>{children}</>}
+    </div>
+  );
+};
+
+const useStyles = makeStyles(() => ({
+  customTabRoot: {
+    backgroundColor: '#00C853',
+  },
+  customTabIndicator: {
+    backgroundColor: '#43A047',
+  },
+}));
 
 const EditAccount: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -22,72 +49,24 @@ const EditAccount: React.FC = () => {
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
 
-  const [username, setUsername] = useState(user.username);
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
 
-  const dispatch = useDispatch();
+  const [value, setValue] = React.useState(0);
+
+  const classes = useStyles();
 
   useEffect(() => {
-    setUsername(user.username);
+    /* eslint-disable @typescript-eslint/ban-types */
     setFirstName(user.firstName);
     setLastName(user.lastName);
-
-    const tabs = document.querySelector('.tabs');
-    M.Tabs.init(tabs);
   }, [user]);
 
-  const toggleDisabled = (labelId: string): void => {
-    const input = document.getElementById(labelId) as HTMLInputElement;
-
-    if (input.disabled) {
-      input.disabled = false;
-      input.classList.remove('Mui-disabled');
-      input.parentElement.classList.remove('Mui-disabled');
-    }
-  };
-
-  const setDisabled = formId => {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input') as NodeListOf<
-      HTMLInputElement
-    >;
-
-    inputs.forEach(input => {
-      if (!input.disabled) {
-        input.disabled = true;
-      }
-    });
-  };
-
-  const handleSubmit = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
+  const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     e.preventDefault();
-
-    if (validate.isFormValid('accountForm')) {
-      const { id } = user;
-      const updatedUser = {
-        username,
-        firstName,
-        lastName,
-      };
-
-      console.log(updatedUser);
-
-      dispatch(updateAccountThunk(id, updatedUser));
-
-      setDisabled('accountForm');
-    }
+    setValue(newValue);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>
-  ): void => {
-    // control form field value
-    set(e.target.value);
-  };
   return (
     <>
       <img
@@ -103,141 +82,35 @@ const EditAccount: React.FC = () => {
         </strong>
       </h4>
 
-      <div className="row">
+      <div className="row m-t-l">
         <div className="col s12">
-          <ul className="tabs">
-            <li className="tab col s3">
-              <a href="#edit-profile" className="green-text text-accent-4">
-                Edit Profile
-              </a>
-            </li>
-            <li className="tab col s3">
-              <a href="#jobs" className="green-text text-accent-4">
-                My Jobs ({jobs.length || 0})
-              </a>
-            </li>
-            <li className="tab col s3">
-              <a href="#messages" className="green-text text-accent-4">
-                Messages ({inbox.inbox.length || 0})
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="edit-profile" className="col s12">
-          <div className="container m-t-l" id="accountForm">
-            <h2>Edit Profile</h2>
-            <div className="row">
-              <div className="col s11 input-field">
-                <TextField
-                  id="firstName"
-                  label="First Name"
-                  disabled
-                  defaultValue={firstName}
-                  fullWidth
-                  error={!validate.isName(firstName)}
-                  onChange={e => handleChange(e, setFirstName)}
-                  helperText={
-                    !validate.isName(firstName) ? 'Invalid Field' : ' '
-                  }
-                />
-              </div>
-              <div className="col s1">
-                <Fab
-                  size="small"
-                  color="secondary"
-                  aria-label="add"
-                  onClick={() => toggleDisabled('firstName')}
-                >
-                  <EditIcon />
-                </Fab>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s11 input-field">
-                <TextField
-                  id="lastName"
-                  label="Last Name"
-                  disabled
-                  defaultValue={lastName}
-                  fullWidth
-                  error={!validate.isName(lastName)}
-                  onChange={e => handleChange(e, setLastName)}
-                  helperText={
-                    !validate.isName(lastName) ? 'Invalid Field' : ' '
-                  }
-                />
-              </div>
-              <div className="col s1">
-                <Fab
-                  size="small"
-                  color="secondary"
-                  aria-label="add"
-                  onClick={() => toggleDisabled('lastName')}
-                >
-                  <EditIcon />
-                </Fab>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s11 input-field">
-                <TextField
-                  id="email"
-                  label="Email"
-                  disabled
-                  defaultValue={username}
-                  fullWidth
-                  error={!validate.isEmail(username)}
-                  onChange={e => handleChange(e, setUsername)}
-                  helperText={
-                    !validate.isEmail(username) ? 'Invalid Field' : ' '
-                  }
-                />
-              </div>
-              <div className="col s1">
-                <Fab
-                  size="small"
-                  color="secondary"
-                  aria-label="add"
-                  onClick={() => toggleDisabled('email')}
-                >
-                  <EditIcon />
-                </Fab>
-              </div>
-            </div>
-            <div className="center">
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                className="green accent-4"
-                onClick={handleSubmit}
-                startIcon={<AccountCircle />}
-              >
-                Update Account
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div id="jobs" className="col s12">
-          <div className="m-t-l">
+          <AppBar position="static">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              centered
+              classes={{
+                root: classes.customTabRoot,
+                indicator: classes.customTabIndicator,
+              }}
+            >
+              <Tab icon={<PersonPinIcon />} label="Edit Profile" />
+              <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
+              <Tab
+                icon={<Message />}
+                label={`Messages (${inbox.inbox.length || 0})`}
+              />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            <EditAccountForm />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
             <JobsDetailsPreview />
-          </div>
-        </div>
-        <div id="messages" className="col s12">
-          <div className="m-t-l">
-            <h2>My Messages</h2>
-            {inbox.inbox.length ? (
-              <ul className="collection">
-                {inbox.inbox.map(chatroom => (
-                  <li key={chatroom.id} className="collection-item left-align">
-                    <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h2>No Jobs Yet</h2>
-            )}
-          </div>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <InboxPreview />
+          </TabPanel>
         </div>
       </div>
     </>
