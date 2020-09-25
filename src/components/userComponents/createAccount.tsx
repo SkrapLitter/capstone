@@ -64,6 +64,7 @@ const CreateAccount: React.FC = () => {
         <TextField
           id="password"
           label="Password"
+          type="password"
           value={password}
           error={!!password.length && !validate.isPassword(password)}
           onChange={e => setPassword(e.target.value)}
