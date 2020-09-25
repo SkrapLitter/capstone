@@ -1,12 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { validate } from '../validation';
-import { updateAccountThunk } from '../../store/user/userActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
+import EditAccountForm from './editAccountForm';
+import InboxPreview from '../inboxComponent/inboxPreview';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import Message from '@material-ui/icons/Message';
+import Work from '@material-ui/icons/Work';
+import { makeStyles } from '@material-ui/core/styles';
 
-import M from 'materialize-css';
+interface Props {
+  index: any;
+  value: any;
+}
+
+const TabPanel = (props: Props) => {
+  const { children, value, index } = props;
+
+  return (
+    <div
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      className="s3"
+    >
+      {value === index && <>{children}</>}
+    </div>
+  );
+};
+
+const useStyles = makeStyles(() => ({
+  customTabRoot: {
+    backgroundColor: '#00C853',
+  },
+  customTabIndicator: {
+    backgroundColor: '#43A047',
+  },
+}));
 
 const EditAccount: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
@@ -17,76 +49,24 @@ const EditAccount: React.FC = () => {
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
 
-  const [username, setUsername] = useState(user.username);
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
 
-  const dispatch = useDispatch();
+  const [value, setValue] = React.useState(0);
+
+  const classes = useStyles();
 
   useEffect(() => {
-    setUsername(user.username);
+    /* eslint-disable @typescript-eslint/ban-types */
     setFirstName(user.firstName);
     setLastName(user.lastName);
-
-    const tabs = document.querySelector('.tabs');
-    M.Tabs.init(tabs);
   }, [user]);
 
-  const toggleDisabled = (labelId: string): void => {
-    const input = document.getElementById(labelId) as HTMLInputElement;
-
-    if (input.disabled) {
-      input.disabled = false;
-    }
-  };
-
-  const setDisabled = formId => {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input') as NodeListOf<
-      HTMLInputElement
-    >;
-
-    inputs.forEach(input => {
-      if (!input.disabled) {
-        input.disabled = true;
-      }
-    });
-  };
-
-  const handleSubmit = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
+  const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     e.preventDefault();
-
-    if (validate.isFormValid('accountForm')) {
-      const { id } = user;
-      const updatedUser = {
-        username,
-        firstName,
-        lastName,
-      };
-
-      dispatch(updateAccountThunk(id, updatedUser));
-
-      setDisabled('accountForm');
-    }
+    setValue(newValue);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>,
-    labelId: string
-  ): void => {
-    // control form field value
-    set(e.target.value);
-    // get the label
-    const label = document.getElementById(labelId);
-    // toggle class for label animation
-    /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
-    e.target.value
-      ? label.classList.add('active')
-      : label.classList.remove('active');
-  };
   return (
     <>
       <img
@@ -101,136 +81,36 @@ const EditAccount: React.FC = () => {
           {firstName} {lastName}
         </strong>
       </h4>
-      <div className="row">
+
+      <div className="row m-t-l">
         <div className="col s12">
-          <ul className="tabs">
-            <li className="tab col s3">
-              <a href="#edit-profile" className="green-text text-accent-4">
-                Edit Profile
-              </a>
-            </li>
-            <li className="tab col s3">
-              <a href="#jobs" className="green-text text-accent-4">
-                My Jobs ({jobs.length || 0})
-              </a>
-            </li>
-            <li className="tab col s3">
-              <a href="#messages" className="green-text text-accent-4">
-                Messages ({inbox.inbox.length || 0})
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="edit-profile" className="col s12">
-          <div className="container m-t-l" id="accountForm">
-            <h2>Edit Profile</h2>
-            <div className="row">
-              <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={firstName}
-                  onChange={e => handleChange(e, setFirstName, 'fnLabel')}
-                  type="text"
-                  className={validate.setClassName(validate.isName(firstName))}
-                  id="firstName"
-                />
-                <label htmlFor="firstName" className="active" id="fnLabel">
-                  First Name
-                </label>
-              </div>
-              <div className="col s1">
-                <button
-                  onClick={() => toggleDisabled('firstName')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
-                >
-                  <i className="material-icons">create</i>
-                </button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={lastName}
-                  onChange={e => handleChange(e, setLastName, 'lnLabel')}
-                  type="text"
-                  className={validate.setClassName(validate.isName(lastName))}
-                  id="lastName"
-                />
-                <label htmlFor="lastName" className="active" id="lnLabel">
-                  Last Name
-                </label>
-              </div>
-              <div className="col s1">
-                <button
-                  onClick={() => toggleDisabled('lastName')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
-                >
-                  <i className="material-icons">create</i>
-                </button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s11 input-field">
-                <input
-                  autoComplete="off"
-                  disabled
-                  value={username}
-                  onChange={e => handleChange(e, setUsername, 'emLabel')}
-                  type="email"
-                  className={validate.setClassName(validate.isEmail(username))}
-                  id="email"
-                />
-                <label htmlFor="email" className="active" id="emLabel">
-                  Email
-                </label>
-              </div>
-              <div className="col s1">
-                <button
-                  onClick={() => toggleDisabled('email')}
-                  className="btn-floating btn-small waves-effect waves-light"
-                  type="submit"
-                >
-                  <i className="material-icons">create</i>
-                </button>
-              </div>
-            </div>
-            <div className="center">
-              <button
-                onClick={handleSubmit}
-                className="btn waves-effect waves-light green accent-4"
-                type="submit"
-              >
-                Update Account
-                <i className="material-icons right">account_circle</i>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div id="jobs" className="col s12">
-          <div className="m-t-l">
+          <AppBar position="static">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              centered
+              classes={{
+                root: classes.customTabRoot,
+                indicator: classes.customTabIndicator,
+              }}
+            >
+              <Tab icon={<PersonPinIcon />} label="Edit Profile" />
+              <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
+              <Tab
+                icon={<Message />}
+                label={`Messages (${inbox.inbox.length || 0})`}
+              />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            <EditAccountForm />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
             <JobsDetailsPreview />
-          </div>
-        </div>
-        <div id="messages" className="col s12">
-          <div className="m-t-l">
-            <h2>My Messages</h2>
-            {inbox.inbox.length ? (
-              <ul className="collection">
-                {inbox.inbox.map(chatroom => (
-                  <li key={chatroom.id} className="collection-item left-align">
-                    <Link to={chatroom.id}>{chatroom.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h2>No Jobs Yet</h2>
-            )}
-          </div>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <InboxPreview />
+          </TabPanel>
         </div>
       </div>
     </>

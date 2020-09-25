@@ -9,6 +9,7 @@ const upload = multer();
 const { Image, Job, Verification } = models;
 
 const singleUpload = upload.single('image');
+const multipleUpload = upload.array('image');
 
 photoRouter.post('/jobphoto/:id', singleUpload, async (req, res) => {
   const { buffer, originalname } = req.file;
@@ -75,38 +76,63 @@ photoRouter.post('/jobphoto', singleUpload, async (req, res) => {
   });
 });
 
-photoRouter.post('/verificationphoto/:id', singleUpload, async (req, res) => {
-  const { buffer, originalname } = req.file;
+photoRouter.post('/verificationphoto/:id', multipleUpload, async (req, res) => {
+  const file = req.files;
   const { id } = req.params;
+  const userId = req.user.id;
+  const bucketName = { Bucket: userId };
 
   const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID2,
     secretAccessKey: process.env.AWS_SECRET2,
   });
 
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME2,
-    Key: originalname,
-    Body: buffer,
-    ACL: 'public-read',
-  };
-
-  s3.upload(params, async (err, data) => {
+  s3.createBucket(bucketName, (err, data) => {
     if (err) {
-      console.error(err);
-      res.status(500).send({ message: 'Server error' });
+      console.log('error', err);
     } else {
-      const verification = await Verification.create({
-        url: data.Location,
-        jobId: id,
-      });
-      await Job.update(
-        { status: 'pendingVerification' },
-        { where: { id: id } }
-      );
-      res.status(201).send(verification);
+      console.log('success', data);
     }
   });
+  const promises = [];
+  try {
+    file.forEach(img => {
+      const params = {
+        Bucket: bucketName.Bucket,
+        Key: img.originalname,
+        Body: img.buffer,
+        ACL: 'public-read',
+      };
+      const promise = s3.upload(params).promise();
+      promises.push(promise);
+    });
+
+    Promise.all(promises)
+      .then(async data => {
+        data.forEach(async img => {
+          await Verification.create({
+            url: img.Location,
+            jobId: id,
+          });
+        });
+      })
+      .then(async () => {
+        await Job.update(
+          { status: 'pendingVerification' },
+          { where: { id: id } }
+        );
+        const job = await Job.findOne({
+          where: {
+            id,
+          },
+          include: [Image, Verification],
+        });
+        res.status(201).send(job);
+      });
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = {

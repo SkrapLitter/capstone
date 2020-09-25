@@ -2,7 +2,7 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
@@ -12,8 +12,8 @@ import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
-import PhotoVerification from './photoVerification';
 import { Button } from '@material-ui/core';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 interface RouteParams {
   id: string;
@@ -23,7 +23,11 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
 
   const [showGallery, setShowGallery] = useState(false);
-  const [showVerUpload, setShowVerUpload] = useState(false);
+
+  const history = useHistory();
+
+  const [showVerificationGallery, setShowVerificationGallery] = useState(false);
+  // const [showVerUpload, setShowVerUpload] = useState(false);
 
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
@@ -40,11 +44,6 @@ const JobDetails: React.FC = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
   const images = job.images.map(img => img.url);
-
-  const toggleVerificationUpload = e => {
-    e.preventDefault();
-    setShowVerUpload(!showVerUpload);
-  };
 
   return (
     <div className="container jCenter">
@@ -70,16 +69,41 @@ const JobDetails: React.FC = () => {
               {job.reservedUser === user.id ? (
                 <Button
                   variant="outlined"
-                  onClick={toggleVerificationUpload}
+                  onClick={() => history.push(`/verify/${job.id}`)}
                   className="m1em"
                 >
                   Job Complete?
                 </Button>
               ) : null}
             </div>
-            <div className="container">
-              {showVerUpload ? <PhotoVerification job={job} /> : null}
-            </div>
+            {job.verifications && job.verifications.length ? (
+              <div className="container">
+                <div className="d-flex" style={{ alignItems: 'center' }}>
+                  <p style={{ fontSize: '1.5rem' }}>Verification</p>
+                  <VerifiedUserIcon fontSize="large" />
+                </div>
+                <div className="verificationContainer f-centered">
+                  <div
+                    className="jobImage"
+                    style={{
+                      backgroundImage: `url('${
+                        job.verifications &&
+                        job.verifications.length &&
+                        job.verifications[0].url
+                      }')`,
+                    }}
+                    onClick={() => setShowVerificationGallery(true)}
+                    role="navigation"
+                  />
+                  {showVerificationGallery && (
+                    <JobImages
+                      setShowGallery={setShowVerificationGallery}
+                      images={job.verifications.map(img => img.url)}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : null}
             <div className="container">
               <div className="flexRow">
                 <div className="flexRow">
