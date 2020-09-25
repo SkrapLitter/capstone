@@ -18,6 +18,21 @@ export const isFormValid = (formId): boolean => {
   return inputs.length === 0;
 };
 
+const isValid = (): boolean => {
+  let valid = true;
+  // get all the inputs
+  const inputs = document.querySelectorAll('input');
+  // if any are invalid or empty, validation fails
+  inputs.forEach(input => {
+    const isThisInvalid = input.getAttribute('aria-invalid');
+    if (isThisInvalid === 'true' || !input.value.length) {
+      valid = false;
+    }
+  });
+  // otherwise, form is good to go
+  return valid;
+};
+
 export const validate = {
   isEmail,
   isPassword,
@@ -25,5 +40,5 @@ export const validate = {
   isPrice,
   setClassName,
   isFormValid,
-  isPrice,
+  isValid,
 };

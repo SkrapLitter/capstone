@@ -2,8 +2,23 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { loginThunk } from '../../store/user/userActions';
+import { validate } from '../validation';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '100%',
+      },
+    },
+  })
+);
 
 const LoginForm: React.FC = () => {
+  const classes = useStyles();
   // REDUX
   const dispatch = useDispatch();
   const selectUser = (state: StoreState) => state.user;
@@ -13,44 +28,16 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const setters = [setUsername, setPassword];
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>,
-    labelId: string
-  ): void => {
-    // control form field value
-    set(e.target.value);
-    // get the label
-    const label = document.getElementById(labelId);
-    // toggle class for label animation
-    /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
-    e.target.value
-      ? label.classList.add('active')
-      : label.classList.remove('active');
-  };
-
-  const isValid = (): boolean => {
-    return document.querySelectorAll('.valid').length === 2;
-  };
-
   const handleSubmit = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
     // validate form
-    if (isValid()) {
+    if (validate.isValid()) {
       // send to server then update redux user with response
       dispatch(loginThunk(username, password));
       // clear the form
-      setters.forEach(fn => fn(''));
-    } else {
-      const inputs = document.querySelectorAll('input');
-      // add invalid class to invalid fields
-      inputs.forEach(input => {
-        if (!input.classList.contains('valid')) {
-          input.classList.add('invalid');
-        }
-      });
+      setters.forEach(setVal => setVal(''));
     }
   };
 
@@ -61,43 +48,35 @@ const LoginForm: React.FC = () => {
     >
       {error && <div className="alert red lighten-5">Alert: {error}</div>}
       <h4>Login</h4>
-      <div className="input-field fsField">
-        <input
+      <form className={classes.root} noValidate autoComplete="off">
+        <TextField
+          id="username"
+          label="Email"
           value={username}
-          onChange={e => handleChange(e, setUsername, 'emLabel')}
-          type="email"
-          className={
-            username.length
-              ? /^[a-zA-Z0-9_.]+@[a-zA-Z0-9-.]+\.[a-z]{2,}$/.test(username)
-                ? 'valid'
-                : 'invalid'
+          error={!!username.length && !validate.isEmail(username)}
+          onChange={e => setUsername(e.target.value)}
+          aria-required
+          required
+          helperText={
+            !!username.length && !validate.isEmail(username)
+              ? 'Enter a valid email address'
               : ''
           }
-          id="email"
         />
-        <label htmlFor="email" id="emLabel">
-          Email
-        </label>
-      </div>
-      <div className="input-field fsField">
-        <input
-          value={password}
-          onChange={e => handleChange(e, setPassword, 'pwLabel')}
-          type="password"
+        <TextField
           id="password"
-          className={
-            password.length
-              ? /^[a-z0-9!@#$%^&*()_-]{6,}/i.test(password)
-                ? 'valid'
-                : 'invalid'
+          label="Password"
+          value={password}
+          error={!!password.length && !validate.isPassword(password)}
+          onChange={e => setPassword(e.target.value)}
+          aria-required
+          required
+          helperText={
+            !!password.length && !validate.isPassword(password)
+              ? 'Password must be 6 chars. minimum'
               : ''
           }
         />
-        <label htmlFor="password" id="pwLabel">
-          Password
-        </label>
-      </div>
-      <div className="center">
         <button
           onClick={handleSubmit}
           className="btn waves-effect waves-light green accent-4"
@@ -106,7 +85,7 @@ const LoginForm: React.FC = () => {
           Login
           <i className="material-icons right">account_circle</i>
         </button>
-      </div>
+      </form>
     </div>
   );
 };
