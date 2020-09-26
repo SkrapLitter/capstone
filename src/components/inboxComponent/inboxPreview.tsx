@@ -3,26 +3,37 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 
+import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Forum from '@material-ui/icons/Forum';
+
 const InboxPreview: React.FC = () => {
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
 
   return (
-    <div id="messages" className="col s12">
-      <div className="m-t-l">
-        <h2>My Messages</h2>
+    <div id="messages">
+      <Box py={5}>
         {inbox.inbox.length ? (
-          <ul className="collection">
+          <List>
             {inbox.inbox.map(chatroom => (
-              <li key={chatroom.id} className="collection-item left-align">
-                <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
-              </li>
+              <ListItem key={chatroom.id}>
+                <ListItemIcon>
+                  <Forum />
+                </ListItemIcon>
+                <ListItemText>
+                  <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
+                </ListItemText>
+              </ListItem>
             ))}
-          </ul>
+          </List>
         ) : (
-          <h2>No Jobs Yet</h2>
+          <p>No new messages</p>
         )}
-      </div>
+      </Box>
     </div>
   );
 };
