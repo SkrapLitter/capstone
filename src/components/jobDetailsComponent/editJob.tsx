@@ -11,12 +11,27 @@ import {
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '100%',
+      },
+    },
+  })
+);
 
 interface RouteParams {
   id: string;
 }
 
 const EditJob: React.FC = () => {
+  const classes = useStyles();
+
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
@@ -44,43 +59,32 @@ const EditJob: React.FC = () => {
     console.log(address);
   }, [address]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    set: React.Dispatch<React.SetStateAction<string>>,
-    labelId: string
-  ): void => {
-    // control form field value
-    set(e.target.value);
-    // get the label
-    const label = document.getElementById(labelId);
-    // toggle class for label animation
-    /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
-    e.target.value
-      ? label.classList.add('active')
-      : label.classList.remove('active');
-  };
-
-  const isValid = (): boolean => {
-    const form = document.getElementById('createJobForm');
-    const validFields = form.querySelectorAll('.valid');
-    // 2 inputs + textarea are valid and address object returned from Google
-    return validFields.length === 2;
-  };
-
-  const handleSubmit = (): void => {
-    // validate form and highlight invalid fields
-    if (!isValid()) {
-      const form = document.getElementById('createJobForm');
-      const inputs = form.querySelectorAll('input');
-      const textarea = form.querySelector('textarea');
-      inputs.forEach(input => {
-        if (!input.classList.contains('valid')) {
-          input.classList.add('invalid');
-        }
-      });
-      if (!textarea.classList.contains('valid')) {
-        textarea.classList.add('invalid');
+  useEffect(() => {
+    // animate label for textarea to clone material-ui
+    const textarea: HTMLElement = document.getElementById('description');
+    const textareaLabel: HTMLElement = document.getElementById(
+      'descriptionLabel'
+    );
+    if (textarea.textContent.length) {
+      textareaLabel.classList.add('active');
+    }
+    textarea.addEventListener('focus', () => {
+      textareaLabel.classList.add('active');
+    });
+    textarea.addEventListener('blur', () => {
+      if (!textarea.textContent.length) {
+        textareaLabel.classList.remove('active');
       }
+    });
+  }, [description]);
+
+  const handleSubmit = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
+    e.preventDefault();
+    // validate form and highlight invalid fields
+    if (!name || !description) {
+      // TODO TOAST MESSAGE
       return;
     }
     axios
@@ -99,13 +103,13 @@ const EditJob: React.FC = () => {
       .catch(console.log);
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const file = new FormData();
     file.append('image', e.target.files[0]);
     dispatch(addPhotoToJob(id, file));
   };
-  const handleDeleteImage = (photoId: string, jobId: string) => {
+  const handleDeleteImage = (photoId: string, jobId: string): void => {
     dispatch(deletePhotoFromJob(photoId, jobId));
   };
   return (
@@ -115,7 +119,85 @@ const EditJob: React.FC = () => {
       id="createJobForm"
     >
       <h4>Edit {name}</h4>
-      <div className="input-field fsField">
+      <form className={classes.root} noValidate autoComplete="off">
+        <TextField
+          id="name"
+          label="Name"
+          value={name}
+          error={!!name.length && name.length < 4}
+          onChange={e => setName(e.target.value)}
+          aria-required
+          required
+          helperText={
+            !!name.length && name.length < 4 ? 'Name is too short' : ''
+          }
+        />
+        <div className="m8">
+          <p style={{ textAlign: 'left', color: 'rgba(0, 0, 0, 0.54)' }}>
+            Location<span className="smallText"> *</span>
+          </p>
+          <GooglePlacesAutocomplete
+            selectProps={{ address, onChange: setAddress }}
+            apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
+          />
+        </div>
+        <div className="thumbGallery">
+          {job &&
+            job.images.map(img => (
+              <div
+                key={img.id}
+                style={{ backgroundImage: `url('${img.url}')` }}
+                className="thumb"
+              >
+                <DeleteForeverOutlinedIcon
+                  style={{ color: 'red' }}
+                  onClick={() => handleDeleteImage(img.id, job.id)}
+                />
+              </div>
+            ))}
+        </div>
+        <div className="m-t-b">
+          <div>
+            <input
+              type="file"
+              name="image"
+              id="imageUpload"
+              onChange={handleImage}
+            />
+          </div>
+        </div>
+        <div className="m8 pRel">
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            id="description"
+            autoComplete="off"
+            className={
+              description.length
+                ? description.length > 3
+                  ? 'createDescription valid'
+                  : 'createDescription invalid'
+                : 'createDescription'
+            }
+          />
+          <label
+            htmlFor="description"
+            id="descriptionLabel"
+            className={description ? 'active' : ''}
+          >
+            Description
+          </label>
+        </div>
+        <button
+          onClick={handleSubmit}
+          className="btn waves-effect waves-light green accent-4"
+          type="submit"
+        >
+          Submit
+          <i className="material-icons right">work</i>
+        </button>
+      </form>
+      {/* <div className="input-field fsField">
         <input
           value={name}
           onChange={e => handleChange(e, setName, 'nameLabel')}
@@ -133,64 +215,7 @@ const EditJob: React.FC = () => {
           selectProps={{ address, onChange: setAddress }}
           apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
         />
-      </div>
-      <div className="thumbGallery">
-        {job &&
-          job.images.map(img => (
-            <div
-              key={img.id}
-              style={{ backgroundImage: `url('${img.url}')` }}
-              className="thumb"
-            >
-              <DeleteForeverOutlinedIcon
-                style={{ color: 'red' }}
-                onClick={() => handleDeleteImage(img.id, job.id)}
-              />
-            </div>
-          ))}
-      </div>
-      <div className="m-t-b">
-        <div className="input-field fsField">
-          <input
-            type="file"
-            name="image"
-            id="imageUpload"
-            onChange={handleImage}
-          />
-        </div>
-      </div>
-      <div className="input-field fsField">
-        <textarea
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          id="description"
-          autoComplete="off"
-          className={
-            description.length
-              ? description.length > 3
-                ? 'createDescription valid'
-                : 'createDescription invalid'
-              : 'createDescription'
-          }
-        />
-        <label
-          htmlFor="description"
-          id="descriptionLabel"
-          className={description ? 'active' : ''}
-        >
-          Description
-        </label>
-      </div>
-      <div className="center">
-        <button
-          onClick={handleSubmit}
-          className="btn waves-effect waves-light green accent-4"
-          type="submit"
-        >
-          Submit
-          <i className="material-icons right">work</i>
-        </button>
-      </div>
+      </div> */}
     </div>
   );
 };
