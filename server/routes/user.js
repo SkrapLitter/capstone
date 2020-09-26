@@ -19,12 +19,19 @@ userRouter.get('/stripe/dashboard/:id', async (req, res) => {
     console.error('stripe error', e);
   }
 });
-userRouter.get('/stripe/account/:id', async (req, res) => {
+userRouter.get('/stripe/balance/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id);
-    const account = await stripe.account.retrieve(user.stripe);
-    res.status(200).send(account);
+    if (user.stripe) {
+      const balance = await stripe.balance.retrieve({
+        stripeAccount: user.stripe,
+      });
+      await user.update({
+        balance: balance.available[0].amount / 100,
+      });
+    }
+    res.status(200).send(user);
   } catch (e) {
     console.error('stripe error', e);
   }
@@ -77,19 +84,11 @@ userRouter.put('/socketConnect/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const session = await Session.findByPk(req.cookies.session_id);
-    session.update({
-      socket: id,
-    });
-    await User.update(
-      {
+    if (id) {
+      session.update({
         socket: id,
-      },
-      {
-        where: {
-          id: session.userId,
-        },
-      }
-    );
+      });
+    }
     res.sendStatus(200);
   } catch (e) {
     console.error(e);

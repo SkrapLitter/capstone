@@ -18,6 +18,7 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
+const Axios = require('axios');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -39,7 +40,7 @@ io.on('connection', socket => {
   socket.on('message', async data => {
     try {
       const { chatroomId, author, message, userId } = data;
-      await ChatMessage.create({
+      const newMessage = await ChatMessage.create({
         chatroomId,
         author,
         message,
@@ -48,17 +49,24 @@ io.on('connection', socket => {
       const chatroom = await Chatroom.findByPk(chatroomId);
       const users = chatroom.chatusers.split('/').filter(id => id !== userId);
       await users.forEach(async id => {
-        await Alert.create({
+        const alert = await Alert.create({
           subject: `New Message Received From ${author} in ${chatroom.name}`,
           userId: id,
         });
-        const user = await User.findByPk(id);
+        const user = await User.findOne({
+          include: [{ model: Session }],
+          where: {
+            id,
+          },
+        });
         if (user) {
-          io.to(user.socket).emit('alert', id);
-          io.to(user.socket).emit('newMessage', chatroom);
+          user.sessions.forEach(session => {
+            io.to(session.socket).emit('alert', alert);
+            io.to(session.socket).emit('newMessage', newMessage);
+          });
         }
       });
-      io.to(socket.id).emit('newMessage', chatroom);
+      io.to(socket.id).emit('newMessage', newMessage);
     } catch (e) {
       console.error('socket error', e);
     }
@@ -82,6 +90,11 @@ app.use(async (req, res, next) => {
       expires: new Date(Date.now() + oneWeek),
     });
     req.sessionId = session.id;
+    if (req.cookies.io) {
+      session.update({
+        socket: req.cookies.io,
+      });
+    }
     next();
   } else {
     req.sessionId = req.cookies.session_id;
@@ -96,9 +109,6 @@ app.use(async (req, res, next) => {
       })
       .then(user => {
         if (user) {
-          user.update({
-            socket: req.cookies.io,
-          });
           req.user = user.dataValues;
           next();
         } else {
