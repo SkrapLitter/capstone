@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 interface Props {
   index: any;
   value: any;
+  children: JSX.Element;
 }
 
 const TabPanel = (props: Props) => {
