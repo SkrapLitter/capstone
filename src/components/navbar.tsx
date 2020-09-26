@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
                 </div>
               </li>
             )}
-            <Button>
+            <Button color="primary">
               <Alert />
             </Button>
             <li>

@@ -1,0 +1,21 @@
+:root {
+  --green: #83e85a;
+  --greenLt: #d7f4cb;
+  --greenDk: #055425;
+  --blue: #369bf4;
+  --blueLt: #cce7ff;
+  --blueDk: #cce7ff;
+}
+
+body {
+  margin: 0;
+}
+
+.navbar-fixed {
+  background-color: var(--green);
+  position: fixed;
+  display: flex;
+  width: 100vw;
+  height: 5em;
+  top: 0;
+}
