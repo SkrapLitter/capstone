@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { fetchChatroomMessages } from '../../store/inbox/inboxActions';
+import {
+  fetchChatroomMessages,
+  // setChatroom,
+  getChatroom,
+} from '../../store/inbox/inboxActions';
 import { useParams } from 'react-router';
-import User from '../../store/user/userInterface';
-import { TextField } from '@material-ui/core';
-import moment from 'moment';
+// import User from '../../store/user/userInterface';
+import { Button } from '@material-ui/core';
+// import moment from 'moment';
 import { Message } from '../../store/inbox/inboxInterface';
 import socket from '../../socket';
 
@@ -19,65 +23,79 @@ const SelectedChatroom: React.FC = () => {
   const { chatroom } = inbox;
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user.id) {
-      dispatch(fetchChatroomMessages(id, user.id));
-    }
+    dispatch(getChatroom(id));
+    dispatch(fetchChatroomMessages(id));
   }, []);
-  const sendMessage = e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      socket.emit('message', {
-        message,
-        author: user.username,
-        userId: user.id,
-        chatroomId: chatroom.id,
-      });
-      setMessage('');
-    }
+  socket.on('connect', () => {
+    socket.emit('create', id);
+    socket.on('message', () => {
+      dispatch(fetchChatroomMessages(id));
+    });
+  });
+
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recipient =
+      user.id === chatroom.workerId ? chatroom.posterId : chatroom.workerId;
+    socket.emit('message', {
+      message: message,
+      chatroomId: id,
+      author: user.id,
+      recipient: recipient,
+    });
+    dispatch(fetchChatroomMessages(id));
+    setMessage('');
   };
+  const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+  };
+
   return (
     <div>
-      {user.clearance && inbox.messages.length ? (
-        <>
-          <h2>{chatroom.name}</h2>
-          <ul>
-            {chatroom && chatroom.users.length
-              ? chatroom.users.map((curUser: User) => {
-                  return (
-                    <li key={curUser.id}>
-                      {curUser.firstName} {curUser.lastName}
-                    </li>
-                  );
-                })
-              : null}
-          </ul>
-          <ul>
-            {inbox.messages && inbox.messages.length
-              ? inbox.messages.map((curMessage: Message) => {
-                  return (
-                    <li key={curMessage.id}>
-                      Time Sent:
-                      {moment(curMessage.createdAt).format('HH:mm:ss')}:
-                      <br />
-                      {curMessage.message}
-                      <br />
-                      From :{curMessage.author}
-                      <hr />
-                    </li>
-                  );
-                })
-              : null}
-          </ul>
-          <TextField
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            placeholder="enter message here"
-            onKeyPress={e => sendMessage(e)}
-          />
-        </>
-      ) : (
-        <h2>Please Log In To See This Page</h2>
-      )}
+      {user.clearance ? (
+        <div className="chatBox">
+          <div className="container">
+            <ul>
+              {inbox.messages && inbox.messages.length
+                ? inbox.messages.map((curMessage: Message) => {
+                    if (user.id === curMessage.recipient) {
+                      return (
+                        <li key={curMessage.id}>
+                          <div className="chatMessageL">
+                            <div className="recipient">
+                              <p>{curMessage.message}</p>
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    }
+                    return (
+                      <li key={curMessage.id}>
+                        <div className="chatMessageR">
+                          <div className="sender">
+                            <p>{curMessage.message}</p>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })
+                : null}
+            </ul>
+          </div>
+          <form onSubmit={sendMessage}>
+            <div className="messageInput">
+              <textarea
+                value={message}
+                onChange={handleText}
+                style={{ marginRight: '5px' }}
+              />
+              <Button variant="outlined" type="submit">
+                Send
+              </Button>
+            </div>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 };

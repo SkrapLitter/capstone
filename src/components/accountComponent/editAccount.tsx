@@ -108,6 +108,27 @@ const EditAccount: React.FC = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <JobsDetailsPreview />
+// OLD CODE WITH CORRECT PATHS
+          </div>
+        </div>
+        <div id="messages" className="col s12">
+          <div className="m-t-l">
+            <h2>My Messages</h2>
+            {inbox.inbox.length ? (
+              <ul className="collection">
+                {inbox.inbox.map(chatroom => (
+                  <li key={chatroom.id} className="collection-item left-align">
+                    <Link to={`/inbox/${chatroom.id}`}>
+                      {chatroom.job.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <h2>No Jobs Yet</h2>
+            )}
+          </div>
+// END OF OLD CODE
           </TabPanel>
           <TabPanel value={value} index={2}>
             <InboxPreview />

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { Link } from 'react-router-dom';
-import { fetchUserInbox, setChatroom } from '../../store/inbox/inboxActions';
-import { Button } from '@material-ui/core';
+import { fetchUserInbox } from '../../store/inbox/inboxActions';
+import { Paper } from '@material-ui/core';
 import { Chatroom } from '../../store/inbox/inboxInterface';
 
 const Inbox: React.FC = () => {
@@ -11,25 +11,42 @@ const Inbox: React.FC = () => {
   const { user, inbox } = useSelector((state: StoreState) => state);
   useEffect(() => {
     dispatch(fetchUserInbox(user.id));
-  }, []);
+  }, [user.id]);
+  console.log(inbox.inbox);
+  console.log('USER', user);
   return (
-    <div>
+    <div className="container">
       {user.clearance ? (
         <>
-          <h4>{user.username} inbox</h4>
-          {inbox.inbox && inbox.inbox.length ? (
+          <h4>Inbox</h4>
+          {inbox.inbox.length ? (
             inbox.inbox.map((chatroom: Chatroom) => {
               return (
-                <div key={chatroom.id}>
-                  <Button
-                    onClick={e => {
-                      e.preventDefault();
-                      dispatch(setChatroom(chatroom));
-                    }}
-                  >
-                    <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
-                  </Button>
-                </div>
+                <Paper key={chatroom.id}>
+                  <div key={chatroom.id} className="inboxCard">
+                    <Link to={`/inbox/${chatroom.id}`}>
+                      {user.id === chatroom.job.userId
+                        ? `${chatroom.worker.firstName} ${chatroom.worker.lastName}`
+                        : `${chatroom.poster.firstName} ${chatroom.poster.lastName}`}
+                      {' - '}
+                      {chatroom.job.name}
+                    </Link>
+                  </div>
+                </Paper>
+                // <div key={chatroom.id}>
+                //   <h3>{chatroom.job.name}</h3>
+                //   <Button
+                //     onClick={e => {
+                //       e.preventDefault();
+                //       dispatch(setChatroom(chatroom));
+                //     }}
+                //   >
+                //     <Link to={`/inbox/${chatroom.id}`}>
+
+                //       {chatroom.job.name}
+                //     </Link>
+                //   </Button>
+                // </div>
               );
             })
           ) : (

@@ -681,3 +681,70 @@ div.thumb:hover svg {
   height: 450px;
   width: auto;
 }
+
+.inboxCard {
+  /* border: 1px solid black; */
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.chatBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatMessageL {
+  display: flex;
+  justify-content: flex-start;
+  margin: 5px 0;
+}
+
+.chatMessageR {
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px 0;
+}
+
+.messageInput {
+  /* display: flex; */
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* height: 200px; */
+  width: 100%;
+  padding: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  .messageInput {
+    bottom: 60px;
+  }
+}
+
+.recipient {
+  display: flex;
+  justify-content: flex-start;
+  /* float: left; */
+  background-color: lightgrey;
+  border-radius: 30px 30px 30px 0;
+  width: fit-content;
+  max-width: 60%;
+  padding: 0 10px;
+}
+
+.sender {
+  display: flex;
+  text-align: right;
+  justify-content: flex-end;
+  background-color: #00c853;
+  border-radius: 30px 30px 0 30px;
+  width: fit-content;
+  /* float: right;  */
+  max-width: 60%;
+  padding: 0 10px;
+}

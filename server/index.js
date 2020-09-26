@@ -71,16 +71,50 @@ io.on('connection', socket => {
       console.error('socket error', e);
     }
   });
-  socket.on('reserveJob', async data => {
-    const { jobName, userId, reservedName } = data;
-    const user = User.findByPk(userId);
-    await Alert.create({
-      subject: `${jobName} reserved by ${reservedName}`,
-      userId: user.id,
-    });
-    io.to(user.socket).emit('alert', user.id);
+  socket.on('message', async data => {
+    await ChatMessage.create(data);
+    io.to(data.chatroomId).emit('message', data);
   });
 });
+
+// io.on('connection', socket => {
+//   socket.on('message', async data => {
+//     try {
+//       const { chatroomId, author, message, userId } = data;
+//       await ChatMessage.create({
+//         chatroomId,
+//         author,
+//         message,
+//         userId,
+//       });
+//       const chatroom = await Chatroom.findByPk(chatroomId);
+//       const users = chatroom.chatusers.split('/').filter(id => id !== userId);
+//       await users.forEach(async id => {
+//         await Alert.create({
+//           subject: `New Message Received From ${author} in ${chatroom.name}`,
+//           userId: id,
+//         });
+//         const user = await User.findByPk(id);
+//         if (user) {
+//           io.to(user.socket).emit('alert', id);
+//           io.to(user.socket).emit('newMessage', chatroom);
+//         }
+//       });
+//       io.to(socket.id).emit('newMessage', chatroom);
+//     } catch (e) {
+//       console.error('socket error', e);
+//     }
+//   });
+//   socket.on('reserveJob', async data => {
+//     const { jobName, userId, reservedName } = data;
+//     const user = User.findByPk(userId);
+//     await Alert.create({
+//       subject: `${jobName} reserved by ${reservedName}`,
+//       userId: user.id,
+//     });
+//     io.to(user.socket).emit('alert', user.id);
+//   });
+// });
 app.use(async (req, res, next) => {
   if (!req.cookies.session_id) {
     const session = await Session.create();

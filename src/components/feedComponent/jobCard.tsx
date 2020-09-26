@@ -30,7 +30,7 @@ const JobCard: React.FC<Props> = (props: Props) => {
             </div>
             <div>
               <div>
-                {props.job.price === 0 ? (
+                {props.job.price === '0.00' ? (
                   <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                     <img
                       src={VOLUNTEER_ICON}

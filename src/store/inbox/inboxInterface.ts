@@ -1,3 +1,6 @@
+import { JobAttributes } from '../job/jobInterface';
+import User from '../user/userInterface';
+
 export interface Inbox {
   type: string;
   inbox?: Array<Chatroom>;
@@ -6,13 +9,16 @@ export interface Inbox {
   message?: Message;
 }
 export interface Chatroom {
-  chatUsers: string;
   createdAt: string;
+  posterId: string;
+  workerId: string;
+  userId: null;
   id: string;
   jobId: string;
-  name: string;
   updatedAt: string;
-  users: [];
+  job: JobAttributes;
+  poster: User;
+  worker: User;
 }
 export interface InboxRedux {
   inbox: Array<Chatroom>;
@@ -22,6 +28,7 @@ export interface InboxRedux {
 
 export interface Message {
   author: string;
+  recipient: string;
   chatroomId: string;
   createdAt: string;
   id: string;
