@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import { Dialog, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import Carousel from 're-carousel';
 import { JobAttributes } from '../../store/job/jobInterface';
 
 interface Props {
@@ -21,16 +20,14 @@ const MapMarker: React.FC<Props> = (props: Props) => {
   const handleChange = () => {
     setOpen(!open);
   };
+  const { job } = props;
+
   const body = (
     <Paper>
       <div className="mapCard">
-        <Carousel>
-          {props.job.images.map(image => (
-            <div key={image.id} className="mapImageContainer">
-              <img className="mapCardImage" src={image.url} alt="trash" />
-            </div>
-          ))}
-        </Carousel>
+        <div key={job.images[0].id} className="mapImageContainer">
+          <img className="mapCardImage" src={job.images[0].url} alt="trash" />
+        </div>
         <div className="mapCardText">
           <div>
             <h4>{props.job.name}</h4>

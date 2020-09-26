@@ -5,7 +5,7 @@ import { AppThunk } from '../thunkType';
 // import { fetchAlerts } from '../alert/alertActions';
 import TYPES from '../types';
 
-const updateAccount = (user: User) => {
+export const updateAccount = (user: User) => {
   return {
     type: TYPES.UPDATE_ACCOUNT,
     user,

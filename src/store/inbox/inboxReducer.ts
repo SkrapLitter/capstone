@@ -77,6 +77,11 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
         ...state,
         messages: action.messages,
       };
+    case TYPES.ADD_MESSAGE:
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
+      };
   }
 };
 

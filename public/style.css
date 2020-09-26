@@ -93,6 +93,41 @@
   }
 }
 
+input:not([type]):focus:not([readonly]),
+input[type='text']:not(.browser-default):focus:not([readonly]),
+input[type='password']:not(.browser-default):focus:not([readonly]),
+input[type='email']:not(.browser-default):focus:not([readonly]),
+input[type='url']:not(.browser-default):focus:not([readonly]),
+input[type='time']:not(.browser-default):focus:not([readonly]),
+input[type='date']:not(.browser-default):focus:not([readonly]),
+input[type='datetime']:not(.browser-default):focus:not([readonly]),
+input[type='datetime-local']:not(.browser-default):focus:not([readonly]),
+input[type='tel']:not(.browser-default):focus:not([readonly]),
+input[type='number']:not(.browser-default):focus:not([readonly]),
+input[type='search']:not(.browser-default):focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: none;
+  box-shadow: none;
+  margin: 0;
+}
+input:not([type]),
+input[type='text']:not(.browser-default),
+input[type='password']:not(.browser-default),
+input[type='email']:not(.browser-default),
+input[type='url']:not(.browser-default),
+input[type='time']:not(.browser-default),
+input[type='date']:not(.browser-default),
+input[type='datetime']:not(.browser-default),
+input[type='datetime-local']:not(.browser-default),
+input[type='tel']:not(.browser-default),
+input[type='number']:not(.browser-default),
+input[type='search']:not(.browser-default),
+textarea.materialize-textarea {
+  border-bottom: none;
+  width: 100%;
+  margin: 0;
+}
+
 /* label focus color */
 .input-field.fsField input:focus + label,
 .input-field.fsField input[type='text']:focus + label,
@@ -528,16 +563,36 @@ button:focus {
   margin: 20px;
 }
 
+.pRel {
+  position: relative;
+}
+
 #descriptionLabel {
   margin: 0 1em;
+  position: absolute;
+  top: 1em;
+  left: 0;
+  transition: 0.3s ease all;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.54);
 }
-#descriptionLabel.active {
+label#descriptionLabel.active {
   margin: 0 0 0.5em;
+  color: #3f51b5;
+  font-size: 0.7em;
+  top: -1.5em;
+}
+.smallText {
+  font-size: 0.9em;
+}
+.m8 {
+  margin: 8px;
 }
 
 .thumbGallery {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .thumbGallery > div.thumb {

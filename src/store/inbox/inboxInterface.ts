@@ -6,6 +6,7 @@ export interface Inbox {
   inbox?: Array<Chatroom>;
   messages?: Message;
   chatroom?: Chatroom;
+  message?: Message;
 }
 export interface Chatroom {
   createdAt: string;

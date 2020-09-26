@@ -18,6 +18,7 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
+const Axios = require('axios');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -36,8 +37,39 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
-  socket.on('create', room => {
-    socket.join(room);
+  socket.on('message', async data => {
+    try {
+      const { chatroomId, author, message, userId } = data;
+      const newMessage = await ChatMessage.create({
+        chatroomId,
+        author,
+        message,
+        userId,
+      });
+      const chatroom = await Chatroom.findByPk(chatroomId);
+      const users = chatroom.chatusers.split('/').filter(id => id !== userId);
+      await users.forEach(async id => {
+        const alert = await Alert.create({
+          subject: `New Message Received From ${author} in ${chatroom.name}`,
+          userId: id,
+        });
+        const user = await User.findOne({
+          include: [{ model: Session }],
+          where: {
+            id,
+          },
+        });
+        if (user) {
+          user.sessions.forEach(session => {
+            io.to(session.socket).emit('alert', alert);
+            io.to(session.socket).emit('newMessage', newMessage);
+          });
+        }
+      });
+      io.to(socket.id).emit('newMessage', newMessage);
+    } catch (e) {
+      console.error('socket error', e);
+    }
   });
   socket.on('message', async data => {
     await ChatMessage.create(data);
@@ -92,6 +124,11 @@ app.use(async (req, res, next) => {
       expires: new Date(Date.now() + oneWeek),
     });
     req.sessionId = session.id;
+    if (req.cookies.io) {
+      session.update({
+        socket: req.cookies.io,
+      });
+    }
     next();
   } else {
     req.sessionId = req.cookies.session_id;
@@ -106,9 +143,6 @@ app.use(async (req, res, next) => {
       })
       .then(user => {
         if (user) {
-          user.update({
-            socket: req.cookies.io,
-          });
           req.user = user.dataValues;
           next();
         } else {

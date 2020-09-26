@@ -15,6 +15,10 @@ export const setChatroom = (chatroom: Chatroom): Inbox => ({
   type: TYPES.SET_CHATROOM,
   chatroom,
 });
+export const addMessage = (message: Message): Inbox => ({
+  type: TYPES.ADD_MESSAGE,
+  message,
+});
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
     if (userId) {

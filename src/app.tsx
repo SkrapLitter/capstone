@@ -19,6 +19,10 @@ import SelectedChatroom from './components/inboxComponent/chatroom';
 // import { fetchNewAlerts } from './store/alert/alertActions';
 // import Axios from 'axios';
 // import socket from './socket';
+import { addMessage } from './store/inbox/inboxActions';
+import { setAlert } from './store/alert/alertActions';
+import Axios from 'axios';
+import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
@@ -49,6 +53,13 @@ const App: React.FC = () => {
   //     dispatch(fetchNewAlerts(id));
   //   }
   // });
+  socket.on('newMessage', data => {
+    console.log(data);
+    dispatch(addMessage(data));
+  });
+  socket.on('alert', alert => {
+    dispatch(setAlert(alert));
+  });
   return (
     <div>
       <Navbar />
