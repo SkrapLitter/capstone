@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { validate } from '../validation';
 import { updateAccountThunk } from '../../store/user/userActions';
+
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
@@ -74,11 +77,10 @@ const EditAccountForm: React.FC = () => {
     set(e.target.value);
   };
   return (
-    <div id="edit-profile" className="col s12">
-      <div className="container m-t-l" id="accountForm">
-        <h2>Edit Profile</h2>
-        <div className="row">
-          <div className="col s11 input-field">
+    <div id="accountForm">
+      <Box py={5}>
+        <Grid container spacing={3}>
+          <Grid item xs={11}>
             <TextField
               id="firstName"
               label="First Name"
@@ -89,8 +91,8 @@ const EditAccountForm: React.FC = () => {
               onChange={e => handleChange(e, setFirstName)}
               helperText={!validate.isName(firstName) ? 'Invalid Field' : ' '}
             />
-          </div>
-          <div className="col s1">
+          </Grid>
+          <Grid item xs={1}>
             <Fab
               size="small"
               color="secondary"
@@ -99,10 +101,8 @@ const EditAccountForm: React.FC = () => {
             >
               <EditIcon />
             </Fab>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s11 input-field">
+          </Grid>
+          <Grid item xs={11}>
             <TextField
               id="lastName"
               label="Last Name"
@@ -113,8 +113,8 @@ const EditAccountForm: React.FC = () => {
               onChange={e => handleChange(e, setLastName)}
               helperText={!validate.isName(lastName) ? 'Invalid Field' : ' '}
             />
-          </div>
-          <div className="col s1">
+          </Grid>
+          <Grid item xs={1}>
             <Fab
               size="small"
               color="secondary"
@@ -123,10 +123,8 @@ const EditAccountForm: React.FC = () => {
             >
               <EditIcon />
             </Fab>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s11 input-field">
+          </Grid>
+          <Grid item xs={11}>
             <TextField
               id="email"
               label="Email"
@@ -137,8 +135,8 @@ const EditAccountForm: React.FC = () => {
               onChange={e => handleChange(e, setUsername)}
               helperText={!validate.isEmail(username) ? 'Invalid Field' : ' '}
             />
-          </div>
-          <div className="col s1">
+          </Grid>
+          <Grid item xs={1}>
             <Fab
               size="small"
               color="secondary"
@@ -147,21 +145,26 @@ const EditAccountForm: React.FC = () => {
             >
               <EditIcon />
             </Fab>
-          </div>
-        </div>
-        <div className="center">
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            className="green accent-4"
-            onClick={handleSubmit}
-            startIcon={<AccountCircle />}
+          </Grid>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
           >
-            Update Account
-          </Button>
-        </div>
-      </div>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              className="green accent-4"
+              onClick={handleSubmit}
+              startIcon={<AccountCircle />}
+            >
+              Update Account
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 };
