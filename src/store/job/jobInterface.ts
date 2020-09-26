@@ -23,6 +23,7 @@ export interface JobAttributes {
   images?: Array<PhotoAttributes>;
   summary?: string;
   user?: User;
+  verifications?: PhotoAttributes[];
 }
 export interface UserJobs {
   completed?: Array<JobAttributes>;

@@ -9,6 +9,7 @@ import CreateJob from './components/jobComponents/createJob';
 import { useDispatch } from 'react-redux';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
+import EditJob from './components/jobDetailsComponent/editJob';
 import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import SelectedChatroom from './components/inboxComponent/chatroom';
@@ -17,6 +18,7 @@ import { setAlert } from './store/alert/alertActions';
 import Axios from 'axios';
 import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
+import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
 
 const App: React.FC = () => {
@@ -51,9 +53,11 @@ const App: React.FC = () => {
           <Route path="/account" render={() => <Account />} />
           <Route exact path="/jobs" component={Feed} />
           <Route path="/jobs/:id" component={JobDetails} />
+          <Route path="/job/edit/:id" component={EditJob} />
           <Route path="/create" component={CreateJob} />
           <Route exact path="/inbox" component={Inbox} />
           <Route path="/inbox/:id?" component={SelectedChatroom} />
+          <Route path="/verify/:id" component={PhotoVerification} />
           <Route path="/checkout/:id" component={Checkout} />
           <Redirect to="/jobs" />
         </Switch>

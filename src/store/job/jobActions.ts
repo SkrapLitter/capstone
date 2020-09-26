@@ -140,7 +140,30 @@ const locationSort = (
   };
 };
 
+const addPhotoToJob = (id: string, file: FormData): AppThunk => {
+  return async dispatch => {
+    Axios.post(`/api/photo/jobphoto/${id}`, file, {
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=boundary',
+      },
+    })
+      .then(({ data }) => {
+        dispatch(setJob(data));
+      })
+      .catch(console.log);
+  };
+};
+
+const deletePhotoFromJob = (photoId: string, jobId: string): AppThunk => {
+  return async dispatch => {
+    Axios.delete(`/api/jobs/${photoId}?jobId=${jobId}`)
+      .then(({ data }) => dispatch(setJob(data)))
+      .catch(console.log);
+  };
+};
+
 export {
+  setJob,
   setJobs,
   fetchJobs,
   reserveJob,
@@ -148,4 +171,6 @@ export {
   unreserveJob,
   locationSort,
   fetchMapJobs,
+  addPhotoToJob,
+  deletePhotoFromJob,
 };

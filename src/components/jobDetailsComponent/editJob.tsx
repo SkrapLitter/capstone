@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
+import { AppThunk } from '../../store/thunkType';
+import {
+  fetchJob,
+  addPhotoToJob,
+  deletePhotoFromJob,
+} from '../../store/job/jobActions';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import CreateAccountOverlay from '../userComponents/createAccountOverlay';
-import { uploadPhoto } from '../../store/photos/photoActions';
-import { fetchJob } from '../../store/job/jobActions';
-import { validate } from '../validation';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
@@ -22,25 +25,39 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CreateJob: React.FC = () => {
+interface RouteParams {
+  id: string;
+}
+
+const EditJob: React.FC = () => {
   const classes = useStyles();
 
   const selectUser = (state: StoreState) => state.user;
-  const storeImages = (state: StoreState) => state.photos;
-  const images = useSelector(storeImages);
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
+  const { id } = useParams<RouteParams>();
   const history = useHistory();
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(null);
   const [description, setDescription] = useState('');
-  const [shouldShowCreateUser, setShouldShowCreateUser] = useState(false);
+
+  const {
+    job: { job },
+  } = useSelector((state: StoreState) => state);
 
   useEffect(() => {
-    // if user is logged in - hide create account overlay
-    if (user.clearance) setShouldShowCreateUser(false);
-  }, [user.clearance]);
+    dispatch(fetchJob(id));
+  }, []);
+
+  useEffect(() => {
+    console.log('JOB', job);
+    setName(job.name);
+    setDescription(job.description);
+  }, [job]);
+
+  useEffect(() => {
+    console.log(address);
+  }, [address]);
 
   useEffect(() => {
     // animate label for textarea to clone material-ui
@@ -66,65 +83,42 @@ const CreateJob: React.FC = () => {
   ): void => {
     e.preventDefault();
     // validate form and highlight invalid fields
-    if (!name || !description || !price || !address) {
-      // TODO toast message
+    if (!name || !description) {
+      // TODO TOAST MESSAGE
       return;
     }
-    // check if user is logged in
-    if (!user.clearance) {
-      setShouldShowCreateUser(true);
-      return;
-    }
-    const status: string =
-      price.length && price !== '0' ? 'pending' : 'volunteer';
     axios
-      .post('/api/jobs', {
+      .put(`/api/jobs/${id}`, {
         name,
-        price,
         address,
         description,
         userId: user.id,
-        images: images.photos,
-        status,
+        type: 'update',
       })
       .then(({ data }) => {
-        // get jobId for navigation
-        const id = data.jobId;
-        if (status === 'volunteer') {
-          // navigate to job details page
-          history.push(`/jobs/${id}`);
-        } else {
-          return new Promise(res => {
-            res(dispatch(fetchJob(id)));
-          }).then(() => history.push(`/checkout/${id}`));
-        }
+        // navigate to job details page
+        history.push(`/jobs/${data.job.id}`);
       })
       // TODO - error handling for server errors - Toast?
       .catch(console.log);
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    const file: FormData = new FormData();
+    const file = new FormData();
     file.append('image', e.target.files[0]);
-    axios
-      .post('/api/photo/jobphoto', file, {
-        headers: {
-          'Content-Type': 'multipart/form-data; boundary=boundary',
-        },
-      })
-      .then(({ data }) => {
-        dispatch(uploadPhoto(data));
-      });
+    dispatch(addPhotoToJob(id, file));
   };
-
+  const handleDeleteImage = (photoId: string, jobId: string): void => {
+    dispatch(deletePhotoFromJob(photoId, jobId));
+  };
   return (
     <div
       className="container"
       style={{ maxWidth: '400px', textAlign: 'center' }}
       id="createJobForm"
     >
-      <h4>Create a New Job</h4>
+      <h4>Edit {name}</h4>
       <form className={classes.root} noValidate autoComplete="off">
         <TextField
           id="name"
@@ -138,20 +132,6 @@ const CreateJob: React.FC = () => {
             !!name.length && name.length < 4 ? 'Name is too short' : ''
           }
         />
-        <TextField
-          id="price"
-          label="Price"
-          value={price}
-          error={!!price.length && !validate.isPrice(price)}
-          onChange={e => setPrice(e.target.value)}
-          aria-required
-          required
-          helperText={
-            !!price.length && !validate.isPrice(price)
-              ? 'Please enter a valid price'
-              : ''
-          }
-        />
         <div className="m8">
           <p style={{ textAlign: 'left', color: 'rgba(0, 0, 0, 0.54)' }}>
             Location<span className="smallText"> *</span>
@@ -161,6 +141,21 @@ const CreateJob: React.FC = () => {
             apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
           />
         </div>
+        <div className="thumbGallery">
+          {job &&
+            job.images.map(img => (
+              <div
+                key={img.id}
+                style={{ backgroundImage: `url('${img.url}')` }}
+                className="thumb"
+              >
+                <DeleteForeverOutlinedIcon
+                  style={{ color: 'red' }}
+                  onClick={() => handleDeleteImage(img.id, job.id)}
+                />
+              </div>
+            ))}
+        </div>
         <div className="m-t-b">
           <div>
             <input
@@ -169,20 +164,6 @@ const CreateJob: React.FC = () => {
               id="imageUpload"
               onChange={handleImage}
             />
-          </div>
-          <div>
-            {images.photos.length
-              ? images.photos.map(image => {
-                  return (
-                    <img
-                      key={image.id}
-                      className="thumbnail"
-                      src={image.url}
-                      alt="trash"
-                    />
-                  );
-                })
-              : null}
           </div>
         </div>
         <div className="m8 pRel">
@@ -199,24 +180,44 @@ const CreateJob: React.FC = () => {
                 : 'createDescription'
             }
           />
-          <label htmlFor="description" id="descriptionLabel">
-            Description<span className="smallText"> *</span>
+          <label
+            htmlFor="description"
+            id="descriptionLabel"
+            className={description ? 'active' : ''}
+          >
+            Description
           </label>
         </div>
-        <div className="center">
-          <button
-            onClick={handleSubmit}
-            className="btn waves-effect waves-light green accent-4"
-            type="submit"
-          >
-            Create Job
-            <i className="material-icons right">work</i>
-          </button>
-        </div>
-        {shouldShowCreateUser && <CreateAccountOverlay />}
+        <button
+          onClick={handleSubmit}
+          className="btn waves-effect waves-light green accent-4"
+          type="submit"
+        >
+          Submit
+          <i className="material-icons right">work</i>
+        </button>
       </form>
+      {/* <div className="input-field fsField">
+        <input
+          value={name}
+          onChange={e => handleChange(e, setName, 'nameLabel')}
+          id="name"
+          autoComplete="off"
+          className={name.length ? (name.length > 3 ? 'valid' : 'invalid') : ''}
+        />
+        <label htmlFor="name" id="nameLabel" className={name ? 'active' : ''}>
+          Job Name
+        </label>
+      </div>
+      <div className="input-field fsField">
+        <p style={{ textAlign: 'left', color: 'gray' }}>Location</p>
+        <GooglePlacesAutocomplete
+          selectProps={{ address, onChange: setAddress }}
+          apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
+        />
+      </div> */}
     </div>
   );
 };
 
-export default CreateJob;
+export default EditJob;

@@ -10,27 +10,24 @@ interface Props {
 
 const CreateImgArray: React.FC<Props> = (props: Props) => {
   const { images, curImgIndex } = props;
+  if (images.length < 4 && images.length > 1) {
+    // Double it to enable infinite swiping
+    images.forEach(img => images.push(img));
+  }
   const generateClassName = (i: number): string => {
-    if (images.length <= 2) {
-      // Don't animate out, just swap images
-      if (i === curImgIndex) {
-        return 'jobGalleryImg curImg';
-      }
-    } else {
-      // Animation logic
-      if (i === curImgIndex) {
-        return 'jobGalleryImg curImg';
-      } else if (
-        i === curImgIndex - 1 ||
-        (i === images.length - 1 && curImgIndex === 0)
-      ) {
-        return 'jobGalleryImg moveLeft';
-      } else if (
-        i === curImgIndex + 1 ||
-        (curImgIndex === images.length - 1 && i === 0)
-      ) {
-        return 'jobGalleryImg moveRight';
-      }
+    // Animation logic
+    if (i === curImgIndex) {
+      return 'jobGalleryImg curImg';
+    } else if (
+      i === curImgIndex - 1 ||
+      (i === images.length - 1 && curImgIndex === 0)
+    ) {
+      return 'jobGalleryImg moveLeft';
+    } else if (
+      i === curImgIndex + 1 ||
+      (curImgIndex === images.length - 1 && i === 0)
+    ) {
+      return 'jobGalleryImg moveRight';
     }
     // Otherwise, Make it Invisible
     return 'dNone';

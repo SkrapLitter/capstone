@@ -2,9 +2,9 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
 import { StoreState } from '../../store/store';
 import { fetchJob } from '../../store/job/jobActions';
@@ -12,6 +12,8 @@ import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
+import { Button } from '@material-ui/core';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 interface RouteParams {
   id: string;
@@ -22,9 +24,12 @@ const JobDetails: React.FC = () => {
 
   const [showGallery, setShowGallery] = useState(false);
 
-  const dispatch: (
-    a: ThunkAction<any, any, any, any>
-  ) => Promise<any> = useDispatch();
+  const history = useHistory();
+
+  const [showVerificationGallery, setShowVerificationGallery] = useState(false);
+  // const [showVerUpload, setShowVerUpload] = useState(false);
+
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
     dispatch(fetchJob(id));
@@ -59,7 +64,46 @@ const JobDetails: React.FC = () => {
             {showGallery && (
               <JobImages setShowGallery={setShowGallery} images={images} />
             )}
-            {renderButtons()}
+            <div style={{ display: 'flex' }}>
+              {renderButtons()}
+              {job.reservedUser === user.id ? (
+                <Button
+                  variant="outlined"
+                  onClick={() => history.push(`/verify/${job.id}`)}
+                  className="m1em"
+                >
+                  Job Complete?
+                </Button>
+              ) : null}
+            </div>
+            {job.verifications && job.verifications.length ? (
+              <div className="container">
+                <div className="d-flex" style={{ alignItems: 'center' }}>
+                  <p style={{ fontSize: '1.5rem' }}>Verification</p>
+                  <VerifiedUserIcon fontSize="large" />
+                </div>
+                <div className="verificationContainer f-centered">
+                  <div
+                    className="jobImage"
+                    style={{
+                      backgroundImage: `url('${
+                        job.verifications &&
+                        job.verifications.length &&
+                        job.verifications[0].url
+                      }')`,
+                    }}
+                    onClick={() => setShowVerificationGallery(true)}
+                    role="navigation"
+                  />
+                  {showVerificationGallery && (
+                    <JobImages
+                      setShowGallery={setShowVerificationGallery}
+                      images={job.verifications.map(img => img.url)}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : null}
             <div className="container">
               <div className="flexRow">
                 <div className="flexRow">

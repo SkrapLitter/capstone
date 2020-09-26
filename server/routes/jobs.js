@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const {
-  models: { Job, Image, Payment },
+  models: { Job, Image, Payment, Verification },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -176,7 +176,7 @@ jobRouter.get('/job/:id', async (req, res) => {
       where: {
         id,
       },
-      include: [Image, User],
+      include: [Image, User, Verification],
     });
     res.status(200).send(job);
   } catch (e) {
@@ -322,22 +322,52 @@ jobRouter.put('/:id', async (req, res) => {
             (req.isAuthenticated() && req.user && job.userId === req.user.id) ||
             (req.user && req.user.clearance === 5)
           ) {
-            const { name, price, city, state, address, userId } = req.body;
-            const status = price ? 'paid' : 'unpaid';
-            await Job.update(
-              {
-                name,
-                price,
-                city,
-                state,
-                address,
-                userId,
-                status,
-              },
-              {
-                where: { id },
-              }
-            );
+            // eslint-disable-next-line
+            const { name, address, description, userId } = req.body;
+            let city;
+            let state;
+            let lat;
+            let lng;
+            if (address) {
+              city = address.value.structured_formatting.secondary_text.split(
+                ', '
+              )[0];
+              state = address.value.structured_formatting.secondary_text.split(
+                ', '
+              )[1];
+              const geocodeData = await axios
+                .get(
+                  `https://maps.googleapis.com/maps/api/geocode/json?place_id=${encodeURI(
+                    `${address.value.place_id}`
+                  )}&key=${process.env.GEOCODE_KEY}`
+                )
+                .then(response => response.data);
+
+              lat = geocodeData.results[0].geometry.location.lat;
+              lng = geocodeData.results[0].geometry.location.lng;
+            }
+            const options = () => {
+              const optionObj = {};
+              const keys = Object.keys(req.body);
+              keys.forEach(key => {
+                if (key !== 'type') {
+                  if (req.body[key] && req.body[key] !== job[key])
+                    optionObj[key] = req.body[key];
+                  if (key === 'address') {
+                    if (address) {
+                      optionObj.city = city;
+                      optionObj.state = state;
+                      optionObj.lat = lat;
+                      optionObj.lng = lng;
+                      optionObj.address =
+                        address.value.structured_formatting.main_text;
+                    }
+                  }
+                }
+              });
+              return optionObj;
+            };
+            await job.update(options());
           }
           break;
         }
@@ -349,6 +379,26 @@ jobRouter.put('/:id', async (req, res) => {
   } catch (e) {
     res.status(500).send({ status: false });
     console.error('Error with job update', e);
+  }
+});
+
+jobRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { jobId } = req.query;
+  // TODO - DELETE PHOTO FROM AMAZON
+  try {
+    const image = await Image.findByPk(id);
+    await image.destroy();
+    const job = await Job.findOne({
+      where: {
+        id: jobId,
+      },
+      include: [Image],
+    });
+    res.status(200).send(job);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
   }
 });
 
