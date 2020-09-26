@@ -21,6 +21,8 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme/theme';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -49,27 +51,29 @@ const App: React.FC = () => {
     }
   });
   return (
-    <div>
-      <Navbar />
-      <div className="contentWrapper">
-        <Switch>
-          <Route exact path="/" render={() => <Landing />} />
-          <Route path="/stripe/:id" component={Stripe} />
-          <Route path="/map" render={() => <Map />} />
-          <Route path="/account" render={() => <Account />} />
-          <Route exact path="/jobs" component={Feed} />
-          <Route path="/jobs/:id" component={JobDetails} />
-          <Route path="/job/edit/:id" component={EditJob} />
-          <Route path="/create" component={CreateJob} />
-          <Route exact path="/inbox" component={Inbox} />
-          <Route path="/inbox/:id?" component={SelectedChatroom} />
-          <Route path="/verify/:id" component={PhotoVerification} />
-          <Route path="/checkout/:id" component={Checkout} />
-          <Redirect to="/jobs" />
-        </Switch>
+    <ThemeProvider theme={theme}>
+      <div>
+        <Navbar />
+        <div className="contentWrapper">
+          <Switch>
+            <Route exact path="/" render={() => <Landing />} />
+            <Route path="/stripe/:id" component={Stripe} />
+            <Route path="/map" render={() => <Map />} />
+            <Route path="/account" render={() => <Account />} />
+            <Route exact path="/jobs" component={Feed} />
+            <Route path="/jobs/:id" component={JobDetails} />
+            <Route path="/job/edit/:id" component={EditJob} />
+            <Route path="/create" component={CreateJob} />
+            <Route exact path="/inbox" component={Inbox} />
+            <Route path="/inbox/:id?" component={SelectedChatroom} />
+            <Route path="/verify/:id" component={PhotoVerification} />
+            <Route path="/checkout/:id" component={Checkout} />
+            <Redirect to="/jobs" />
+          </Switch>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ThemeProvider>
   );
 };
 
