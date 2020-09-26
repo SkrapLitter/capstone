@@ -6,16 +6,15 @@ import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import CreateJob from './components/jobComponents/createJob';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
 import EditJob from './components/jobDetailsComponent/editJob';
 import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import SelectedChatroom from './components/inboxComponent/chatroom';
-import { fetchChatroomMessages } from './store/inbox/inboxActions';
-import { StoreState } from './store/store';
-import { fetchNewAlerts } from './store/alert/alertActions';
+import { addMessage } from './store/inbox/inboxActions';
+import { setAlert } from './store/alert/alertActions';
 import Axios from 'axios';
 import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
@@ -24,7 +23,6 @@ import Checkout from './components/checkoutComponent/checkout';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: StoreState) => state);
 
   useEffect(() => {
     dispatch(cookieLogin());
@@ -38,15 +36,11 @@ const App: React.FC = () => {
   }, []);
 
   socket.on('newMessage', data => {
-    const users = data.chatusers.split('/');
-    if (users.includes(user.id)) {
-      dispatch(fetchChatroomMessages(data.id, user.id));
-    }
+    console.log(data);
+    dispatch(addMessage(data));
   });
-  socket.on('alert', id => {
-    if (id === user.id) {
-      dispatch(fetchNewAlerts(id));
-    }
+  socket.on('alert', alert => {
+    dispatch(setAlert(alert));
   });
   return (
     <div>

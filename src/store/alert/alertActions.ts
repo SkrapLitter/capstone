@@ -12,6 +12,10 @@ const setNewAlerts = (newAlerts: Alert): AlertAction => ({
   type: TYPES.SET_NEW_ALERTS,
   newAlerts,
 });
+export const setAlert = (alert: Alert): AlertAction => ({
+  type: TYPES.SET_ALERT,
+  alert,
+});
 
 export const fetchAlerts = (userId: string): AppThunk => {
   return async dispatch => {
