@@ -34,8 +34,8 @@ userRouter.post('/stripe/onboarding/:id', async (req, res) => {
     const { id } = req.params;
     const user = await User.findByPk(id);
     if (user) {
-      const accountLink = `${process.env.STRIPE_URI}?response_type=code&scope=read_write&redirect_uri=http://localhost:3000/api/user/stripe/callback/${user.id}&client_id=${process.env.STRIPE_CLIENT}&stripe_user[business_type]=individual&stripe_user[email]=${user.username}&stripe_user[first_name]=${user.firstName}&stripe_user[last_name]=${user.lastName}&stripe_user[phone_number]=0000000000`;
-      // const accountLink = `${process.env.STRIPE_URI}?response_type=code&scope=read_write&redirect_uri=https://skraplitter.herokuapp.com/api/user/stripe/callback/${user.id}&client_id=${process.env.STRIPE_CLIENT}&stripe_user[business_type]=individual&stripe_user[email]=${user.username}&stripe_user[first_name]=${user.firstName}&stripe_user[last_name]=${user.lastName}&stripe_user[phone_number]=0000000000`;
+      // const accountLink = `${process.env.STRIPE_URI}?response_type=code&scope=read_write&redirect_uri=http://localhost:3000/api/user/stripe/callback/${user.id}&client_id=${process.env.STRIPE_CLIENT}&stripe_user[business_type]=individual&stripe_user[email]=${user.username}&stripe_user[first_name]=${user.firstName}&stripe_user[last_name]=${user.lastName}&stripe_user[phone_number]=0000000000`;
+      const accountLink = `${process.env.STRIPE_URI}?response_type=code&scope=read_write&redirect_uri=https://skraplitter.herokuapp.com/api/user/stripe/callback/${user.id}&client_id=${process.env.STRIPE_CLIENT}&stripe_user[business_type]=individual&stripe_user[email]=${user.username}&stripe_user[first_name]=${user.firstName}&stripe_user[last_name]=${user.lastName}&stripe_user[phone_number]=0000000000`;
       res.status(200).send(accountLink);
     } else res.status(500).send({ error: 'user not found' });
   } catch (e) {
