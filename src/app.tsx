@@ -20,6 +20,7 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
+<<<<<<< HEAD
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -28,6 +29,10 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
 import '../public/uiUpdate.scss';
 import '../public/style.scss';
+=======
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme/theme';
+>>>>>>> added theme provider and css vars, deleted materialize css
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,7 +52,11 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
+<<<<<<< HEAD
       <div className="bodyContainer">
+=======
+      <div>
+>>>>>>> added theme provider and css vars, deleted materialize css
         <Navbar />
         <div className="contentWrapper">
           <Switch>
@@ -68,7 +77,10 @@ const App: React.FC = () => {
         </div>
         <Footer />
       </div>
+<<<<<<< HEAD
       <Footer />
+=======
+>>>>>>> added theme provider and css vars, deleted materialize css
     </ThemeProvider>
   );
 };

@@ -42,6 +42,7 @@ const Navbar: React.FC = () => {
                   Account
                 </Link>
               </li>
+<<<<<<< HEAD
               {!!user.clearance && (
                 <li className="user-profile">
                   <Link to="/account">
@@ -71,6 +72,29 @@ const Navbar: React.FC = () => {
               )}
             </ul>
           </div>
+=======
+            )}
+            <Button color="primary">
+              <Alert />
+            </Button>
+            <li>
+              <Link to="/jobs">Jobs</Link>
+            </li>
+            <li>
+              <Link to="/map">Map</Link>
+            </li>
+            <li>
+              <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
+                Inbox
+              </Link>
+            </li>
+            <li>
+              <Link to="/account" className={user.clearance ? 'ghost' : ''}>
+                Account
+              </Link>
+            </li>
+          </ul>
+>>>>>>> added theme provider and css vars, deleted materialize css
         </div>
       </nav>
     </div>
