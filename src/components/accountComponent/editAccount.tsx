@@ -35,10 +35,7 @@ const TabPanel = (props: Props) => {
 
 const useStyles = makeStyles(() => ({
   customTabRoot: {
-    backgroundColor: '#00C853',
-  },
-  customTabIndicator: {
-    backgroundColor: '#43A047',
+    backgroundColor: '#fff',
   },
 }));
 
@@ -96,10 +93,11 @@ const EditAccount: React.FC = () => {
             <Tabs
               value={value}
               onChange={handleChange}
+              textColor="secondary"
+              indicatorColor="secondary"
               centered
               classes={{
                 root: classes.customTabRoot,
-                indicator: classes.customTabIndicator,
               }}
             >
               <Tab icon={<PersonPinIcon />} label="Edit Profile" />

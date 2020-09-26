@@ -23,7 +23,6 @@ const jobsDetailsPreview: React.FC = () => {
   return (
     <div id="jobs" className="col s12">
       <div className="m-t-l">
-        <h3>My Jobs</h3>
         {active.length ? (
           <>
             <h3>Active Jobs</h3>

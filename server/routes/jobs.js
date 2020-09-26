@@ -204,8 +204,6 @@ jobRouter.get('/user/:id', async (req, res) => {
       job => job.status === 'volunteer' || job.status === 'funded'
     );
 
-    console.log(completed);
-
     res.status(200).send({
       completed,
       cancelled,
