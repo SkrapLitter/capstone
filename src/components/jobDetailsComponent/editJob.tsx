@@ -84,7 +84,7 @@ const EditJob: React.FC = () => {
     e.preventDefault();
     // validate form and highlight invalid fields
     if (!name || !description) {
-      console.log(name, description);
+      // TODO TOAST MESSAGE
       return;
     }
     axios

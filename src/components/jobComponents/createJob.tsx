@@ -67,6 +67,7 @@ const CreateJob: React.FC = () => {
     e.preventDefault();
     // validate form and highlight invalid fields
     if (!name || !description || !price || !address) {
+      // TODO toast message
       return;
     }
     // check if user is logged in
