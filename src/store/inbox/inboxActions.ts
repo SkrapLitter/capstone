@@ -19,7 +19,6 @@ export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
     if (userId) {
       const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
-      console.log(inbox);
       dispatch(setInbox(inbox));
     }
   };

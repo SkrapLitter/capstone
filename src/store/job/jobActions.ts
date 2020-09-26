@@ -67,7 +67,7 @@ const fetchMapJobs = (
 
 const fetchJob = (id: string): AppThunk => {
   return async (dispatch): Promise<any> => {
-    const { data } = await Axios.get(`/api/jobs/job/${id}`);
+    const { data } = await Axios.get(`/api/jobs/${id}`);
     dispatch(setJob(data));
     return data;
   };
@@ -83,6 +83,7 @@ export const fetchJobsByUser = (userId: string): AppThunk => {
     }
   };
 };
+
 const reserveJob = (jobId: string): AppThunk => {
   return async (dispatch): Promise<any> => {
     try {

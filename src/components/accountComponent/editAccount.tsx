@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
+import { fetchJobsByUser } from '../../store/job/jobActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import EditAccountForm from './editAccountForm';
 import InboxPreview from '../inboxComponent/inboxPreview';
@@ -45,22 +46,28 @@ const EditAccount: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
 
-  const { jobs } = useSelector((state: StoreState) => state.job);
+  const selectJobs = (state: StoreState) => state.job;
+  const { userJobs } = useSelector(selectJobs);
+  const jobsTypes = Object.keys(userJobs);
+  const jobsQty = jobsTypes.reduce((acc, val) => {
+    return acc + userJobs[val].length;
+  }, 0);
 
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
 
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
-
   const [value, setValue] = React.useState(0);
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     /* eslint-disable @typescript-eslint/ban-types */
     setFirstName(user.firstName);
     setLastName(user.lastName);
+    dispatch(fetchJobsByUser(user.id));
   }, [user]);
 
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
@@ -96,7 +103,7 @@ const EditAccount: React.FC = () => {
               }}
             >
               <Tab icon={<PersonPinIcon />} label="Edit Profile" />
-              <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
+              <Tab icon={<Work />} label={`My Jobs (${jobsQty || 0})`} />
               <Tab
                 icon={<Message />}
                 label={`Messages (${inbox.inbox.length || 0})`}
