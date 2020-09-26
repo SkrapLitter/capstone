@@ -5,6 +5,8 @@ import { fetchJobsByUser } from '../../store/job/jobActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import EditAccountForm from './editAccountForm';
 import InboxPreview from '../inboxComponent/inboxPreview';
+
+import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -13,7 +15,11 @@ import HistoryIcon from '@material-ui/icons/History';
 import PaymentIcon from '@material-ui/icons/Payment';
 import Message from '@material-ui/icons/Message';
 import Work from '@material-ui/icons/Work';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 interface Props {
   index: any;
@@ -35,9 +41,17 @@ const TabPanel = (props: Props) => {
   );
 };
 
-const useStyles = makeStyles(() => ({
-  customTabRoot: {
-    backgroundColor: '#fff',
+const useStyles = makeStyles((theme: Theme) => ({
+  tabRoot: {
+    backgroundColor: theme.palette.primary.main,
+  },
+  tabIndicator: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  avatar: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+    boxShadow: theme.shadows[3],
   },
 }));
 
@@ -74,55 +88,57 @@ const EditAccount: React.FC = () => {
   };
 
   return (
-    <>
-      <img
-        src={user.image}
-        width="75"
-        height="75"
-        className="border-circle z-depth-1"
-        alt={`${firstName} ${lastName}`}
-      />
-      <h4>
-        <strong>
-          {firstName} {lastName}
-        </strong>
-      </h4>
-
-      <div className="row m-t-l">
-        <div className="col s12">
-          <AppBar position="static">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              textColor="secondary"
-              indicatorColor="secondary"
-              centered
-              classes={{
-                root: classes.customTabRoot,
-              }}
-            >
-              <Tab icon={<PersonPinIcon />} label="Edit Profile" />
-              <Tab icon={<Work />} label={`My Jobs (${jobsQty || 0})`} />
-              <Tab
-                icon={<Message />}
-                label={`Messages (${inbox.chatrooms.length || 0})`}
-              />
-              <Tab icon={<HistoryIcon />} label="History" />
-              <Tab icon={<PaymentIcon />} label="Payment" />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            <EditAccountForm />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <JobsDetailsPreview />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <InboxPreview />
-          </TabPanel>
-        </div>
-      </div>
-    </>
+    <Container maxWidth="sm">
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <Grid item xs={12}>
+          <Avatar
+            src={user.image}
+            variant="circle"
+            className={classes.avatar}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h4" component="h1">
+            {firstName} {lastName}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Box py={5}>
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            centered
+            classes={{
+              root: classes.tabRoot,
+              indicator: classes.tabIndicator,
+            }}
+          >
+            <Tab icon={<PersonPinIcon />} label="Edit Profile" />
+            <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
+            <Tab
+              icon={<Message />}
+              label={`Messages (${inbox.inbox.length || 0})`}
+            />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <EditAccountForm />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <JobsDetailsPreview />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <InboxPreview />
+        </TabPanel>
+      </Box>
+    </Container>
   );
 };
 
