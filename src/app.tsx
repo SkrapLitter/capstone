@@ -21,7 +21,7 @@ import SelectedChatroom from './components/inboxComponent/chatroom';
 // import socket from './socket';
 import { addMessage } from './store/inbox/inboxActions';
 import { setAlert } from './store/alert/alertActions';
-import Axios from 'axios';
+// import Axios from 'axios';
 import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
