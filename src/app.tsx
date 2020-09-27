@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 toast.configure();
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
-
+import '../public/uiUpdate.scss';
 import '../public/style.scss';
 
 const App: React.FC = () => {
@@ -47,23 +47,26 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Navbar />
-      <div className="contentWrapper">
-        <Switch>
-          <Route exact path="/" render={() => <Landing />} />
-          <Route path="/stripe/:id" component={Stripe} />
-          <Route path="/map" render={() => <Map />} />
-          <Route path="/account" render={() => <Account />} />
-          <Route exact path="/jobs" component={Feed} />
-          <Route path="/jobs/:id" component={JobDetails} />
-          <Route path="/job/edit/:id" component={EditJob} />
-          <Route path="/create" component={CreateJob} />
-          <Route exact path="/inbox" component={Inbox} />
-          <Route path="/inbox/:id?" component={SelectedChatroom} />
-          <Route path="/verify/:id" component={PhotoVerification} />
-          <Route path="/checkout/:id" component={Checkout} />
-          <Redirect to="/jobs" />
-        </Switch>
+      <div className="bodyContainer">
+        <Navbar />
+        <div className="contentWrapper">
+          <Switch>
+            <Route exact path="/" render={() => <Landing />} />
+            <Route path="/stripe/:id" component={Stripe} />
+            <Route path="/map" render={() => <Map />} />
+            <Route path="/account" render={() => <Account />} />
+            <Route exact path="/jobs" component={Feed} />
+            <Route path="/jobs/:id" component={JobDetails} />
+            <Route path="/job/edit/:id" component={EditJob} />
+            <Route path="/create" component={CreateJob} />
+            <Route exact path="/inbox" component={Inbox} />
+            <Route path="/inbox/:id?" component={SelectedChatroom} />
+            <Route path="/verify/:id" component={PhotoVerification} />
+            <Route path="/checkout/:id" component={Checkout} />
+            <Redirect to="/jobs" />
+          </Switch>
+        </div>
+        <Footer />
       </div>
       <Footer />
     </ThemeProvider>

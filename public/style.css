@@ -20,16 +20,6 @@
   border-radius: 50%;
 }
 
-.user-profile-subnav {
-  display: none;
-  padding: 0 1rem;
-  position: absolute;
-}
-
-.user-profile:hover .user-profile-subnav {
-  display: block;
-}
-
 .fixedFooter {
   position: fixed;
   bottom: 0;
@@ -41,11 +31,6 @@
   .fixedFooter {
     display: none;
   }
-}
-
-.footerIcons {
-  display: flex;
-  justify-content: space-evenly;
 }
 
 .contentWrapper {
