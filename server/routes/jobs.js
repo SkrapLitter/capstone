@@ -185,7 +185,7 @@ jobRouter.get('/job/:id', async (req, res) => {
   }
 });
 
-jobRouter.get('/job/user/:id', async (req, res) => {
+jobRouter.get('/user/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const jobs = await Job.findAll({
@@ -203,6 +203,7 @@ jobRouter.get('/job/user/:id', async (req, res) => {
     const active = jobs.filter(
       job => job.status === 'volunteer' || job.status === 'funded'
     );
+
     res.status(200).send({
       completed,
       cancelled,
