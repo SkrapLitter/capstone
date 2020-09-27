@@ -3,63 +3,73 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutThunk } from '../store/user/userActions';
 import { StoreState } from '../store/store';
-import Alert from './alertComponent/alert';
-import { Button } from '@material-ui/core';
+// import Alert from './alertComponent/alert';
+// import { Button } from '@material-ui/core';
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: StoreState) => state);
   return (
     <div className="navbar-fixed">
-      <nav className="green accent-4">
+      <nav>
         <div className="nav-wrapper">
-          <Link to="/" className="navLogo">
-            skräp
-          </Link>
-          <ul id="nav-mobile" className="right hide-on-small-only">
-            {!!user.clearance && (
-              <li className="user-profile">
-                <Link to="/account">
-                  <img
-                    src={user.image}
-                    width="20"
-                    height="20"
-                    className="border-circle"
-                    alt={`${user.firstName} ${user.lastName}`}
-                  />
-                </Link>
-                <div className="user-profile-subnav green accent-4">
-                  <button
-                    className="btn btn-small"
-                    onClick={() => dispatch(logoutThunk())}
-                    type="button"
-                  >
-                    Logout
-                  </button>
-                  <Link to={`/stripe/${user.id}`}>Stripe</Link>
-                </div>
+          <div>
+            <Link to="/" className="navLogo">
+              skräp
+            </Link>
+          </div>
+          <div className="navList">
+            <ul id="nav-mobile" className="right hide-on-small-only">
+              {/* <li>
+                <Button>
+                  <Alert />
+                </Button>
+              </li> */}
+              <li>
+                <Link to="/jobs">Jobs</Link>
               </li>
-            )}
-            <Button color="primary">
-              <Alert />
-            </Button>
-            <li>
-              <Link to="/jobs">Jobs</Link>
-            </li>
-            <li>
-              <Link to="/map">Map</Link>
-            </li>
-            <li>
-              <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
-                Inbox
-              </Link>
-            </li>
-            <li>
-              <Link to="/account" className={user.clearance ? 'ghost' : ''}>
-                Account
-              </Link>
-            </li>
-          </ul>
+              <li>
+                <Link to="/map">Map</Link>
+              </li>
+              <li>
+                <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
+                  Inbox
+                </Link>
+              </li>
+              <li>
+                <Link to="/account" className={user.clearance ? 'ghost' : ''}>
+                  Account
+                </Link>
+              </li>
+              {!!user.clearance && (
+                <li className="user-profile">
+                  <Link to="/account">
+                    <img
+                      src={user.image}
+                      width="20"
+                      height="20"
+                      className="border-circle"
+                      alt={`${user.firstName} ${user.lastName}`}
+                    />
+                  </Link>
+                  <div className="user-profile-subnav">
+                    <div>
+                      <button
+                        className="nav-btn"
+                        onClick={() => dispatch(logoutThunk())}
+                        type="button"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                    <div>
+                      <Link to={`/stripe/${user.id}`}>Stripe</Link>
+                    </div>
+                  </div>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </nav>
     </div>
