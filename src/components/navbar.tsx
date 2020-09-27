@@ -43,6 +43,9 @@ const Navbar: React.FC = () => {
                 </Link>
               </li>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> navbar and footer nav styled
               {!!user.clearance && (
                 <li className="user-profile">
                   <Link to="/account">
@@ -72,6 +75,7 @@ const Navbar: React.FC = () => {
               )}
             </ul>
           </div>
+<<<<<<< HEAD
 =======
             )}
             <Button color="primary">
@@ -95,6 +99,8 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
 >>>>>>> added theme provider and css vars, deleted materialize css
+=======
+>>>>>>> navbar and footer nav styled
         </div>
       </nav>
     </div>
