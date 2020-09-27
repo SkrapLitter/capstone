@@ -11,11 +11,11 @@ const InboxPreview: React.FC = () => {
     <div id="messages" className="col s12">
       <div className="m-t-l">
         <h2>My Messages</h2>
-        {inbox.inbox.length ? (
+        {inbox.chatrooms.length ? (
           <ul className="collection">
-            {inbox.inbox.map(chatroom => (
+            {inbox.chatrooms.map(chatroom => (
               <li key={chatroom.id} className="collection-item left-align">
-                <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
+                <Link to={`/inbox/${chatroom.id}`}>{chatroom.job.name}</Link>
               </li>
             ))}
           </ul>

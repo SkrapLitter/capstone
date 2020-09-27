@@ -39,8 +39,7 @@ const UserButtons: React.FC = () => {
     }
     return new Promise((res, rej) => {
       try {
-        // res(dispatch(findOrCreateChat(job.id, job.userId, user.id)));
-        res(findOrCreateChat(job.id, job.userId, user.id));
+        res(dispatch(findOrCreateChat(job.id, job.userId, user.id)));
       } catch (err) {
         rej(err);
       }

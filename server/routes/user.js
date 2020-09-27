@@ -84,7 +84,7 @@ userRouter.put('/socketConnect/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const session = await Session.findByPk(req.cookies.session_id);
-    if (id) {
+    if (id && session) {
       session.update({
         socket: id,
       });

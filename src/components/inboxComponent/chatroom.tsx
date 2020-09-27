@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
-import {
-  fetchChatroomMessages,
-  // setChatroom,
-  getChatroom,
-} from '../../store/inbox/inboxActions';
 import { useParams } from 'react-router';
-// import User from '../../store/user/userInterface';
 import { Button } from '@material-ui/core';
 // import moment from 'moment';
 import { Message } from '../../store/inbox/inboxInterface';
 import socket from '../../socket';
+import axios from 'axios';
 
 interface RouteParams {
   id: string;
@@ -20,30 +15,27 @@ const SelectedChatroom: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const [message, setMessage] = useState('');
   const { user, inbox } = useSelector((state: StoreState) => state);
-  const { chatroom } = inbox;
-  const dispatch = useDispatch();
+  const chatroom = inbox.chatrooms.find(room => room.id === id);
   useEffect(() => {
-    dispatch(getChatroom(id));
-    dispatch(fetchChatroomMessages(id));
-  }, []);
-  socket.on('connect', () => {
-    socket.emit('create', id);
-    socket.on('message', () => {
-      dispatch(fetchChatroomMessages(id));
-    });
-  });
-
+    if (chatroom) {
+      const messages =
+        user.id === chatroom.posterId ? 'posterMessage' : 'workerMessage';
+      axios.put(`/api/chat/chatroom/${id}`, { messages });
+    }
+  }, [inbox]);
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const recipient =
-      user.id === chatroom.workerId ? chatroom.posterId : chatroom.workerId;
+    const [recipient, title] =
+      user.id === chatroom.workerId
+        ? [chatroom.posterId, 'posterMessage']
+        : [chatroom.workerId, 'workerMessage'];
     socket.emit('message', {
       message: message,
       chatroomId: id,
-      author: user.id,
       recipient: recipient,
+      author: user.id,
+      title,
     });
-    dispatch(fetchChatroomMessages(id));
     setMessage('');
   };
   const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -52,12 +44,12 @@ const SelectedChatroom: React.FC = () => {
 
   return (
     <div>
-      {user.clearance ? (
+      {user.clearance && chatroom ? (
         <div className="chatBox">
           <div className="container">
             <ul>
-              {inbox.messages && inbox.messages.length
-                ? inbox.messages.map((curMessage: Message) => {
+              {chatroom.chatMessages && chatroom.chatMessages.length
+                ? chatroom.chatMessages.map((curMessage: Message) => {
                     if (user.id === curMessage.recipient) {
                       return (
                         <li key={curMessage.id}>
