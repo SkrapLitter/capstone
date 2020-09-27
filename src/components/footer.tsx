@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <div className="fixedFooter">
-      <nav className="green accent-4">
-        <div className="nav-wrapper">
+      <nav>
+        <div className="navIcons">
           <ul id="nav-mobile" className="footerIcons">
             <li>
               <Link to="/jobs">
