@@ -7,6 +7,8 @@ import { StoreState } from '../../store/store';
 import { findOrCreateChat } from '../../store/inbox/inboxActions';
 import { Chatroom } from '../../store/inbox/inboxInterface';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 interface RouteParams {
   id: string;
@@ -50,6 +52,7 @@ const PosterButtons: React.FC = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Button variant="outlined" onClick={openEditPage} className="m1em">
+        <EditIcon className="buttonIcon" />
         Edit Details
       </Button>
       {job.reservedUser ? (
