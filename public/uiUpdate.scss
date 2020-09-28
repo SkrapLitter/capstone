@@ -166,11 +166,7 @@ nav {
     font-weight: bold;
     margin: 0;
   }
-  h6 {
-    font-size: 0.8em;
-    font-weight: normal;
-    margin: 0;
-  }
+
   .jobCardButtons {
     display: flex;
     flex: 1;
@@ -210,7 +206,31 @@ nav {
     }
   }
 }
+.jobDetailsContainer {
+  max-width: 600px;
+  margin: 0 1em;
 
+  img.border-circle {
+    margin: 0 1em 0 0;
+    border: 1px solid #ccc;
+  }
+  .iconRow {
+    @include displayFlexAC;
+    margin: 0.5em 0;
+
+    svg {
+      margin-right: 16px;
+    }
+    img.volunteerIcon {
+      width: 24px;
+      height: auto;
+      margin-right: 1em;
+    }
+    h4 {
+      font-size: 24px;
+    }
+  }
+}
 /*
 *
 * BODY STYLES
@@ -264,6 +284,11 @@ nav {
 }
 .fredoka {
   font-family: 'Fredoka One', sans-serif;
+}
+h6 {
+  font-size: 0.8em;
+  font-weight: normal;
+  margin: 0;
 }
 /*
 *
