@@ -168,8 +168,8 @@ nav {
   }
   h6 {
     font-size: 0.8em;
-    margin: 0 0 0.5em 0;
     font-weight: normal;
+    margin: 0;
   }
   .jobCardButtons {
     display: flex;
@@ -186,9 +186,6 @@ nav {
     font-size: 1.4em;
     margin: 0.5em 0;
     font-family: 'Fredoka One', sans-serif;
-  }
-  .locationIcon {
-    margin-bottom: 0.5em;
   }
   .jobRow {
     margin: 0.25em 0;
