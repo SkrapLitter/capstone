@@ -14,10 +14,10 @@ import JobCard from './jobCard';
 const useStyles = makeStyles({
   button: {
     '&.active': {
-      background: '#00c853',
+      background: '#04e762',
       color: '#fffff',
     },
-    color: '#00c853',
+    color: '#04e762',
     margin: '10px 5px',
     background: '#ffffff',
   },
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
   createButton: {
     color: '#ffffff',
-    backgroundColor: '#00c853',
+    backgroundColor: '#04e762',
   },
 });
 
@@ -137,7 +137,6 @@ const Feed: React.FC = () => {
           next={fetchNext}
           hasMore={size < count}
           loader={<h4>Loading...</h4>}
-          className="infiniteContainer"
         >
           {jobs.length ? (
             jobs.map((job: JobAttributes) => <JobCard key={job.id} job={job} />)
