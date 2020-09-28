@@ -14,10 +14,15 @@ import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
 import { Button } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 interface RouteParams {
   id: string;
 }
+
+const VOLUNTEER_ICON =
+  'https://treehugger-capstone.s3.us-east-2.amazonaws.com/volunteerIcon.svg';
 
 const JobDetails: React.FC = () => {
   const zoom = 16;
@@ -32,6 +37,9 @@ const JobDetails: React.FC = () => {
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
+    // scroll to top of window
+    window.scroll(0, 0);
+    // get the job details
     dispatch(fetchJob(id));
   }, []);
 
@@ -49,8 +57,8 @@ const JobDetails: React.FC = () => {
     <div className="container jCenter">
       {job && Object.values(job).length ? (
         <>
-          <h4 className="center-align">{job.name}</h4>
-          <div className="jCenter" style={{ maxWidth: '800px' }}>
+          <h2 className="center-align fredoka">{job.name}</h2>
+          <div className="jCenter">
             <div
               className="jobImage"
               style={{
@@ -72,7 +80,7 @@ const JobDetails: React.FC = () => {
                   onClick={() => history.push(`/verify/${job.id}`)}
                   className="m1em"
                 >
-                  Job Complete?
+                  Verify Job Completion
                 </Button>
               ) : null}
             </div>
@@ -104,42 +112,54 @@ const JobDetails: React.FC = () => {
                 </div>
               </div>
             ) : null}
-            <div className="container">
-              <div className="flexRow">
-                <div className="flexRow">
-                  <h6 className="charcoal">Posted By: {job.createdUser}</h6>
+            <div className="jobDetailsContainer">
+              <div>
+                <div className="iconRow">
+                  {Number(job.price) === 0 ? (
+                    <img
+                      src={VOLUNTEER_ICON}
+                      alt="volunteer icon"
+                      className="volunteerIcon"
+                    />
+                  ) : (
+                    <AttachMoneyIcon color="primary" />
+                  )}
+                  <h4 id="jobPrice">
+                    {job.price > 0 ? `${job.price}` : 'Volunteer'}
+                  </h4>
+                </div>
+                <div className="iconRow">
                   <img
                     src={job.user && job.user.image}
-                    width="50"
-                    height="50"
+                    width="24"
+                    height="24"
                     className="border-circle z-depth-1"
                     alt={`${user.firstName} ${user.lastName}`}
                   />
+                  <p className="gray">Posted By: {job.createdUser}</p>
                 </div>
-                <h4 id="jobPrice">
-                  {job.price > 0 ? `$${job.price}` : 'Volunteer'}
-                </h4>
               </div>
               <p>{job.description}</p>
+              <div className="iconRow">
+                <LocationOnIcon style={{ color: 'var(--blue)' }} />
+                <p className="gray">
+                  Location: {job.address}, {job.city}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="jCenter" style={{ textAlign: 'left' }}>
-            <p className="charcoal">
-              Location: {job.address}, {job.city}
-            </p>
-            <div className="mapContainerSmall">
-              {!!job.lat && (
-                <GoogleMapReact
-                  bootstrapURLKeys={{
-                    key: 'AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI',
-                  }}
-                  center={{ lat: job.lat, lng: job.lng }}
-                  zoom={zoom}
-                >
-                  <SingleMarker lat={job.lat} lng={job.lng} text={job.name} />
-                </GoogleMapReact>
-              )}
-            </div>
+          <div className="mapContainerSmall">
+            {!!job.lat && (
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: 'AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI',
+                }}
+                center={{ lat: job.lat, lng: job.lng }}
+                zoom={zoom}
+              >
+                <SingleMarker lat={job.lat} lng={job.lng} text={job.name} />
+              </GoogleMapReact>
+            )}
           </div>
         </>
       ) : null}
