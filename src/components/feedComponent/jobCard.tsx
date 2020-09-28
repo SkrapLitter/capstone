@@ -39,13 +39,13 @@ const JobCard: React.FC<Props> = (props: Props) => {
                     <h6 className="gray">&nbsp;This is a volunteer job</h6>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex jobRow">
                     <AttachMoneyIcon color="primary" />
                     <h5>{job.price}</h5>
                   </div>
                 )}
-                <div className="flex">
-                  <LocationOnIcon color="secondary" />
+                <div className="flex jobRow">
+                  <LocationOnIcon color="secondary" className="locationIcon" />
                   <h6 className="gray">
                     {job.address}, {job.city}, {job.state}
                   </h6>
