@@ -441,7 +441,7 @@ button:focus {
 
 .navLogo {
   margin-left: 10px;
-  font: 2rem 'Fredoka One', cursive;
+  font: 2rem 'Fredoka One', sans-serif;
 }
 
 .feedButtons {
@@ -462,29 +462,24 @@ button:focus {
   padding: 10px;
 }
 
-.jobCard {
-  margin: 10px 0;
-}
-
 .feedJobImageContainer {
   height: 600px;
   width: 600px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  box-sizing: border-box;
 }
 
 .feedSingleImage {
   height: 100%;
   width: 100%;
-  margin: 10px;
+  margin-top: 10px;
   object-fit: cover;
   background-position: center;
 }
 
 .feedDoubleImageLeft {
-  margin: 10px 5px 10px 10px;
+  margin: 10px 5px 10px 0px;
   height: 100%;
   width: 50%;
   object-fit: cover;
@@ -492,7 +487,7 @@ button:focus {
 }
 
 .feedDoubleImageRight {
-  margin: 10px 10px 10px 5px;
+  margin: 10px 0px 10px 5px;
   height: 100%;
   width: 50%;
   object-fit: cover;
@@ -516,23 +511,25 @@ button:focus {
   margin-top: 5px;
 }
 
-@media screen and (max-width: 730px) {
+@media screen and (max-width: 768px) {
   .feedJobImageContainer {
-    height: 400px;
-    width: 400px;
+    height: 350px;
+    width: 350px;
   }
 }
 
 .feedTextContainer {
   padding: 10px;
   display: flex;
+  max-width: 600px;
   flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   height: 100%;
 }
 
 .volunteerIcon {
-  width: 30px;
+  width: 16px;
   height: auto;
   margin-right: 5px;
 }

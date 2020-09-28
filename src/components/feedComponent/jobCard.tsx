@@ -2,6 +2,9 @@ import React from 'react';
 import { JobAttributes } from '../../store/job/jobInterface';
 import { Grid, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import FeedImageRender from './feedImageRender';
 
 const VOLUNTEER_ICON =
@@ -17,18 +20,13 @@ const JobCard: React.FC<Props> = (props: Props) => {
   return (
     <Paper elevation={3} className="jobCard">
       <Grid container direction="column">
-        <Grid container item xs={12} direction="row" justify="center">
+        <div className="flex jcc w100">
           <FeedImageRender images={images} />
-        </Grid>
+        </div>
         <Grid item xs={12}>
           <div className="feedTextContainer">
-            <div>
-              <h4>{props.job.name}</h4>
-              <h6 className="charcoal">
-                {props.job.address}, {props.job.city}, {props.job.state}
-              </h6>
-            </div>
-            <div>
+            <p className="jobCardTitle">{props.job.name}</p>
+            <div className="jobCardInfo">
               <div>
                 {!props.job.price ? (
                   <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -37,32 +35,39 @@ const JobCard: React.FC<Props> = (props: Props) => {
                       alt="volunteer icon"
                       className="volunteerIcon"
                     />
-                    <h6>
-                      <i>This is a volunteer job</i>
-                    </h6>
+                    <h6 className="gray">&nbsp;This is a volunteer job</h6>
                   </div>
                 ) : (
-                  <h3>
-                    <strong>${props.job.price}</strong>
-                  </h3>
+                  <div className="flex">
+                    <AttachMoneyIcon color="primary" />
+                    <h5>{props.job.price}</h5>
+                  </div>
                 )}
-                <button
-                  className="waves-effect waves-light btn green accent-4 cardButton"
-                  type="button"
+                <div className="flex">
+                  <LocationOnIcon color="secondary" />
+                  <h6 className="gray">
+                    {props.job.address}, {props.job.city}, {props.job.state}
+                  </h6>
+                </div>
+              </div>
+              <div className="jobCardButtons">
+                <Button
+                  variant="contained"
+                  color="primary"
                   onClick={e => {
                     e.preventDefault();
                     history.push(`/jobs/${props.job.id}`);
                   }}
                 >
                   View Details
-                </button>
-                <button
-                  className="waves-effect waves-light btn green accent-4 cardButton"
-                  type="button"
+                </Button>
+                {/* <Button
+                  variant='contained'
+                  color='primary'
                   disabled={props.job.reserved}
                 >
                   Reserve Job
-                </button>
+                </Button> */}
               </div>
             </div>
           </div>
