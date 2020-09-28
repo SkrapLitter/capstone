@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import CreateAccountOverlay from '../userComponents/createAccountOverlay';
-import { uploadPhoto } from '../../store/photos/photoActions';
-import { fetchJob } from '../../store/job/jobActions';
 import { validate } from '../validation';
 import TextField from '@material-ui/core/TextField';
+import { DropzoneArea } from 'material-ui-dropzone';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,10 +25,8 @@ const CreateJob: React.FC = () => {
   const classes = useStyles();
 
   const selectUser = (state: StoreState) => state.user;
-  const storeImages = (state: StoreState) => state.photos;
-  const images = useSelector(storeImages);
+  const [photos, setPhotos] = useState([]);
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
   const history = useHistory();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
@@ -77,45 +74,36 @@ const CreateJob: React.FC = () => {
     }
     const status: string =
       price.length && price !== '0' ? 'pending' : 'volunteer';
+    const newJob = {
+      name,
+      price,
+      address: JSON.stringify(address),
+      description,
+      userId: user.id,
+      status,
+    };
+    const file = new FormData();
+    photos.forEach(photo => {
+      file.append('image', photo);
+    });
+    Object.keys(newJob).forEach(key => {
+      file.append(key, newJob[key]);
+    });
     axios
-      .post('/api/jobs', {
-        name,
-        price,
-        address,
-        description,
-        userId: user.id,
-        images: images.photos,
-        status,
-      })
+      .post('/api/jobs', file)
       .then(({ data }) => {
         // get jobId for navigation
-        const id = data.jobId;
+        console.log(data);
+        const id = data.id;
         if (status === 'volunteer') {
           // navigate to job details page
           history.push(`/jobs/${id}`);
         } else {
-          return new Promise(res => {
-            res(dispatch(fetchJob(id)));
-          }).then(() => history.push(`/checkout/${id}`));
+          history.push(`/checkout/${id}`);
         }
       })
       // TODO - error handling for server errors - Toast?
       .catch(console.log);
-  };
-
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file: FormData = new FormData();
-    file.append('image', e.target.files[0]);
-    axios
-      .post('/api/photo/jobphoto', file, {
-        headers: {
-          'Content-Type': 'multipart/form-data; boundary=boundary',
-        },
-      })
-      .then(({ data }) => {
-        dispatch(uploadPhoto(data));
-      });
   };
 
   return (
@@ -162,28 +150,7 @@ const CreateJob: React.FC = () => {
           />
         </div>
         <div className="m-t-b">
-          <div>
-            <input
-              type="file"
-              name="image"
-              id="imageUpload"
-              onChange={handleImage}
-            />
-          </div>
-          <div>
-            {images.photos.length
-              ? images.photos.map(image => {
-                  return (
-                    <img
-                      key={image.id}
-                      className="thumbnail"
-                      src={image.url}
-                      alt="trash"
-                    />
-                  );
-                })
-              : null}
-          </div>
+          <DropzoneArea onChange={files => setPhotos(files)} />
         </div>
         <div className="m8 pRel">
           <textarea
