@@ -4,6 +4,7 @@ import { AppThunk } from '../thunkType';
 // import { fetchUserInbox } from '../inbox/inboxActions';
 // import { fetchAlerts } from '../alert/alertActions';
 import TYPES from '../types';
+import { clearInbox, fetchUserInbox } from '../inbox/inboxActions';
 
 export const updateAccount = (user: User) => {
   return {
@@ -51,8 +52,7 @@ export const cookieLogin = (): AppThunk => {
     const { user } = (await axios.get('/api/auth/login')).data;
     if (user) {
       dispatch(login(user));
-      // dispatch(fetchUserInbox(user.id));
-      // dispatch(fetchAlerts(user.id));
+      dispatch(fetchUserInbox(user.id));
     }
   };
 };
@@ -62,6 +62,7 @@ export const updateAccountThunk = (id: string, user: User): AppThunk => {
     try {
       const { data } = await axios.put(`/api/auth/${id}`, user);
       dispatch(updateAccount(data));
+      dispatch(fetchUserInbox(data.id));
     } catch (err) {
       console.error(err);
       const { statusText } = err.response;
@@ -105,8 +106,7 @@ export const loginThunk = (username: string, password: string): AppThunk => {
       };
       const { data } = await axios.post('/api/auth/login', payload);
       dispatch(login(data));
-      // dispatch(fetchUserInbox(data.id));
-      // dispatch(fetchAlerts(data.id));
+      dispatch(fetchUserInbox(data.id));
     } catch (err) {
       const { statusText } = err.response;
       dispatch(loginFail(statusText));
@@ -119,6 +119,7 @@ export const logoutThunk = (): AppThunk => {
     try {
       await axios.delete('/api/auth/logout');
       dispatch(logout());
+      dispatch(clearInbox());
     } catch (err) {
       console.error(err);
     }

@@ -34,14 +34,6 @@ Job.hasOne(Chatroom);
 
 ChatMessage.belongsTo(Chatroom);
 Chatroom.hasMany(ChatMessage);
-// ChatMessage.belongsTo(Chatroom);
-// Chatroom.hasMany(ChatMessage);
-// User.hasMany(ChatMessage);
-// ChatMessage.belongsTo(User);
-// User.belongsToMany(Chatroom, { through: 'UserChat' });
-// Chatroom.belongsToMany(User, { through: 'UserChat' });
-// Chatroom.belongsTo(Job);
-// Job.hasMany(Chatroom);
 
 Image.belongsTo(Job);
 Job.hasMany(Image);

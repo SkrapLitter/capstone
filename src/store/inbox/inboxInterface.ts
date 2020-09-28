@@ -3,10 +3,9 @@ import User from '../user/userInterface';
 
 export interface Inbox {
   type: string;
-  inbox?: Array<Chatroom>;
-  messages?: Message;
-  chatroom?: Chatroom;
+  chatrooms?: Array<Chatroom>;
   message?: Message;
+  chatroomId?: string;
 }
 export interface Chatroom {
   createdAt: string;
@@ -19,11 +18,12 @@ export interface Chatroom {
   job: JobAttributes;
   poster: User;
   worker: User;
+  posterMessage: number;
+  workerMessage: number;
+  chatMessages: Array<Message>;
 }
 export interface InboxRedux {
-  inbox: Array<Chatroom>;
-  messages: Message[];
-  chatroom: Chatroom;
+  chatrooms: Array<Chatroom>;
 }
 
 export interface Message {
@@ -34,5 +34,4 @@ export interface Message {
   id: string;
   message: string;
   updatedAt: string;
-  userId: string;
 }
