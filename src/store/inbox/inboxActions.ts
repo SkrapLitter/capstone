@@ -10,10 +10,9 @@ const setInbox = (chatrooms: Array<Chatroom>): Inbox => ({
 export const clearInbox = () => ({
   type: TYPES.CLEAR_INBOX,
 });
-export const addMessage = (message: Message, chatroomId: string): Inbox => ({
+export const addMessage = (message: Message): Inbox => ({
   type: TYPES.ADD_MESSAGE,
   message,
-  chatroomId,
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {

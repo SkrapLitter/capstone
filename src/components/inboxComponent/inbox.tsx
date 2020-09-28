@@ -21,7 +21,7 @@ const Inbox: React.FC = () => {
             inbox.chatrooms.map((chatroom: Chatroom) => {
               return (
                 <Paper key={chatroom.id}>
-                  <div key={chatroom.id} className="inboxCard">
+                  <div className="inboxCard">
                     <Link to={`/inbox/${chatroom.id}`}>
                       {user.id === chatroom.job.userId ? (
                         <>

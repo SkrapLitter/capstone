@@ -16,7 +16,7 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
       };
     case TYPES.ADD_MESSAGE:
       state.chatrooms.forEach(chatroom => {
-        if (chatroom.id === action.chatroomId) {
+        if (chatroom.id === action.message.chatroomId) {
           chatroom.chatMessages.push(action.message);
         }
       });

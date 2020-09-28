@@ -60,7 +60,7 @@ chatroomRouter.post('/find', async (req, res) => {
       res.status(200).send(chatroom);
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.sendStatus(500);
   }
 });

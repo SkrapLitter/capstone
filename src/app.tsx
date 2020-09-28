@@ -31,7 +31,7 @@ const App: React.FC = () => {
     Axios.put(`/api/user/socketConnect/${socket.id}`);
   });
   socket.on('newMessage', data => {
-    dispatch(addMessage(data.newMessage, data.chatroomId));
+    dispatch(addMessage(data));
   });
 
   socket.on('alert', alert => {

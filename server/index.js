@@ -59,16 +59,10 @@ io.on('connection', socket => {
       });
       await user.sessions.forEach(session => {
         if (session.socket in io.sockets.connected) {
-          io.to(session.socket).emit('newMessage', {
-            newMessage,
-            chatroomId,
-          });
+          io.to(session.socket).emit('newMessage', newMessage);
         }
       });
-      io.to(socket.id).emit('newMessage', {
-        newMessage,
-        chatroomId,
-      });
+      io.to(socket.id).emit('newMessage', newMessage);
     } catch (e) {
       console.error('socket error', e);
     }
@@ -94,8 +88,7 @@ app.use(async (req, res, next) => {
             id: req.sessionId,
           });
         }
-        const user = findUserBySession(req.sessionId);
-        return user;
+        return findUserBySession(req.sessionId);
       })
       .then(user => {
         if (user) {
