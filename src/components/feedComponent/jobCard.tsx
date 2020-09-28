@@ -15,7 +15,8 @@ interface Props {
 }
 
 const JobCard: React.FC<Props> = (props: Props) => {
-  const images: string[] = props.job.images.map(img => img.url);
+  const { job } = props;
+  const images: string[] = job.images.map(img => img.url);
   const history = useHistory();
   return (
     <Paper elevation={3} className="jobCard">
@@ -25,10 +26,10 @@ const JobCard: React.FC<Props> = (props: Props) => {
         </div>
         <Grid item xs={12}>
           <div className="feedTextContainer">
-            <p className="jobCardTitle">{props.job.name}</p>
+            <p className="jobCardTitle">{job.name}</p>
             <div className="jobCardInfo">
               <div>
-                {Number(props.job.price) === 0 ? (
+                {Number(job.price) === 0 ? (
                   <div className="volunteer">
                     <img
                       src={VOLUNTEER_ICON}
@@ -40,13 +41,13 @@ const JobCard: React.FC<Props> = (props: Props) => {
                 ) : (
                   <div className="flex">
                     <AttachMoneyIcon color="primary" />
-                    <h5>{props.job.price}</h5>
+                    <h5>{job.price}</h5>
                   </div>
                 )}
                 <div className="flex">
                   <LocationOnIcon color="secondary" />
                   <h6 className="gray">
-                    {props.job.address}, {props.job.city}, {props.job.state}
+                    {job.address}, {job.city}, {job.state}
                   </h6>
                 </div>
               </div>
@@ -54,20 +55,12 @@ const JobCard: React.FC<Props> = (props: Props) => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={e => {
-                    e.preventDefault();
-                    history.push(`/jobs/${props.job.id}`);
+                  onClick={() => {
+                    history.push(`/jobs/${job.id}`);
                   }}
                 >
                   View Details
                 </Button>
-                {/* <Button
-                  variant='contained'
-                  color='primary'
-                  disabled={props.job.reserved}
-                >
-                  Reserve Job
-                </Button> */}
               </div>
             </div>
           </div>
