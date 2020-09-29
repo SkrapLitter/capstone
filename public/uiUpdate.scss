@@ -195,6 +195,7 @@ nav {
 }
 .feedContainer {
   width: 100%;
+  max-width: 600px;
   .infinite-scroll-component__outerdiv {
     width: 100%;
     @include displayFlexAC;
@@ -230,6 +231,24 @@ nav {
     }
   }
 }
+.jobDetailsButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  button {
+    margin: 1em;
+  }
+}
+.sortByLocation {
+  display: flex;
+  min-width: 165px;
+  padding-left: 1em;
+}
+.jobSearch {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
 /*
 *
 * BODY STYLES
@@ -252,6 +271,9 @@ nav {
   height: calc(100vh - 4em);
 }
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 80%;
 }
 .flexColumn {
@@ -289,6 +311,29 @@ h6 {
   font-weight: normal;
   margin: 0;
 }
+.mr05 {
+  margin-right: 0.5em;
+}
+textarea {
+  padding: 1em;
+  max-width: calc(100% - 2em);
+}
+.hero-text {
+  color: #fff;
+  font: 2rem 'Fredoka One', cursive;
+  left: 0;
+  padding: 4rem 2rem;
+  position: absolute;
+  right: 0;
+}
+button {
+  width: 200px;
+}
+.hero-text h1,
+.hero-text h2 {
+  margin: 0 0 0.5em 0;
+  text-shadow: 2px 2px 5px var(--purpleDk);
+}
 /*
 *
 * MOBILE-ONLY MEDIA QUERIES
@@ -312,5 +357,19 @@ h6 {
   }
   nav {
     width: 100vw;
+  }
+  .jobDetailsButtons {
+    justify-content: center;
+  }
+  .jobDetailsButtons button {
+    margin: 1em 0.5em 0.5em;
+  }
+  .hero h1 {
+    font-size: 1.5em;
+  }
+}
+@media screen and (max-width: 374px) {
+  .hero h1 {
+    font-size: 1em;
   }
 }
