@@ -121,10 +121,10 @@ const EditAccount: React.FC = () => {
             }}
           >
             <Tab icon={<PersonPinIcon />} label="Edit Profile" />
-            <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
+            <Tab icon={<Work />} label={`My Jobs (${jobsQty || 0})`} />
             <Tab
               icon={<Message />}
-              label={`Messages (${inbox.inbox.length || 0})`}
+              label={`Messages (${inbox.chatrooms.length || 0})`}
             />
           </Tabs>
         </AppBar>
