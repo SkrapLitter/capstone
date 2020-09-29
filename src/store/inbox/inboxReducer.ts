@@ -30,17 +30,17 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
         if (chatroom.id === action.data.newMessage.chatroomId) {
           if (action.data.recipient) {
             const userRole =
-              action.userId === chatroom.job.userId ? `poster` : 'worker';
+              action.userId === chatroom.job.userId ? `poster` : '';
             if (userRole === 'poster') {
               if (chatroom.posterMessage === 0) {
                 number++;
-                chatroom.posterMessage++;
-              } else chatroom.posterMessage++;
-            } else if (userRole === 'worker') {
+              }
+              chatroom.posterMessage++;
+            } else {
               if (chatroom.workerMessage === 0) {
                 number++;
-                chatroom.workerMessage++;
-              } else chatroom.workerMessage++;
+              }
+              chatroom.workerMessage++;
             }
           }
           chatroom.chatMessages.push(action.data.newMessage);
