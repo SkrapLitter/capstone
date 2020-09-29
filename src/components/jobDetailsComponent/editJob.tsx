@@ -12,6 +12,7 @@ import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -118,7 +119,7 @@ const EditJob: React.FC = () => {
       style={{ maxWidth: '400px', textAlign: 'center' }}
       id="createJobForm"
     >
-      <h4>Edit {name}</h4>
+      <h2 className="fredoka">Edit {name}</h2>
       <form className={classes.root} noValidate autoComplete="off">
         <TextField
           id="name"
@@ -133,7 +134,13 @@ const EditJob: React.FC = () => {
           }
         />
         <div className="m8">
-          <p style={{ textAlign: 'left', color: 'rgba(0, 0, 0, 0.54)' }}>
+          <p
+            style={{
+              textAlign: 'left',
+              fontSize: '0.8em',
+              color: 'rgba(0, 0, 0, 0.54)',
+            }}
+          >
             Location<span className="smallText"> *</span>
           </p>
           <GooglePlacesAutocomplete
@@ -188,34 +195,17 @@ const EditJob: React.FC = () => {
             Description
           </label>
         </div>
-        <button
+        <Button
           onClick={handleSubmit}
           className="btn waves-effect waves-light green accent-4"
           type="submit"
+          variant="contained"
+          color="primary"
         >
+          <i className="material-icons mr05">work</i>
           Submit
-          <i className="material-icons right">work</i>
-        </button>
+        </Button>
       </form>
-      {/* <div className="input-field fsField">
-        <input
-          value={name}
-          onChange={e => handleChange(e, setName, 'nameLabel')}
-          id="name"
-          autoComplete="off"
-          className={name.length ? (name.length > 3 ? 'valid' : 'invalid') : ''}
-        />
-        <label htmlFor="name" id="nameLabel" className={name ? 'active' : ''}>
-          Job Name
-        </label>
-      </div>
-      <div className="input-field fsField">
-        <p style={{ textAlign: 'left', color: 'gray' }}>Location</p>
-        <GooglePlacesAutocomplete
-          selectProps={{ address, onChange: setAddress }}
-          apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
-        />
-      </div> */}
     </div>
   );
 };

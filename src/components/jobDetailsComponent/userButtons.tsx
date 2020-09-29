@@ -88,8 +88,8 @@ const UserButtons: React.FC = () => {
     }
   };
   return (
-    <div style={{ display: 'flex' }}>
-      <Button variant="outlined" onClick={handleReserve} className="m1em">
+    <div className="jobDetailsButtons">
+      <Button variant="outlined" onClick={handleReserve}>
         {job.reserved ? (
           <CloseIcon className="buttonIcon" />
         ) : (
@@ -97,7 +97,7 @@ const UserButtons: React.FC = () => {
         )}
         {job.reserved ? 'Cancel' : 'Reserve'}
       </Button>
-      <Button variant="outlined" onClick={openChat} className="m1em">
+      <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>

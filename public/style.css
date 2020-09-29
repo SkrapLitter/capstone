@@ -74,66 +74,6 @@
   }
 }
 
-input:not([type]):focus:not([readonly]),
-input[type='text']:not(.browser-default):focus:not([readonly]),
-input[type='password']:not(.browser-default):focus:not([readonly]),
-input[type='email']:not(.browser-default):focus:not([readonly]),
-input[type='url']:not(.browser-default):focus:not([readonly]),
-input[type='time']:not(.browser-default):focus:not([readonly]),
-input[type='date']:not(.browser-default):focus:not([readonly]),
-input[type='datetime']:not(.browser-default):focus:not([readonly]),
-input[type='datetime-local']:not(.browser-default):focus:not([readonly]),
-input[type='tel']:not(.browser-default):focus:not([readonly]),
-input[type='number']:not(.browser-default):focus:not([readonly]),
-input[type='search']:not(.browser-default):focus:not([readonly]),
-textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: none;
-  box-shadow: none;
-  margin: 0;
-}
-input:not([type]),
-input[type='text']:not(.browser-default),
-input[type='password']:not(.browser-default),
-input[type='email']:not(.browser-default),
-input[type='url']:not(.browser-default),
-input[type='time']:not(.browser-default),
-input[type='date']:not(.browser-default),
-input[type='datetime']:not(.browser-default),
-input[type='datetime-local']:not(.browser-default),
-input[type='tel']:not(.browser-default),
-input[type='number']:not(.browser-default),
-input[type='search']:not(.browser-default),
-textarea.materialize-textarea {
-  border-bottom: none;
-  width: 100%;
-  margin: 0;
-}
-
-/* label focus color */
-.input-field.fsField input:focus + label,
-.input-field.fsField input[type='text']:focus + label,
-.input-field.fsField input[type='email']:focus + label,
-.input-field.fsField input[type='password']:focus + label {
-  color: #777;
-}
-/* label underline focus color */
-.input-field.fsField input:focus,
-.input-field.fsField input[type='text']:focus,
-.input-field.fsField input[type='email']:focus,
-.input-field.fsField input[type='password']:focus {
-  border-bottom: 1px solid #777;
-  box-shadow: 0 0 0 0 #777;
-}
-.input-field.fsField input:focus.valid,
-.input-field.fsField input[type='email']:focus.valid,
-.input-field.fsField input[type='password']:focus.valid {
-  border-bottom: 2px solid #0f0;
-}
-.input-field input.valid {
-  border-bottom: 2px solid #0f0;
-  box-shadow: 0 0 0 0 #777;
-}
-
 .marker {
   opacity: 0;
   animation-name: markerAnimation;
@@ -559,8 +499,8 @@ button:focus {
 }
 label#descriptionLabel.active {
   margin: 0 0 0.5em;
-  color: #3f51b5;
-  font-size: 0.7em;
+  color: var(--green);
+  font-size: 0.8em;
   top: -1.5em;
 }
 .smallText {
@@ -608,20 +548,6 @@ div.thumb:hover svg {
     bottom: 0;
     margin: 0 20px calc(20px + 50px) 0;
   }
-}
-
-.hero-text {
-  color: #fff;
-  font: 2rem 'Fredoka One', cursive;
-  left: 0;
-  padding: 4rem 2rem;
-  position: absolute;
-  right: 0;
-}
-
-.hero-text h1,
-.hero-text h2 {
-  margin: 0;
 }
 
 .stripe {

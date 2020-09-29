@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, TextField, Fab } from '@material-ui/core';
+import { Fab, Input } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
-import MapIcon from '@material-ui/icons/Map';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import { StoreState } from '../../store/store';
 import { fetchJobs, locationSort } from '../../store/job/jobActions';
 import { JobAttributes } from '../../store/job/jobInterface';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import JobCard from './jobCard';
 
 const useStyles = makeStyles({
+  formControl: {
+    margin: '0 1em 1em 1em',
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: '1em',
+  },
   button: {
     '&.active': {
       background: '#04e762',
@@ -22,7 +36,8 @@ const useStyles = makeStyles({
     background: '#ffffff',
   },
   search: {
-    marginTop: '10px',
+    margin: '0 1em',
+    width: '300px',
   },
   createButton: {
     color: '#ffffff',
@@ -47,12 +62,13 @@ const Feed: React.FC = () => {
   const handleInput = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setInput(e.target.value);
-  const handleType = (e, filter: string) => {
-    e.preventDefault();
+
+  const handleType = (e: React.ChangeEvent<{ value: string }>) => {
+    const filter: string = e.target.value;
+    setType(filter);
     setPage(1);
     setSize(20);
-    dispatch(fetchJobs(input, page, size, filter));
-    setType(filter);
+    dispatch(fetchJobs(input, page, size, filter === 'all' ? '' : filter));
   };
   const fetchNext = () => {
     setSize(size + 20);
@@ -70,68 +86,66 @@ const Feed: React.FC = () => {
   }, []);
 
   const sortByLocation = () => {
-    dispatch(locationSort(jobs, location, !locSort));
     setLocSort(!locSort);
+    dispatch(locationSort(jobs, location, !locSort));
   };
 
   const classes = useStyles();
   return (
     <div className="container">
       <div className="feedContainer">
-        <TextField
-          className={classes.search}
-          value={input}
-          onChange={handleInput}
-          fullWidth
-          label="Search Jobs"
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              setPage(1);
-              setSize(20);
-              dispatch(fetchJobs(input, page, size, type));
-            }
-          }}
-        />
-        <div className="feedButtons">
-          <div>
-            <Button
-              className={classes.button}
-              variant={type === '' ? 'contained' : 'outlined'}
-              onClick={e => handleType(e, '')}
-            >
-              All Jobs
-            </Button>
-            <Button
-              className={classes.button}
-              variant={type === 'funded' ? 'contained' : 'outlined'}
-              onClick={e => handleType(e, 'funded')}
-            >
-              Paid Jobs
-            </Button>
-            <Button
-              className={classes.button}
-              variant={type === 'volunteer' ? 'contained' : 'outlined'}
-              onClick={e => handleType(e, 'volunteer')}
-            >
-              Volunteer Jobs
-            </Button>
+        {location ? (
+          <div className="sortByLocation">
+            <FormControlLabel
+              label="Show jobs near me"
+              control={
+                <Switch
+                  checked={locSort}
+                  onChange={sortByLocation}
+                  name="sortByLocation"
+                  color="primary"
+                />
+              }
+            />
           </div>
-
-          {location ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {locSort ? (
-                <h6>Location Sorting On</h6>
-              ) : (
-                <h6>Location Sorting Off</h6>
-              )}
-              <MapIcon
-                fontSize="large"
-                className="sortIcon"
-                onClick={sortByLocation}
-              />
-            </div>
-          ) : null}
+        ) : null}
+        <div className="jobSearch">
+          <div className="feedButtons">
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Job Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={type}
+                onChange={handleType}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="funded">Paid</MenuItem>
+                <MenuItem value="volunteer">Volunteer</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <Input
+            className={classes.search}
+            value={input}
+            onChange={handleInput}
+            fullWidth
+            placeholder="Search"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                setPage(1);
+                setSize(20);
+                dispatch(fetchJobs(input, page, size, type));
+              }
+            }}
+          />
         </div>
+
         <InfiniteScroll
           dataLength={count}
           next={fetchNext}

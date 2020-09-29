@@ -57,12 +57,12 @@ const PosterButtons: React.FC = () => {
     history.push(`/job/edit/${id}`);
   };
   return (
-    <div style={{ display: 'flex' }}>
-      <Button variant="outlined" onClick={openEditPage} className="m1em">
+    <div className="jobDetailsButtons">
+      <Button variant="outlined" onClick={openEditPage}>
         <EditIcon className="buttonIcon" />
         Edit Details
       </Button>
-      <Button variant="outlined" onClick={openChat} className="m1em">
+      <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
