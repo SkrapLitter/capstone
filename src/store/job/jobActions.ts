@@ -7,6 +7,11 @@ import {
   dateSort,
   locationSorter,
 } from '../../components/mapComponent/mapUtils';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import socket from '../../socket';
+
+toast.configure();
 
 interface Jobs {
   type: string;
@@ -120,6 +125,35 @@ const unreserveJob = (jobId: string): AppThunk => {
   };
 };
 
+export const cancelJob = (job: JobAttributes): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/payment/stripe/cancel/${job.id}`);
+      if (data) {
+        toast('You have successfully cancelled this job', { type: 'success' });
+      } else toast('There was an error cancelling this job', { type: 'error' });
+      dispatch(fetchJobsByUser(job.userId));
+    } catch (e) {
+      toast('There was an error cancelling this job', { type: 'error' });
+    }
+  };
+};
+export const completeJob = (job: JobAttributes): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(
+        `/api/payment/stripe/complete/${job.id}`
+      );
+      if (data) {
+        toast('You have successfully completed this job', { type: 'success' });
+        socket.emit('complete', job);
+      } else toast('There was an error cancelling this job', { type: 'error' });
+      dispatch(fetchJobsByUser(job.userId));
+    } catch (e) {
+      toast('There was an error cancelling this job', { type: 'error' });
+    }
+  };
+};
 interface Location {
   lat: number;
   lng: number;

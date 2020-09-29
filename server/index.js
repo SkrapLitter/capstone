@@ -93,6 +93,18 @@ io.on('connection', socket => {
       }
     });
   });
+  socket.on('complete', async data => {
+    const user = await findUserIncludeSessions(data.reservedUser);
+    const reservedSubject = `You have completed ${data.name} and payment has been paid from ${data.createdUser}`;
+    const subject = `${data.name} has been completed and payment has been completed`;
+    const userAlert = await createAlert(user.id, reservedSubject);
+    await createAlert(data.userId, subject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
+  });
 });
 
 app.use(async (req, res, next) => {
