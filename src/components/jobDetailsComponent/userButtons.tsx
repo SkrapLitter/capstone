@@ -8,6 +8,7 @@ import { Chatroom } from '../../store/inbox/inboxInterface';
 import { reserveJob, unreserveJob } from '../../store/job/jobActions';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import socket from '../../socket';
 
 const UserButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -53,7 +54,8 @@ const UserButtons: React.FC = () => {
     if (job.reserved) {
       // TODO - ARE YOU SURE? YOU'LL LOSE YOUR DEPOSIT
       dispatch(unreserveJob(job.id))
-        .then(() => {
+        .then(data => {
+          socket.emit('unreserve', data, user.id);
           setMessage('Reservation Cancelled');
           setOpen(true);
         })
@@ -63,7 +65,8 @@ const UserButtons: React.FC = () => {
         });
     } else {
       dispatch(reserveJob(job.id))
-        .then(() => {
+        .then(data => {
+          socket.emit('reserve', data);
           setMessage('Reservation Confirmed');
           setOpen(true);
         })
@@ -73,8 +76,6 @@ const UserButtons: React.FC = () => {
         });
     }
   };
-  console.log('USER', user);
-  console.log('JOB', job);
   return (
     <div style={{ display: 'flex' }}>
       <Button variant="outlined" onClick={handleReserve} className="m1em">

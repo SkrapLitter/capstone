@@ -34,7 +34,6 @@ const JobDetails: React.FC = () => {
   useEffect(() => {
     dispatch(fetchJob(id));
   }, []);
-
   const {
     user,
     job: { job },
@@ -43,7 +42,8 @@ const JobDetails: React.FC = () => {
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
-  const images = job.images.map(img => img.url);
+  const images =
+    job.images && job.images.length ? job.images.map(img => img.url) : [];
 
   return (
     <div className="container jCenter">

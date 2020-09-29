@@ -10,7 +10,6 @@ alertRouter.get('/user/:id', async (req, res) => {
       const alert = await Alert.findAll({
         where: {
           userId: id,
-          seen: false,
         },
         order: [['updatedAt', 'DESC']],
       });
@@ -52,27 +51,7 @@ alertRouter.post('/', async (req, res) => {
     res.sendStatus(500);
   }
 });
-alertRouter.put('/:id', async (req, res) => {
-  try {
-    if (req.isAuthenticated() && req.user) {
-      const { id } = req.params;
-      await Alert.update(
-        {
-          seen: true,
-        },
-        {
-          where: {
-            id,
-          },
-        }
-      );
-      res.sendStatus(200);
-    }
-  } catch (e) {
-    console.error('error with /alert put', e);
-    res.sendStatus(500);
-  }
-});
+
 alertRouter.delete('/:id', async (req, res) => {
   try {
     if (req.isAuthenticated() && req.user) {
