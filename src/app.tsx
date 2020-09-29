@@ -20,10 +20,13 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(cookieLogin());
   }, []);
@@ -33,10 +36,11 @@ const App: React.FC = () => {
   socket.on('newMessage', data => {
     dispatch(addMessage(data));
   });
-
   socket.on('alert', alert => {
     dispatch(setAlert(alert));
+    toast(alert.subject, { type: 'success' });
   });
+
   return (
     <div>
       <Navbar />

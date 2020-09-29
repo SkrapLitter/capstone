@@ -2,9 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutThunk } from '../store/user/userActions';
+import InboxBadge from './inboxComponent/inboxBadge';
 import { StoreState } from '../store/store';
-import Alert from './alertComponent/alert';
-import { Button } from '@material-ui/core';
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,9 +39,6 @@ const Navbar: React.FC = () => {
                 </div>
               </li>
             )}
-            <Button>
-              <Alert />
-            </Button>
             <li>
               <Link to="/jobs">Jobs</Link>
             </li>
@@ -51,7 +47,7 @@ const Navbar: React.FC = () => {
             </li>
             <li>
               <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
-                Inbox
+                <InboxBadge />
               </Link>
             </li>
             <li>

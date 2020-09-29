@@ -4,8 +4,9 @@ import User from '../user/userInterface';
 export interface Inbox {
   type: string;
   chatrooms?: Array<Chatroom>;
-  message?: Message;
+  data?: Data;
   chatroomId?: string;
+  userId?: string;
 }
 export interface Chatroom {
   createdAt: string;
@@ -24,8 +25,13 @@ export interface Chatroom {
 }
 export interface InboxRedux {
   chatrooms: Array<Chatroom>;
+  newChatroomMessage: number;
 }
-
+export interface Data {
+  newMessage?: Chatroom;
+  recipient?: string;
+  author?: string;
+}
 export interface Message {
   author: string;
   recipient: string;

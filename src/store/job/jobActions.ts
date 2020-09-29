@@ -67,7 +67,7 @@ const fetchMapJobs = (
 
 const fetchJob = (id: string): AppThunk => {
   return async (dispatch): Promise<any> => {
-    const { data } = await Axios.get(`/api/jobs/${id}`);
+    const { data } = await Axios.get(`/api/jobs/job/${id}`);
     dispatch(setJob(data));
     return data;
   };
@@ -90,7 +90,10 @@ const reserveJob = (jobId: string): AppThunk => {
       const { data } = await Axios.put(`/api/jobs/${jobId}`, {
         type: 'reserve',
       });
-      if (data.status) dispatch(setJob(data.job));
+      if (data.status) {
+        dispatch(setJob(data.job));
+        return data.job;
+      }
     } catch (e) {
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));
@@ -107,6 +110,7 @@ const unreserveJob = (jobId: string): AppThunk => {
         type: 'unreserve',
       });
       if (data.status) dispatch(setJob(data.job));
+      return data.job;
     } catch (e) {
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));

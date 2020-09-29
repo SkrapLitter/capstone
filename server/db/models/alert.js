@@ -1,6 +1,5 @@
 const { STRING, UUID, UUIDV4 } = require('sequelize');
 const db = require('../db');
-const { BOOLEAN } = require('sequelize/lib/data-types');
 
 const Alert = db.define('alert', {
   id: {
@@ -11,14 +10,6 @@ const Alert = db.define('alert', {
   subject: {
     type: STRING,
     allowNull: false,
-  },
-  global: {
-    type: BOOLEAN,
-    defaultValue: false,
-  },
-  seen: {
-    type: BOOLEAN,
-    defaultValue: false,
   },
 });
 

@@ -9,6 +9,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HistoryIcon from '@material-ui/icons/History';
+import PaymentIcon from '@material-ui/icons/Payment';
 import Message from '@material-ui/icons/Message';
 import Work from '@material-ui/icons/Work';
 import { makeStyles } from '@material-ui/core/styles';
@@ -66,7 +68,6 @@ const EditAccount: React.FC = () => {
     setLastName(user.lastName);
     dispatch(fetchJobsByUser(user.id));
   }, [user]);
-
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     e.preventDefault();
     setValue(newValue);
@@ -106,6 +107,8 @@ const EditAccount: React.FC = () => {
                 icon={<Message />}
                 label={`Messages (${inbox.chatrooms.length || 0})`}
               />
+              <Tab icon={<HistoryIcon />} label="History" />
+              <Tab icon={<PaymentIcon />} label="Payment" />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>

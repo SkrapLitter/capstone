@@ -15,8 +15,6 @@ import {
 } from '@material-ui/core';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { JobAttributes } from '../../store/job/jobInterface';
 import { validate } from '../validation';
 
@@ -59,10 +57,7 @@ const Checkout: React.FC = () => {
         })
       ).data;
       if (status === 'success') {
-        toast('Success! You have checked out!', { type: 'success' });
         history.push('/account');
-      } else {
-        toast('Error checking out!', { type: 'error' });
       }
     }
   };

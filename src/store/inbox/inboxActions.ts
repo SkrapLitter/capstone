@@ -1,24 +1,25 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
-import { Inbox, Chatroom, Message } from './inboxInterface';
+import { Inbox, Chatroom, Data } from './inboxInterface';
 import Axios from 'axios';
 
-const setInbox = (chatrooms: Array<Chatroom>): Inbox => ({
+const setInbox = (chatrooms: Array<Chatroom>, userId: string): Inbox => ({
   type: TYPES.SET_INBOX,
   chatrooms,
+  userId,
 });
 export const clearInbox = () => ({
   type: TYPES.CLEAR_INBOX,
 });
-export const addMessage = (message: Message): Inbox => ({
+export const addMessage = (data: Data): Inbox => ({
   type: TYPES.ADD_MESSAGE,
-  message,
+  data,
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
     if (userId) {
       const chatrooms = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
-      dispatch(setInbox(chatrooms));
+      dispatch(setInbox(chatrooms, userId));
     }
   };
 };

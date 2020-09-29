@@ -14,9 +14,13 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const { findUserBySession } = require('./utils');
 const {
-  models: { Chatroom, ChatMessage, Alert },
+  findUserBySession,
+  findUserIncludeSessions,
+  createAlert,
+} = require('./utils');
+const {
+  models: { Chatroom, ChatMessage },
 } = require('./db');
 const { default: Axios } = require('axios');
 const io = require('socket.io')(http);
@@ -51,21 +55,43 @@ io.on('connection', socket => {
       await chatroom.update({
         [title]: chatroom[title] + 1,
       });
-      const user = await User.findOne({
-        include: [{ model: Session }],
-        where: {
-          id: recipient,
-        },
-      });
+      const user = await findUserIncludeSessions(recipient);
       await user.sessions.forEach(session => {
         if (session.socket in io.sockets.connected) {
-          io.to(session.socket).emit('newMessage', newMessage);
+          io.to(session.socket).emit('newMessage', {
+            newMessage,
+            recipient,
+          });
         }
       });
-      io.to(socket.id).emit('newMessage', newMessage);
+      io.to(socket.id).emit('newMessage', { newMessage, author });
     } catch (e) {
       console.error('socket error', e);
     }
+  });
+  socket.on('reserve', async data => {
+    const user = await findUserIncludeSessions(data.userId);
+    const subject = `${data.name} has been reserved by ${data.reservedUsername}`;
+    const reservedSubject = `You have reserved ${data.name} posted by ${data.createdUser}`;
+    const userAlert = await createAlert(user.id, subject);
+    await createAlert(data.reservedUser, reservedSubject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
+  });
+  socket.on('unreserve', async (data, id) => {
+    const user = await findUserIncludeSessions(data.userId);
+    const reservedSubject = `You have unreserved from ${data.name} posted by ${data.createdUser}`;
+    const subject = `${data.name} has been unreserved and is now open for reservations`;
+    const userAlert = await createAlert(user.id, subject);
+    await createAlert(id, reservedSubject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
   });
 });
 
