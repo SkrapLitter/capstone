@@ -1,8 +1,7 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-// import { useSelector, useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-// import { ThunkAction } from 'redux-thunk';
+import { useSelector, useDispatch } from 'react-redux';
+import { ThunkAction } from 'redux-thunk';
 import { StoreState } from '../../store/store';
 import { findOrCreateChat } from '../../store/inbox/inboxActions';
 import { Chatroom } from '../../store/inbox/inboxInterface';
@@ -16,9 +15,9 @@ const PosterButtons: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<RouteParams>();
 
-  // const dispatch: (
-  //   a: ThunkAction<any, any, any, any>
-  // ) => Promise<any> = useDispatch();
+  const dispatch: (
+    a: ThunkAction<any, any, any, any>
+  ) => Promise<any> = useDispatch();
 
   const {
     user,
@@ -31,8 +30,7 @@ const PosterButtons: React.FC = () => {
     e.preventDefault();
     return new Promise((res, rej) => {
       try {
-        // res(dispatch(findOrCreateChat(job.id, user.id, job.reservedUser)));
-        res(findOrCreateChat(job.id, user.id, job.reservedUser));
+        res(dispatch(findOrCreateChat(job.id, user.id, job.reservedUser)));
       } catch (err) {
         rej(err);
       }
@@ -45,8 +43,6 @@ const PosterButtons: React.FC = () => {
   const openEditPage = () => {
     history.push(`/job/edit/${id}`);
   };
-  // console.log('USER', user);
-  // console.log('JOB', job);
   return (
     <div style={{ display: 'flex' }}>
       <Button variant="outlined" onClick={openEditPage} className="m1em">
