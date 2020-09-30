@@ -82,6 +82,7 @@ const EditAccount: React.FC = () => {
     setLastName(user.lastName);
     dispatch(fetchJobsByUser(user.id));
   }, [user]);
+
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     e.preventDefault();
     setValue(newValue);
