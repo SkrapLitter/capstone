@@ -19,6 +19,22 @@ const Navbar: React.FC = () => {
           </div>
           <div className="navList">
             <ul id="nav-mobile" className="right hide-on-small-only">
+              <li>
+                <Link to="/jobs">Jobs</Link>
+              </li>
+              <li>
+                <Link to="/map">Map</Link>
+              </li>
+              <li>
+                <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
+                  <InboxBadge />
+                </Link>
+              </li>
+              <li>
+                <Link to="/account" className={user.clearance ? 'ghost' : ''}>
+                  Account
+                </Link>
+              </li>
               {!!user.clearance && (
                 <li className="user-profile">
                   <Link to="/account">
@@ -46,22 +62,6 @@ const Navbar: React.FC = () => {
                   </div>
                 </li>
               )}
-              <li>
-                <Link to="/jobs">Jobs</Link>
-              </li>
-              <li>
-                <Link to="/map">Map</Link>
-              </li>
-              <li>
-                <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
-                  <InboxBadge />
-                </Link>
-              </li>
-              <li>
-                <Link to="/account" className={user.clearance ? 'ghost' : ''}>
-                  Account
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
