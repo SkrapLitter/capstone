@@ -1,4 +1,5 @@
-const { STRING, UUID, UUIDV4, TEXT } = require('sequelize');
+const { UUID, UUIDV4 } = require('sequelize');
+const { INTEGER } = require('sequelize/lib/data-types');
 const db = require('../db');
 const User = require('./user');
 
@@ -8,15 +9,13 @@ const Chatroom = db.define('chatroom', {
     type: UUID,
     defaultValue: UUIDV4,
   },
-  name: {
-    type: STRING,
-    allowNull: false,
+  workerMessage: {
+    type: INTEGER,
+    defaultValue: 0,
   },
-  chatusers: {
-    type: TEXT,
-  },
-  jobName: {
-    type: STRING,
+  posterMessage: {
+    type: INTEGER,
+    defaultValue: 0,
   },
 });
 

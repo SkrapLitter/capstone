@@ -18,6 +18,7 @@ const { findUserBySession } = require('./utils');
 const {
   models: { Chatroom, ChatMessage, Alert },
 } = require('./db');
+const { default: Axios } = require('axios');
 const io = require('socket.io')(http);
 
 dotenv.config();
@@ -36,43 +37,38 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 io.on('connection', socket => {
+  Axios.put(`http://localhost:3000/api/user/socketConnect/${socket.id}`);
   socket.on('message', async data => {
     try {
-      const { chatroomId, author, message, userId } = data;
-      await ChatMessage.create({
+      const { chatroomId, author, message, recipient, title } = data;
+      const newMessage = await ChatMessage.create({
         chatroomId,
         author,
         message,
-        userId,
+        recipient,
       });
       const chatroom = await Chatroom.findByPk(chatroomId);
-      const users = chatroom.chatusers.split('/').filter(id => id !== userId);
-      await users.forEach(async id => {
-        await Alert.create({
-          subject: `New Message Received From ${author} in ${chatroom.name}`,
-          userId: id,
-        });
-        const user = await User.findByPk(id);
-        if (user) {
-          io.to(user.socket).emit('alert', id);
-          io.to(user.socket).emit('newMessage', chatroom);
+      await chatroom.update({
+        [title]: chatroom[title] + 1,
+      });
+      const user = await User.findOne({
+        include: [{ model: Session }],
+        where: {
+          id: recipient,
+        },
+      });
+      await user.sessions.forEach(session => {
+        if (session.socket in io.sockets.connected) {
+          io.to(session.socket).emit('newMessage', newMessage);
         }
       });
-      io.to(socket.id).emit('newMessage', chatroom);
+      io.to(socket.id).emit('newMessage', newMessage);
     } catch (e) {
       console.error('socket error', e);
     }
   });
-  socket.on('reserveJob', async data => {
-    const { jobName, userId, reservedName } = data;
-    const user = User.findByPk(userId);
-    await Alert.create({
-      subject: `${jobName} reserved by ${reservedName}`,
-      userId: user.id,
-    });
-    io.to(user.socket).emit('alert', user.id);
-  });
 });
+
 app.use(async (req, res, next) => {
   if (!req.cookies.session_id) {
     const session = await Session.create();
@@ -87,18 +83,15 @@ app.use(async (req, res, next) => {
     req.sessionId = req.cookies.session_id;
     Session.findByPk(req.cookies.session_id)
       .then(data => {
-        if (!data)
+        if (!data) {
           Session.create({
             id: req.sessionId,
           });
-        const user = findUserBySession(req.sessionId);
-        return user;
+        }
+        return findUserBySession(req.sessionId);
       })
       .then(user => {
         if (user) {
-          user.update({
-            socket: req.cookies.io,
-          });
           req.user = user.dataValues;
           next();
         } else {

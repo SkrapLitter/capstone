@@ -2,6 +2,7 @@ export interface AlertAction {
   type: string;
   alerts?: Alert;
   newAlerts?: Alert;
+  alert?: Alert;
 }
 
 export interface Alert {

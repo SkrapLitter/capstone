@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { Link } from 'react-router-dom';
-import { fetchUserInbox, setChatroom } from '../../store/inbox/inboxActions';
-import { Button } from '@material-ui/core';
+import { fetchUserInbox } from '../../store/inbox/inboxActions';
+import { Paper } from '@material-ui/core';
 import { Chatroom } from '../../store/inbox/inboxInterface';
 
 const Inbox: React.FC = () => {
@@ -11,25 +11,45 @@ const Inbox: React.FC = () => {
   const { user, inbox } = useSelector((state: StoreState) => state);
   useEffect(() => {
     dispatch(fetchUserInbox(user.id));
-  }, []);
+  }, [user.id]);
   return (
-    <div>
+    <div className="container">
       {user.clearance ? (
         <>
-          <h4>{user.username} inbox</h4>
-          {inbox.inbox && inbox.inbox.length ? (
-            inbox.inbox.map((chatroom: Chatroom) => {
+          <h4>Inbox</h4>
+          {inbox.chatrooms.length ? (
+            inbox.chatrooms.map((chatroom: Chatroom) => {
               return (
-                <div key={chatroom.id}>
-                  <Button
-                    onClick={e => {
-                      e.preventDefault();
-                      dispatch(setChatroom(chatroom));
-                    }}
-                  >
-                    <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
-                  </Button>
-                </div>
+                <Paper key={chatroom.id}>
+                  <div className="inboxCard">
+                    <Link to={`/inbox/${chatroom.id}`}>
+                      {user.id === chatroom.job.userId ? (
+                        <>
+                          <p>
+                            {chatroom.worker.firstName}{' '}
+                            {chatroom.worker.lastName}
+                            {' - '}
+                            {chatroom.job.name}
+                          </p>
+                          {chatroom.posterMessage
+                            ? `(${chatroom.posterMessage}) new Messages!`
+                            : ''}
+                        </>
+                      ) : (
+                        <>
+                          <p>
+                            {chatroom.poster.firstName}{' '}
+                            {chatroom.poster.lastName} {' - '}
+                            {chatroom.job.name}
+                          </p>
+                          {chatroom.workerMessage
+                            ? `(${chatroom.workerMessage}) new Messages!`
+                            : ''}
+                        </>
+                      )}
+                    </Link>
+                  </div>
+                </Paper>
               );
             })
           ) : (

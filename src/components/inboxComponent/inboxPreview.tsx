@@ -17,15 +17,15 @@ const InboxPreview: React.FC = () => {
   return (
     <div id="messages">
       <Box py={5}>
-        {inbox.inbox.length ? (
+        {inbox.chatrooms.length ? (
           <List>
-            {inbox.inbox.map(chatroom => (
+            {inbox.chatrooms.map(chatroom => (
               <ListItem key={chatroom.id}>
                 <ListItemIcon>
                   <Forum />
                 </ListItemIcon>
                 <ListItemText>
-                  <Link to={`/inbox/${chatroom.id}`}>{chatroom.name}</Link>
+                  <Link to={`/inbox/${chatroom.id}`}>{chatroom.job.name}</Link>
                 </ListItemText>
               </ListItem>
             ))}

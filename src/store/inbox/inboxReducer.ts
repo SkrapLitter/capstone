@@ -2,17 +2,7 @@ import TYPES from '../types';
 import { InboxRedux } from './inboxInterface';
 
 const defaultInbox: InboxRedux = {
-  inbox: [],
-  messages: [],
-  chatroom: {
-    chatUsers: '',
-    createdAt: '',
-    id: '',
-    jobId: '',
-    name: '',
-    updatedAt: '',
-    users: [],
-  },
+  chatrooms: [],
 };
 
 const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
@@ -22,17 +12,20 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
     case TYPES.SET_INBOX:
       return {
         ...state,
-        inbox: action.inbox,
+        chatrooms: action.chatrooms,
       };
-    case TYPES.SET_CHATROOM:
+    case TYPES.ADD_MESSAGE:
+      state.chatrooms.forEach(chatroom => {
+        if (chatroom.id === action.message.chatroomId) {
+          chatroom.chatMessages.push(action.message);
+        }
+      });
       return {
         ...state,
-        chatroom: action.chatroom,
       };
-    case TYPES.SET_MESSAGES:
+    case TYPES.CLEAR_INBOX:
       return {
-        ...state,
-        messages: action.messages,
+        ...defaultInbox,
       };
   }
 };

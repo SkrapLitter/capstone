@@ -99,9 +99,6 @@ authRouter.post(
         usersSession = await Session.create({ id: req.sessionId });
       }
       await usersSession.setUser(user.id);
-      await user.update({
-        socket: usersSession.socket,
-      });
       res.status(200).send(user);
     } catch (err) {
       console.error(err);
@@ -135,16 +132,6 @@ authRouter.post(
       if (!usersSession) {
         usersSession = await Session.create({ id: req.sessionId });
       }
-      await User.update(
-        {
-          socket: usersSession.socket,
-        },
-        {
-          where: {
-            id: req.user.id,
-          },
-        }
-      );
       await usersSession.setUser(req.user.id);
       res.status(200).send(req.user);
     } catch (e) {
