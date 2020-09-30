@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutThunk } from '../store/user/userActions';
 import InboxBadge from './inboxComponent/inboxBadge';
 import { StoreState } from '../store/store';
-// import Alert from './alertComponent/alert';
-// import { Button } from '@material-ui/core';
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,31 +19,6 @@ const Navbar: React.FC = () => {
           </div>
           <div className="navList">
             <ul id="nav-mobile" className="right hide-on-small-only">
-              {/* <li>
-                <Button>
-                  <Alert />
-                </Button>
-              </li> */}
-              <li>
-                <Link to="/jobs">Jobs</Link>
-              </li>
-              <li>
-                <Link to="/map">Map</Link>
-              </li>
-              <li>
-                <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
-                  Inbox
-                </Link>
-              </li>
-              <li>
-                <Link to="/account" className={user.clearance ? 'ghost' : ''}>
-                  Account
-                </Link>
-              </li>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> navbar and footer nav styled
               {!!user.clearance && (
                 <li className="user-profile">
                   <Link to="/account">
@@ -73,34 +46,24 @@ const Navbar: React.FC = () => {
                   </div>
                 </li>
               )}
+              <li>
+                <Link to="/jobs">Jobs</Link>
+              </li>
+              <li>
+                <Link to="/map">Map</Link>
+              </li>
+              <li>
+                <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
+                  <InboxBadge />
+                </Link>
+              </li>
+              <li>
+                <Link to="/account" className={user.clearance ? 'ghost' : ''}>
+                  Account
+                </Link>
+              </li>
             </ul>
           </div>
-<<<<<<< HEAD
-=======
-            )}
-            <Button color="primary">
-              <Alert />
-            </Button>
-            <li>
-              <Link to="/jobs">Jobs</Link>
-            </li>
-            <li>
-              <Link to="/map">Map</Link>
-            </li>
-            <li>
-              <Link to="/inbox" className={user.clearance ? '' : 'ghost'}>
-                Inbox
-              </Link>
-            </li>
-            <li>
-              <Link to="/account" className={user.clearance ? 'ghost' : ''}>
-                Account
-              </Link>
-            </li>
-          </ul>
->>>>>>> added theme provider and css vars, deleted materialize css
-=======
->>>>>>> navbar and footer nav styled
         </div>
       </nav>
     </div>

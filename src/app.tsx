@@ -22,12 +22,12 @@ import PhotoVerification from './components/jobDetailsComponent/photoVerificatio
 import Checkout from './components/checkoutComponent/checkout';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-toast.configure();
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
 import '../public/uiUpdate.scss';
 import '../public/style.scss';
+
+toast.configure();
 
 const App: React.FC = () => {
   const dispatch = useDispatch();

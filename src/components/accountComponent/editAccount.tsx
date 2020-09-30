@@ -88,7 +88,7 @@ const EditAccount: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container fixed>
       <Grid
         container
         direction="column"
@@ -114,28 +114,37 @@ const EditAccount: React.FC = () => {
           <Tabs
             value={value}
             onChange={handleChange}
-            centered
+            variant="scrollable"
+            scrollButtons="on"
             classes={{
               root: classes.tabRoot,
               indicator: classes.tabIndicator,
             }}
           >
-            <Tab icon={<PersonPinIcon />} label="Edit Profile" />
             <Tab icon={<Work />} label={`My Jobs (${jobsQty || 0})`} />
+            <Tab icon={<PersonPinIcon />} label="Edit Profile" />
             <Tab
               icon={<Message />}
               label={`Messages (${inbox.chatrooms.length || 0})`}
             />
+            <Tab icon={<HistoryIcon />} label="History" />
+            <Tab icon={<PaymentIcon />} label="Payment" />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <EditAccountForm />
+          <JobsDetailsPreview />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <JobsDetailsPreview />
+          <EditAccountForm />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <InboxPreview />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <div>History</div>
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <div>Payments</div>
         </TabPanel>
       </Box>
     </Container>
