@@ -1,18 +1,11 @@
 import TYPES from '../types';
 import { InboxRedux } from './inboxInterface';
 
+let number;
+
 const defaultInbox: InboxRedux = {
-  inbox: [],
-  messages: [],
-  chatroom: {
-    chatUsers: '',
-    createdAt: '',
-    id: '',
-    jobId: '',
-    name: '',
-    updatedAt: '',
-    users: [],
-  },
+  chatrooms: [],
+  newChatroomMessage: 0,
 };
 
 const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
@@ -20,19 +13,46 @@ const inboxReducer = (state: InboxRedux = defaultInbox, action): InboxRedux => {
     default:
       return state;
     case TYPES.SET_INBOX:
+      number = 0;
+      action.chatrooms.forEach(chatroom => {
+        const userRole =
+          action.userId === chatroom.job.userId ? `poster` : 'worker';
+        if (chatroom.posterMessage && userRole === 'poster') number++;
+        else if (chatroom.workerMessage && userRole === 'worker') number++;
+      });
       return {
-        ...state,
-        inbox: action.inbox,
+        newChatroomMessage: number,
+        chatrooms: action.chatrooms,
       };
-    case TYPES.SET_CHATROOM:
+    case TYPES.ADD_MESSAGE:
+      number = state.newChatroomMessage;
+      state.chatrooms.forEach(chatroom => {
+        if (chatroom.id === action.data.newMessage.chatroomId) {
+          if (action.data.recipient) {
+            const userRole =
+              action.userId === chatroom.job.userId ? `poster` : '';
+            if (userRole === 'poster') {
+              if (chatroom.posterMessage === 0) {
+                number++;
+              }
+              chatroom.posterMessage++;
+            } else {
+              if (chatroom.workerMessage === 0) {
+                number++;
+              }
+              chatroom.workerMessage++;
+            }
+          }
+          chatroom.chatMessages.push(action.data.newMessage);
+        }
+      });
       return {
         ...state,
-        chatroom: action.chatroom,
+        newChatroomMessage: number,
       };
-    case TYPES.SET_MESSAGES:
+    case TYPES.CLEAR_INBOX:
       return {
-        ...state,
-        messages: action.messages,
+        ...defaultInbox,
       };
   }
 };

@@ -1,5 +1,7 @@
 require('dotenv').config();
 const jobRouter = require('express').Router();
+const multer = require('multer');
+const AWS = require('aws-sdk');
 const {
   models: { Job, Image, Payment, Verification },
 } = require('../db');
@@ -9,6 +11,9 @@ const { Op } = Sequelize;
 
 const axios = require('axios');
 const User = require('../db/models/user');
+
+const upload = multer();
+const multipleUpload = upload.array('image');
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -185,7 +190,7 @@ jobRouter.get('/job/:id', async (req, res) => {
   }
 });
 
-jobRouter.get('/job/user/:id', async (req, res) => {
+jobRouter.get('/user/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const jobs = await Job.findAll({
@@ -203,6 +208,7 @@ jobRouter.get('/job/user/:id', async (req, res) => {
     const active = jobs.filter(
       job => job.status === 'volunteer' || job.status === 'funded'
     );
+
     res.status(200).send({
       completed,
       cancelled,
@@ -216,18 +222,13 @@ jobRouter.get('/job/user/:id', async (req, res) => {
   }
 });
 
-jobRouter.post('/', async (req, res) => {
+jobRouter.post('/', multipleUpload, async (req, res) => {
   try {
-    const {
-      name,
-      price,
-      address,
-      userId,
-      description,
-      images,
-      status,
-    } = req.body;
-    const ids = images.map(image => image.id);
+    const file = req.files;
+    const { name, price, userId, description, status } = req.body;
+    let { address } = req.body;
+    address = JSON.parse(address);
+    const bucketName = { Bucket: userId };
     const city = address.value.structured_formatting.secondary_text.split(
       ', '
     )[0];
@@ -256,8 +257,43 @@ jobRouter.post('/', async (req, res) => {
       city,
       state,
     });
-    await Image.update({ jobId: job.id }, { where: { id: ids } });
-    res.status(200).send({ jobId: job.id });
+
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_ID2,
+      secretAccessKey: process.env.AWS_SECRET2,
+    });
+
+    s3.createBucket(bucketName, (err, data) => {
+      if (err) {
+        console.log('error', err);
+      } else {
+        console.log('success', data);
+      }
+    });
+    const promises = [];
+    file.forEach(img => {
+      const params = {
+        Bucket: bucketName.Bucket,
+        Key: img.originalname,
+        Body: img.buffer,
+        ACL: 'public-read',
+      };
+      const promise = s3.upload(params).promise();
+      promises.push(promise);
+    });
+
+    Promise.all(promises)
+      .then(async data => {
+        data.forEach(async img => {
+          await Image.create({
+            url: img.Location,
+            jobId: job.id,
+          });
+        });
+      })
+      .then(() => {
+        res.status(201).send(job);
+      });
   } catch (e) {
     res.status(500).send(e);
     console.error('Error posting job', e);

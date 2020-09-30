@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
+import { fetchJobsByUser } from '../../store/job/jobActions';
 import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import EditAccountForm from './editAccountForm';
 import InboxPreview from '../inboxComponent/inboxPreview';
@@ -10,6 +11,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HistoryIcon from '@material-ui/icons/History';
+import PaymentIcon from '@material-ui/icons/Payment';
 import Message from '@material-ui/icons/Message';
 import Work from '@material-ui/icons/Work';
 import Avatar from '@material-ui/core/Avatar';
@@ -56,7 +59,12 @@ const EditAccount: React.FC = () => {
   const selectUser = (state: StoreState) => state.user;
   const user = useSelector(selectUser);
 
-  const { jobs } = useSelector((state: StoreState) => state.job);
+  const selectJobs = (state: StoreState) => state.job;
+  const { userJobs } = useSelector(selectJobs);
+  const jobsTypes = Object.keys(userJobs);
+  const jobsQty = jobsTypes.reduce((acc, val) => {
+    return acc + userJobs[val].length;
+  }, 0);
 
   const selectInbox = (state: StoreState) => state.inbox;
   const inbox = useSelector(selectInbox);
@@ -66,20 +74,21 @@ const EditAccount: React.FC = () => {
   const [value, setValue] = React.useState(0);
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     /* eslint-disable @typescript-eslint/ban-types */
     setFirstName(user.firstName);
     setLastName(user.lastName);
+    dispatch(fetchJobsByUser(user.id));
   }, [user]);
-
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     e.preventDefault();
     setValue(newValue);
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container fixed>
       <Grid
         container
         direction="column"
@@ -105,28 +114,37 @@ const EditAccount: React.FC = () => {
           <Tabs
             value={value}
             onChange={handleChange}
-            centered
+            variant="scrollable"
+            scrollButtons="on"
             classes={{
               root: classes.tabRoot,
               indicator: classes.tabIndicator,
             }}
           >
+            <Tab icon={<Work />} label={`My Jobs (${jobsQty || 0})`} />
             <Tab icon={<PersonPinIcon />} label="Edit Profile" />
-            <Tab icon={<Work />} label={`My Jobs (${jobs.length || 0})`} />
             <Tab
               icon={<Message />}
-              label={`Messages (${inbox.inbox.length || 0})`}
+              label={`Messages (${inbox.chatrooms.length || 0})`}
             />
+            <Tab icon={<HistoryIcon />} label="History" />
+            <Tab icon={<PaymentIcon />} label="Payment" />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <EditAccountForm />
+          <JobsDetailsPreview />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <JobsDetailsPreview />
+          <EditAccountForm />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <InboxPreview />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <div>History</div>
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <div>Payments</div>
         </TabPanel>
       </Box>
     </Container>

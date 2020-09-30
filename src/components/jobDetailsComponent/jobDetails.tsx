@@ -42,16 +42,15 @@ const JobDetails: React.FC = () => {
     // get the job details
     dispatch(fetchJob(id));
   }, []);
-
   const {
     user,
     job: { job },
   } = useSelector((state: StoreState) => state);
-
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
-  const images = job.images.map(img => img.url);
+  const images =
+    job.images && job.images.length ? job.images.map(img => img.url) : [];
 
   return (
     <div className="container jCenter">

@@ -51,9 +51,6 @@ const User = db.define(
     stripe: {
       type: STRING,
     },
-    socket: {
-      type: STRING,
-    },
     balance: {
       type: FLOAT,
     },

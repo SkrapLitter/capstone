@@ -8,6 +8,7 @@ import { Chatroom } from '../../store/inbox/inboxInterface';
 import { reserveJob, unreserveJob } from '../../store/job/jobActions';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import socket from '../../socket';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
@@ -42,18 +43,7 @@ const UserButtons: React.FC = () => {
     }
     return new Promise((res, rej) => {
       try {
-        res(
-          dispatch(
-            findOrCreateChat(
-              user.id,
-              job.userId,
-              user.username,
-              job.createdUser,
-              job.id,
-              job.name
-            )
-          )
-        );
+        res(dispatch(findOrCreateChat(job.id, job.userId, user.id)));
       } catch (err) {
         rej(err);
       }
@@ -67,7 +57,8 @@ const UserButtons: React.FC = () => {
     if (job.reserved) {
       // TODO - ARE YOU SURE? YOU'LL LOSE YOUR DEPOSIT
       dispatch(unreserveJob(job.id))
-        .then(() => {
+        .then(data => {
+          socket.emit('unreserve', data, user.id);
           setMessage('Reservation Cancelled');
           setOpen(true);
         })
@@ -77,7 +68,8 @@ const UserButtons: React.FC = () => {
         });
     } else {
       dispatch(reserveJob(job.id))
-        .then(() => {
+        .then(data => {
+          socket.emit('reserve', data);
           setMessage('Reservation Confirmed');
           setOpen(true);
         })
@@ -88,8 +80,8 @@ const UserButtons: React.FC = () => {
     }
   };
   return (
-    <div style={{ display: 'flex' }}>
-      <Button variant="outlined" onClick={handleReserve} className="m1em">
+    <div className="jobDetailsButtons">
+      <Button variant="outlined" onClick={handleReserve}>
         {job.reserved ? (
           <CloseIcon className="buttonIcon" />
         ) : (
@@ -97,7 +89,7 @@ const UserButtons: React.FC = () => {
         )}
         {job.reserved ? 'Cancel' : 'Reserve'}
       </Button>
-      <Button variant="outlined" onClick={openChat} className="m1em">
+      <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>

@@ -6,52 +6,45 @@ import Feed from './components/feedComponent/feed';
 import Map from './components/mapComponent/map';
 import Account from './components/accountComponent/account';
 import CreateJob from './components/jobComponents/createJob';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Landing from './components/landingComponent/landing';
 import JobDetails from './components/jobDetailsComponent/jobDetails';
 import EditJob from './components/jobDetailsComponent/editJob';
 import Inbox from './components/inboxComponent/inbox';
 import { cookieLogin } from './store/user/userActions';
 import SelectedChatroom from './components/inboxComponent/chatroom';
-import { fetchChatroomMessages } from './store/inbox/inboxActions';
-import { StoreState } from './store/store';
-import { fetchNewAlerts } from './store/alert/alertActions';
+import { addMessage } from './store/inbox/inboxActions';
+import { setAlert } from './store/alert/alertActions';
 import Axios from 'axios';
 import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
 import '../public/uiUpdate.scss';
 import '../public/style.scss';
 
+toast.configure();
+
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: StoreState) => state);
-
   useEffect(() => {
     dispatch(cookieLogin());
   }, []);
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      Axios.put(`/api/user/socketConnect/${socket.id}`);
-    });
-    return () => socket.disconnect();
-  }, []);
-
+  socket.on('connect', () => {
+    Axios.put(`/api/user/socketConnect/${socket.id}`);
+  });
   socket.on('newMessage', data => {
-    const users = data.chatusers.split('/');
-    if (users.includes(user.id)) {
-      dispatch(fetchChatroomMessages(data.id, user.id));
-    }
+    dispatch(addMessage(data));
   });
-  socket.on('alert', id => {
-    if (id === user.id) {
-      dispatch(fetchNewAlerts(id));
-    }
+  socket.on('alert', alert => {
+    dispatch(setAlert(alert));
+    toast(alert.subject, { type: 'success' });
   });
+
   return (
     <ThemeProvider theme={theme}>
       <div className="bodyContainer">

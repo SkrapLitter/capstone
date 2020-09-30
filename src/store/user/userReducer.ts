@@ -11,6 +11,7 @@ const defaultUser: User = {
   error: '',
   stripe: '',
   balance: 0,
+  payments: [],
 };
 
 const userReducer = (state: User = defaultUser, action): User => {

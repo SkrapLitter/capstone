@@ -1,64 +1,43 @@
 import TYPES from '../types';
 import { AppThunk } from '../thunkType';
-import { Inbox, Chatroom, Message } from './inboxInterface';
+import { Inbox, Chatroom, Data } from './inboxInterface';
 import Axios from 'axios';
 
-const setMessages = (messages: Message): Inbox => ({
-  type: TYPES.SET_MESSAGES,
-  messages,
-});
-const setInbox = (inbox: Array<Chatroom>): Inbox => ({
+const setInbox = (chatrooms: Array<Chatroom>, userId: string): Inbox => ({
   type: TYPES.SET_INBOX,
-  inbox,
+  chatrooms,
+  userId,
 });
-export const setChatroom = (chatroom: Chatroom): Inbox => ({
-  type: TYPES.SET_CHATROOM,
-  chatroom,
+export const clearInbox = () => ({
+  type: TYPES.CLEAR_INBOX,
+});
+export const addMessage = (data: Data): Inbox => ({
+  type: TYPES.ADD_MESSAGE,
+  data,
 });
 export const fetchUserInbox = (userId: string): AppThunk => {
   return async dispatch => {
     if (userId) {
-      const inbox = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
-      console.log(inbox);
-      dispatch(setInbox(inbox));
-    }
-  };
-};
-
-export const fetchChatroomMessages = (
-  chatId: string,
-  userId: string
-): AppThunk => {
-  return async dispatch => {
-    if (userId) {
-      const messages = (
-        await Axios.get(`/api/chat/messages?chatId=${chatId}&userId=${userId}`)
-      ).data;
-      dispatch(setMessages(messages));
+      const chatrooms = (await Axios.get(`/api/chat/chatroom/${userId}`)).data;
+      dispatch(setInbox(chatrooms, userId));
     }
   };
 };
 
 export const findOrCreateChat = (
-  userId: string,
-  hostId: string,
-  username: string,
-  hostname: string,
   jobId: string,
-  jobName: string
+  posterId: string,
+  workerId: string
 ): AppThunk => {
   return async dispatch => {
     const chatroom = (
-      await Axios.get(
-        `/api/chat/job?userId=${userId}&hostId=${hostId}&username=${username}&hostname=${hostname}&jobId=${jobId}&jobName=${jobName}`
-      )
+      await Axios.post(`/api/chat/find`, {
+        jobId,
+        workerId,
+        posterId,
+      })
     ).data;
-    if (chatroom) {
-      console.log(chatroom);
-      await dispatch(setChatroom(chatroom));
-      await dispatch(fetchChatroomMessages(chatroom.id, userId));
-      await dispatch(fetchUserInbox(userId));
-      return chatroom;
-    }
+    await dispatch(fetchUserInbox(workerId));
+    return chatroom;
   };
 };
