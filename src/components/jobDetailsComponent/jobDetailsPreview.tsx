@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { JobAttributes } from '../../store/job/jobInterface';
-import { cancelJob } from '../../store/user/userActions';
+import { cancelJob } from '../../store/job/jobActions';
 
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -12,7 +12,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import RoomIcon from '@material-ui/icons/Room';
 import Button from '@material-ui/core/Button';
-import CancelIcon from '@material-ui/icons/Cancel';
 
 interface Props {
   jobs: Array<JobAttributes>;
@@ -62,9 +61,8 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
                       size="small"
                       color="secondary"
                       onClick={e => handleCancel(e, job)}
-                      startIcon={<CancelIcon />}
                     >
-                      Cancel
+                      Complete
                     </Button>
                   </Grid>
                 </Grid>
