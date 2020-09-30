@@ -7,6 +7,11 @@ import {
   dateSort,
   locationSorter,
 } from '../../components/mapComponent/mapUtils';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import socket from '../../socket';
+
+toast.configure();
 
 interface Jobs {
   type: string;
@@ -68,7 +73,6 @@ const fetchMapJobs = (
 const fetchJob = (id: string): AppThunk => {
   return async (dispatch): Promise<any> => {
     const { data } = await Axios.get(`/api/jobs/job/${id}`);
-    console.log('DATA', data);
     dispatch(setJob(data));
     return data;
   };
@@ -91,7 +95,10 @@ const reserveJob = (jobId: string): AppThunk => {
       const { data } = await Axios.put(`/api/jobs/${jobId}`, {
         type: 'reserve',
       });
-      if (data.status) dispatch(setJob(data.job));
+      if (data.status) {
+        dispatch(setJob(data.job));
+        return data.job;
+      }
     } catch (e) {
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));
@@ -108,6 +115,7 @@ const unreserveJob = (jobId: string): AppThunk => {
         type: 'unreserve',
       });
       if (data.status) dispatch(setJob(data.job));
+      return data.job;
     } catch (e) {
       if (e.response.data.shouldUpdateStore) {
         dispatch(setJob(e.response.data.job));
@@ -117,6 +125,35 @@ const unreserveJob = (jobId: string): AppThunk => {
   };
 };
 
+export const cancelJob = (job: JobAttributes): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(`/api/payment/stripe/cancel/${job.id}`);
+      if (data) {
+        toast('You have successfully cancelled this job', { type: 'success' });
+      } else toast('There was an error cancelling this job', { type: 'error' });
+      dispatch(fetchJobsByUser(job.userId));
+    } catch (e) {
+      toast('There was an error cancelling this job', { type: 'error' });
+    }
+  };
+};
+export const completeJob = (job: JobAttributes): AppThunk => {
+  return async (dispatch): Promise<any> => {
+    try {
+      const { data } = await Axios.put(
+        `/api/payment/stripe/complete/${job.id}`
+      );
+      if (data) {
+        toast('You have successfully completed this job', { type: 'success' });
+        socket.emit('complete', job);
+      } else toast('There was an error cancelling this job', { type: 'error' });
+      dispatch(fetchJobsByUser(job.userId));
+    } catch (e) {
+      toast('There was an error cancelling this job', { type: 'error' });
+    }
+  };
+};
 interface Location {
   lat: number;
   lng: number;

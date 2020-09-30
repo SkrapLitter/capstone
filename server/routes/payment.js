@@ -2,7 +2,7 @@ require('dotenv').config();
 const paymentRouter = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_SKEY);
 const {
-  models: { Job, Payment, User },
+  models: { Job, Payment, User, Alert },
 } = require('../db');
 
 paymentRouter.post('/stripe/checkout', async (req, res) => {
@@ -72,7 +72,8 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
     const job = await Job.findByPk(id);
     if (job) {
       if (job.status === 'volunteer' || job.status === 'pending') {
-        await Job.destroy({
+        await Job.update({
+          status: 'cancelled',
           where: {
             id,
           },
@@ -103,6 +104,10 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
             jobId: payment.jobId,
           });
         });
+        await Alert.create({
+          subject: `${job.name} has been cancelled and a refund has been issued`,
+          userId: job.userId,
+        });
         await job.update({
           status: 'cancelled',
           funded: 0,
@@ -131,6 +136,8 @@ paymentRouter.put('/stripe/completed/:id', async (req, res) => {
       if (job.funded > 0) {
         const user = await User.findByPk(job.reservedUser);
         if (!user.stripe) {
+          res.redirect(`/api/user/stripe/onboarding/${user.id}`);
+        } else {
           await stripe.transfers.create({
             amount: job.funded * 0.9 * 100,
             currency: 'usd',
