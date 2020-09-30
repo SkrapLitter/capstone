@@ -1,6 +1,6 @@
 const chatroomRouter = require('express').Router();
 const {
-  models: { Chatroom, User, ChatMessage, Job },
+  models: { Chatroom, User, ChatMessage, Job, Image },
 } = require('../db');
 const Sequelize = require('sequelize');
 
@@ -25,6 +25,7 @@ chatroomRouter.get('/chatroom/:id', async (req, res) => {
           },
           {
             model: Job,
+            include: [{ model: Image }],
           },
           {
             model: ChatMessage,
