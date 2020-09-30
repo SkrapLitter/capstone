@@ -6,6 +6,8 @@ import { StoreState } from '../../store/store';
 import { findOrCreateChat } from '../../store/inbox/inboxActions';
 import { Chatroom } from '../../store/inbox/inboxInterface';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 interface RouteParams {
   id: string;
@@ -44,12 +46,14 @@ const PosterButtons: React.FC = () => {
     history.push(`/job/edit/${id}`);
   };
   return (
-    <div style={{ display: 'flex' }}>
-      <Button variant="outlined" onClick={openEditPage} className="m1em">
+    <div className="jobDetailsButtons">
+      <Button variant="outlined" onClick={openEditPage}>
+        <EditIcon className="buttonIcon" />
         Edit Details
       </Button>
       {job.reservedUser ? (
         <Button variant="outlined" onClick={openChat} className="m1em">
+          <MailOutlineIcon className="buttonIcon" />
           Message Worker
         </Button>
       ) : null}

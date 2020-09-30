@@ -62,7 +62,7 @@ const Checkout: React.FC = () => {
     }
   };
   return (
-    <div>
+    <div className="container">
       {!job.job ? (
         <h1>Loading</h1>
       ) : (

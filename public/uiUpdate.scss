@@ -1,0 +1,375 @@
+:root {
+  --green: #04e762;
+  --greenLt: #00ff6a;
+  --purpleDk: #2d3142;
+  --lavender: #c6caed;
+  --blue: #369bf4;
+  --blueLt: #cce7ff;
+  --blueDk: #0a1d2e;
+  --transitionTime: 0.3s;
+}
+
+@mixin displayFlexAC {
+  display: flex;
+  align-items: center;
+}
+@mixin displayFlexJC {
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: var(--purpleDk);
+}
+/*
+*
+*  NAVBAR STYLES
+*
+*/
+@mixin navHover {
+  text-shadow: none;
+  color: var(--purpleDk);
+}
+.navbar-fixed {
+  position: fixed;
+  width: 100vw;
+  height: 4em;
+  top: 0;
+  z-index: 1;
+}
+nav {
+  background-color: var(--green);
+  height: 100%;
+  a,
+  button {
+    text-decoration: none;
+    border: none;
+    background: none;
+    color: #fff;
+    font-family: 'Fredoka One', sans-serif;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+    transition: var(--transitionTime);
+  }
+  button {
+    font-size: 1em;
+    cursor: pointer;
+  }
+  button:hover {
+    @include navHover;
+  }
+}
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.navList {
+  & > ul {
+    list-style: none;
+    @include displayFlexAC;
+    height: 4em;
+    margin: 0;
+
+    & > li {
+      height: 100%;
+      @include displayFlexAC;
+      transition: var(--transitionTime);
+
+      &:hover {
+        background-color: var(--greenLt);
+      }
+
+      a,
+      a:visited {
+        margin: 0 1em;
+      }
+    }
+  }
+}
+.navList > ul > li:hover > a,
+.user-profile-subnav > div:hover a {
+  @include navHover;
+}
+.user-profile {
+  position: relative;
+  padding: 0 0.5em;
+
+  &:hover .user-profile-subnav {
+    opacity: 1;
+    opacity: 1;
+    background-color: var(--green);
+    display: flex;
+    flex-direction: column;
+  }
+}
+.user-profile-subnav {
+  opacity: 0;
+  position: absolute;
+  top: 4em;
+  right: 0;
+  transition: var(--transitionTime) ease;
+
+  div {
+    transition: var(--transitionTime) ease;
+    padding: 0.5em 1em;
+    @include displayFlexJC;
+  }
+  div:hover {
+    background-color: var(--greenLt);
+  }
+}
+.nav-btn {
+  border: none;
+  background: none;
+}
+.navIcons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  ul.footerIcons {
+    padding-inline-start: 0;
+    width: 80%;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+/*
+* JOB STYLES
+*/
+.volunteer {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+
+  img {
+    margin-bottom: 0.5em;
+  }
+}
+.jobCard {
+  max-width: 600px;
+  .MuiSvgIcon-root {
+    transform: translateX(-5px);
+  }
+  h4 {
+    font-size: 1.5em;
+    margin: 0.5em;
+  }
+  h5 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+  }
+  .jobCardButtons {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  button {
+    width: 150px;
+    margin: 0 0 0.75em 1em;
+  }
+  .jobCardTitle {
+    font-size: 1.4em;
+    margin: 0.5em 0;
+    font-family: 'Fredoka One', sans-serif;
+  }
+  .jobRow {
+    margin: 0.25em 0;
+    display: flex;
+    align-items: flex-end;
+  }
+}
+.jobCardInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.feedContainer {
+  width: 100%;
+  max-width: 600px;
+  .infinite-scroll-component__outerdiv {
+    width: 100%;
+    @include displayFlexAC;
+    flex-direction: column;
+
+    .jobCard {
+      margin: 1em;
+    }
+  }
+}
+.jobDetailsContainer {
+  max-width: 600px;
+  margin: 0 1em;
+
+  img.border-circle {
+    margin: 0 1em 0 0;
+    border: 1px solid #ccc;
+  }
+  .iconRow {
+    @include displayFlexAC;
+    margin: 0.5em 0;
+
+    svg {
+      margin-right: 16px;
+    }
+    img.volunteerIcon {
+      width: 24px;
+      height: auto;
+      margin-right: 1em;
+    }
+    h4 {
+      font-size: 24px;
+    }
+  }
+}
+.jobDetailsButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  button {
+    margin: 1em;
+  }
+}
+.sortByLocation {
+  display: flex;
+  min-width: 165px;
+  padding-left: 1em;
+}
+.jobSearch {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+/*
+*
+* BODY STYLES
+*
+*/
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contentWrapper {
+  margin-top: 4em;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero {
+  width: 100vw;
+  height: calc(100vh - 4em);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+.flex {
+  display: flex;
+  align-items: center;
+}
+.spBtwn {
+  width: 100%;
+  justify-content: space-around;
+}
+.jcc {
+  justify-content: center;
+}
+.jcb {
+  justify-content: flex-end;
+}
+.aic {
+  align-items: center;
+}
+.w100 {
+  width: 100%;
+}
+.gray {
+  color: #777;
+}
+.fredoka {
+  font-family: 'Fredoka One', sans-serif;
+}
+h6 {
+  font-size: 0.8em;
+  font-weight: normal;
+  margin: 0;
+}
+.mr05 {
+  margin-right: 0.5em;
+}
+textarea {
+  padding: 1em;
+  max-width: calc(100% - 2em);
+}
+.hero-text {
+  color: #fff;
+  font: 2rem 'Fredoka One', cursive;
+  left: 0;
+  padding: 4rem 2rem;
+  position: absolute;
+  right: 0;
+}
+button {
+  width: 200px;
+}
+.hero-text h1,
+.hero-text h2 {
+  margin: 0 0 0.5em 0;
+  text-shadow: 2px 2px 5px var(--purpleDk);
+}
+/*
+*
+* MOBILE-ONLY MEDIA QUERIES
+*
+*/
+@media screen and (max-width: 768px) {
+  .container {
+    width: 95vw;
+  }
+  .jobCard .jobCardInfo {
+    width: 320px;
+  }
+}
+@media screen and (max-width: 599px) {
+  .container {
+    width: 100vw;
+    padding-bottom: 4em;
+  }
+  .navList {
+    display: none;
+  }
+  nav {
+    width: 100vw;
+  }
+  .jobDetailsButtons {
+    justify-content: center;
+  }
+  .jobDetailsButtons button {
+    margin: 1em 0.5em 0.5em;
+  }
+  .hero h1 {
+    font-size: 1.5em;
+  }
+}
+@media screen and (max-width: 374px) {
+  .hero h1 {
+    font-size: 1em;
+  }
+}

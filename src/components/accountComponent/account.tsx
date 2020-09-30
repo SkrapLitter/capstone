@@ -9,7 +9,7 @@ const Account: React.FC = () => {
   const user = useSelector(selectUser);
 
   return (
-    <div className="m-t-l m-b-s container center">
+    <div className="m-t-l m-b-s">
       {!user.clearance ? <NotLoggedIn /> : <EditAccount />}
     </div>
   );

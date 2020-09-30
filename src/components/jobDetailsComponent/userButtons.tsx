@@ -9,6 +9,9 @@ import { reserveJob, unreserveJob } from '../../store/job/jobActions';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import socket from '../../socket';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 
 const UserButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -77,11 +80,17 @@ const UserButtons: React.FC = () => {
     }
   };
   return (
-    <div style={{ display: 'flex' }}>
-      <Button variant="outlined" onClick={handleReserve} className="m1em">
+    <div className="jobDetailsButtons">
+      <Button variant="outlined" onClick={handleReserve}>
+        {job.reserved ? (
+          <CloseIcon className="buttonIcon" />
+        ) : (
+          <DoneIcon className="buttonIcon" />
+        )}
         {job.reserved ? 'Cancel' : 'Reserve'}
       </Button>
-      <Button variant="outlined" onClick={openChat} className="m1em">
+      <Button variant="outlined" onClick={openChat}>
+        <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
       <Snackbar
