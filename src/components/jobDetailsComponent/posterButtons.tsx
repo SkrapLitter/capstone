@@ -47,8 +47,6 @@ const PosterButtons: React.FC = () => {
   const openEditPage = () => {
     history.push(`/job/edit/${id}`);
   };
-  // console.log('USER', user);
-  // console.log('JOB', job);
   return (
     <div className="jobDetailsButtons">
       <Button variant="outlined" onClick={openEditPage}>
