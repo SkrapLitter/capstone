@@ -22,6 +22,11 @@ const alertReducer = (
         ...state,
         newAlerts: action.newAlerts,
       };
+    case TYPES.SET_ALERT:
+      return {
+        ...state,
+        newAlerts: [...state.newAlerts, action.alert],
+      };
     default:
       return state;
   }

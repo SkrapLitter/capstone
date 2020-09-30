@@ -1,11 +1,12 @@
 import axios from 'axios';
 import User from './userInterface';
 import { AppThunk } from '../thunkType';
-import { fetchUserInbox } from '../inbox/inboxActions';
-import { fetchAlerts } from '../alert/alertActions';
+// import { fetchUserInbox } from '../inbox/inboxActions';
+// import { fetchAlerts } from '../alert/alertActions';
 import TYPES from '../types';
+import { clearInbox, fetchUserInbox } from '../inbox/inboxActions';
 
-const updateAccount = (user: User) => {
+export const updateAccount = (user: User) => {
   return {
     type: TYPES.UPDATE_ACCOUNT,
     user,
@@ -52,7 +53,6 @@ export const cookieLogin = (): AppThunk => {
     if (user) {
       dispatch(login(user));
       dispatch(fetchUserInbox(user.id));
-      dispatch(fetchAlerts(user.id));
     }
   };
 };
@@ -62,6 +62,7 @@ export const updateAccountThunk = (id: string, user: User): AppThunk => {
     try {
       const { data } = await axios.put(`/api/auth/${id}`, user);
       dispatch(updateAccount(data));
+      dispatch(fetchUserInbox(data.id));
     } catch (err) {
       console.error(err);
       const { statusText } = err.response;
@@ -106,7 +107,6 @@ export const loginThunk = (username: string, password: string): AppThunk => {
       const { data } = await axios.post('/api/auth/login', payload);
       dispatch(login(data));
       dispatch(fetchUserInbox(data.id));
-      dispatch(fetchAlerts(data.id));
     } catch (err) {
       const { statusText } = err.response;
       dispatch(loginFail(statusText));
@@ -119,6 +119,7 @@ export const logoutThunk = (): AppThunk => {
     try {
       await axios.delete('/api/auth/logout');
       dispatch(logout());
+      dispatch(clearInbox());
     } catch (err) {
       console.error(err);
     }

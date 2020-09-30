@@ -9,4 +9,17 @@ export default interface User {
   error?: string;
   stripe?: string;
   balance?: number;
+  payments?: Array<Payment>;
+}
+
+interface Payment {
+  id: string;
+  amount: number;
+  subject: string;
+  type: string;
+  chargeId: string;
+  jobId: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }

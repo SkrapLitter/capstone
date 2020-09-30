@@ -42,18 +42,7 @@ const UserButtons: React.FC = () => {
     }
     return new Promise((res, rej) => {
       try {
-        res(
-          dispatch(
-            findOrCreateChat(
-              user.id,
-              job.userId,
-              user.username,
-              job.createdUser,
-              job.id,
-              job.name
-            )
-          )
-        );
+        res(dispatch(findOrCreateChat(job.id, job.userId, user.id)));
       } catch (err) {
         rej(err);
       }
@@ -87,6 +76,8 @@ const UserButtons: React.FC = () => {
         });
     }
   };
+  console.log('USER', user);
+  console.log('JOB', job);
   return (
     <div className="jobDetailsButtons">
       <Button variant="outlined" onClick={handleReserve}>
