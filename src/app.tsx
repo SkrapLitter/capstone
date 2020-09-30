@@ -27,7 +27,6 @@ import theme from './theme/theme';
 import '../public/uiUpdate.scss';
 import '../public/style.scss';
 
-
 toast.configure();
 
 const App: React.FC = () => {

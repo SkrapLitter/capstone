@@ -19,11 +19,6 @@ const Navbar: React.FC = () => {
           </div>
           <div className="navList">
             <ul id="nav-mobile" className="right hide-on-small-only">
-              {/* <li>
-                <Button>
-                  <Alert />
-                </Button>
-              </li> */}
               <li>
                 <Link to="/jobs">Jobs</Link>
               </li>
