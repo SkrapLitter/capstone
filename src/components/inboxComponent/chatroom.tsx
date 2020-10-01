@@ -57,9 +57,9 @@ const SelectedChatroom: React.FC = () => {
   return (
     <div>
       {user.clearance && chatroom ? (
-        <div>
+        <>
           <div className="chatTitleContainer container">
-            <div className="chatTitle container">
+            <div className="chatTitle">
               <div
                 onClick={() => history.push('/inbox')}
                 className="backIcon"
@@ -105,12 +105,12 @@ const SelectedChatroom: React.FC = () => {
           </div>
 
           <div id="chatScroll" className="chatTopHalf container">
-            <ul>
+            <ul className="messageList">
               {chatroom.chatMessages && chatroom.chatMessages.length
                 ? chatroom.chatMessages.map((curMessage: Message) => {
                     if (user.id === curMessage.recipient) {
                       return (
-                        <li key={curMessage.id}>
+                        <li key={curMessage.id} style={{ listStyle: 'none' }}>
                           <div className="chatMessageL">
                             <div className="recipient">
                               <p>{curMessage.message}</p>
@@ -120,7 +120,7 @@ const SelectedChatroom: React.FC = () => {
                       );
                     }
                     return (
-                      <li key={curMessage.id}>
+                      <li key={curMessage.id} style={{ listStyle: 'none' }}>
                         <div className="chatMessageR">
                           <div className="sender">
                             <p>{curMessage.message}</p>
@@ -144,19 +144,24 @@ const SelectedChatroom: React.FC = () => {
                   padding: '0 10px',
                   border: '1px solid grey',
                   marginRight: '5px',
+                  height: '50px',
                   borderRadius: '30px',
                 }}
               />
               <Button
                 variant="outlined"
                 type="submit"
-                style={{ backgroundColor: '#369BF4', color: 'white' }}
+                style={{
+                  backgroundColor: '#369BF4',
+                  color: 'white',
+                  width: '128px',
+                }}
               >
                 <SendIcon fontSize="large" />
               </Button>
             </form>
           </div>
-        </div>
+        </>
       ) : null}
     </div>
   );
