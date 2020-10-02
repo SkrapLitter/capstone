@@ -170,11 +170,6 @@ jobRouter.get('/map', async (req, res) => {
             },
             {
               status: {
-                [Op.not]: 'pendingVerification',
-              },
-            },
-            {
-              status: {
                 [Op.not]: 'cancelled',
               },
             },
