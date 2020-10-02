@@ -86,6 +86,7 @@
   animation-name: markerAnimation;
   animation-duration: 1s;
   animation-fill-mode: forwards;
+  transform: translate(-1em, -1em);
   /* transition: ease-in; */
 }
 
@@ -100,9 +101,6 @@
 
 .marker:hover {
   cursor: pointer;
-}
-.marker i {
-  transform: translate(-0.5em, -0.5em);
 }
 
 .mapModal {
