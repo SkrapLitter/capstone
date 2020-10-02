@@ -51,6 +51,13 @@
   height: 67vw;
   width: 67vw;
 }
+
+.mapFilter {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .jobImage {
   width: 80vw;
   height: 80vw;
