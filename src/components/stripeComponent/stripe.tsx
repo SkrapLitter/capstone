@@ -48,6 +48,23 @@ const Stripe: React.FC = () => {
                 >
                   Stripe Dashboard
                 </Button>
+                <div>
+                  {user.payments && user.payments.length ? (
+                    <ul>
+                      {user.payments.map(payment => {
+                        return (
+                          <li key={payment.id}>
+                            <p>{payment.subject}</p>
+                            <p>{payment.type}</p>
+                            <p>{payment.amount}</p>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <h1>No Payments Yet</h1>
+                  )}
+                </div>
               </div>
             ) : (
               <>

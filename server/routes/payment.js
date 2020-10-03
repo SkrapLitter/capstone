@@ -17,7 +17,7 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       userId: user.id,
       jobId: job.id,
       type: 'deposit',
-      subject: `funding job ${job.name}, id: ${job.id}`,
+      subject: `Payment for funding job ${job.name}`,
     });
     const idempotencyKey = payment.id;
     const charge = await stripe.charges.create(
