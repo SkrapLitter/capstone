@@ -60,11 +60,12 @@ const fetchMapJobs = (
   north: number,
   south: number,
   east: number,
-  west: number
+  west: number,
+  filter: string
 ): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(
-      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}`
+      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}&filter=${filter}`
     );
     dispatch(setJobs(0, data));
   };
