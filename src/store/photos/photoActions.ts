@@ -2,6 +2,7 @@ import TYPES from '../types';
 import { AppThunk } from '../thunkType';
 import { PhotoAttributes } from './photoInterface';
 import axios from 'axios';
+import socket from '../../socket';
 
 const uploadPhoto = (photo: PhotoAttributes): AppThunk => {
   return async dispatch => {
@@ -22,6 +23,7 @@ const uploadVerification = (file: FormData, id: string, history: any): void => {
     })
     .then(({ data }) => {
       if (data.id) {
+        socket.emit('pendingVerification', data);
         history.push(`/jobs/${data.id}`);
       }
     });
