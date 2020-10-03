@@ -55,7 +55,7 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
                         data-badge-caption={job.status}
                       />
                       <strong>
-                        <Link to={job.id}>{job.name}</Link>
+                        <Link to={`/jobs/${job.id}`}>{job.name}</Link>
                       </strong>
                     </h6>
                     <div>{job.address}</div>

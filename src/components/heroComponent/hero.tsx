@@ -15,14 +15,14 @@ const Hero: React.FC<Props> = (props: Props) => {
     <div className="hero">
       <Parallax strength={300} bgImage={props.bgImage}>
         <div className="hero-text">
-          <h1>CLEAN YOUR WORLD</h1>
+          <h1>Go Green, Get Paid</h1>
           <Button
             variant="contained"
             color="primary"
             size="large"
             onClick={() => history.push('/jobs')}
           >
-            Get Paid
+            Start Now
           </Button>
         </div>
         <div style={{ height: 'calc(100vh - 4em)', width: '200px' }} />

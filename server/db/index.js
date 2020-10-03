@@ -28,26 +28,6 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
     });
-    // let i = 0;
-    // let j = 0;
-    // if (user.id[i] === test.id[j]) {
-    //   i++;
-    //   j++;
-    // }
-    // const [first, second] =
-    //   user.id[i] <= test.id[j] ? [user.id, test.id] : [test.id, user.id];
-    // const chatusers = `${String(first)}/${String(second)}`;
-    // const testchat = await ChatRoom.create({
-    //   name: 'testroom',
-    //   chatusers,
-    // });
-    // testchat.addUser(user);
-    // testchat.addUser(test);
-    // await ChatMessage.create({
-    //   message: `chat created between ${user.username} and ${test.username}`,
-    //   author: 'System',
-    //   chatroomId: testchat.id,
-    // });
 
     const job1 = await Job.create({
       name: 'McCarren Park',
@@ -121,12 +101,6 @@ const sync = async () => {
         'https://c8.alamy.com/comp/EM8M8T/trash-basket-in-the-park-and-garbage-on-the-lawn-EM8M8T.jpg',
       jobId: job2.id,
     });
-
-    // await Image.create({
-    //   url:
-    //     'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
-    //   jobId: job2.id,
-    // });
 
     const job3 = await Job.create({
       name: 'Cooper Park',
