@@ -113,6 +113,7 @@ photoRouter.post('/verificationphoto/:id', multipleUpload, async (req, res) => {
           await Verification.create({
             url: img.Location,
             jobId: id,
+            userId: userId,
           });
         });
       })

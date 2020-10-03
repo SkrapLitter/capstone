@@ -181,7 +181,14 @@ jobRouter.get('/job/:id', async (req, res) => {
       where: {
         id,
       },
-      include: [Image, User, Verification],
+      include: [
+        Image,
+        User,
+        {
+          model: Verification,
+          include: [{ model: User }],
+        },
+      ],
     });
     res.status(200).send(job);
   } catch (e) {
