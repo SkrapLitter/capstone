@@ -68,7 +68,7 @@ const Checkout: React.FC = () => {
       ) : (
         <div>
           <h2>{job.job.name} Checkout Page</h2>
-          {job.job.funded !== 0 ? (
+          {job.job.status !== 'pending' ? (
             <TextField
               value={price}
               onChange={e => {
