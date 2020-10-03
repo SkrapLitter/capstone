@@ -78,7 +78,7 @@ const jobsDetailsPreview: React.FC = () => {
         <Tab label="Cancelled" />
         <Tab label="Completed" />
         <Tab label="Pending" />
-        <Tab label="Verifivation" />
+        <Tab label="Verification" />
       </Tabs>
       <TabPanel value={value} index={0}>
         <JobDetailsPreview jobs={active} />
