@@ -33,14 +33,10 @@ const SiteDetails: React.FC = () => {
           />
         </div>
         <div className="details-right text">
-          <h2>Introducing Skräp</h2>
+          <h2>There's too much litter in the world.</h2>
           <p>
-            Bringing together people who want to go green with those who want to
-            make green.
-          </p>
-          <p>
-            There's too much litter in the world. Skräp gives you the power to
-            do something about it - without getting your hands dirty.
+            Skräp gives you the power to do something about it - without getting
+            your hands dirty.
           </p>
         </div>
       </div>
@@ -57,6 +53,21 @@ const SiteDetails: React.FC = () => {
             src="https://2004-skrap.s3.amazonaws.com/svg/undraw_at_the_park_2e47.svg"
             alt="People working at the park"
           />
+        </div>
+      </div>
+      <div className="site-details">
+        <div className="details-left">
+          <img
+            src="https://2004-skrap.s3.amazonaws.com/svg/undraw_pure_love_ay8a.svg"
+            alt="People working at the park"
+          />
+        </div>
+        <div className="details-right text">
+          <h2>Introducing Skräp</h2>
+          <p>
+            Bringing together people who want to go green with those who want to
+            make green.
+          </p>
         </div>
       </div>
     </div>
