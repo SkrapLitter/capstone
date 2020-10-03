@@ -40,6 +40,7 @@ const UserButtons: React.FC = () => {
     if (!user.clearance) {
       setMessage('You must be logged in to send a message');
       setOpen(true);
+      return;
     }
     return new Promise((res, rej) => {
       try {
