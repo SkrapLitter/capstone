@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createAccountThunk } from '../../store/user/userActions';
+import { AppThunk } from '../../store/thunkType';
 import { validate } from '../validation';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { ToastContainer, toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,7 +27,7 @@ const CreateAccount: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  const dispatch = useDispatch();
+  const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const setters = [setUsername, setPassword, setFirstName, setLastName];
 
   const handleSubmit = (
@@ -33,7 +36,12 @@ const CreateAccount: React.FC = () => {
     e.preventDefault();
     if (validate.isValid()) {
       // send to server then update redux user with response
-      dispatch(createAccountThunk(username, password, firstName, lastName));
+      dispatch(
+        createAccountThunk(username, password, firstName, lastName)
+      ).catch(err => {
+        console.log('sdfkjhdskjhfds');
+        toast.error(`${err}`);
+      });
       // clear the form
       setters.forEach(setVal => setVal(''));
     }
@@ -104,15 +112,17 @@ const CreateAccount: React.FC = () => {
               : ''
           }
         />
-        <button
+        <Button
           onClick={handleSubmit}
-          className="btn waves-effect waves-light green accent-4"
           type="submit"
+          variant="contained"
+          color="primary"
         >
-          Create Account
           <i className="material-icons right">account_circle</i>
-        </button>
+          &nbsp;Create Account
+        </Button>
       </form>
+      <ToastContainer position="top-center" />
     </div>
   );
 };

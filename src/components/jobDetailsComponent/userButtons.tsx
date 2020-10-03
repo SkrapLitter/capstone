@@ -40,6 +40,7 @@ const UserButtons: React.FC = () => {
     if (!user.clearance) {
       setMessage('You must be logged in to send a message');
       setOpen(true);
+      return;
     }
     return new Promise((res, rej) => {
       try {
@@ -93,6 +94,14 @@ const UserButtons: React.FC = () => {
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
+      {job.reservedUser === user.id ? (
+        <Button
+          variant="outlined"
+          onClick={() => history.push(`/verify/${job.id}`)}
+        >
+          Verify Completion
+        </Button>
+      ) : null}
       <Snackbar
         open={open}
         onClose={handleClose}
