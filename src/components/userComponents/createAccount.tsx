@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createAccountThunk } from '../../store/user/userActions';
 import { validate } from '../validation';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -104,14 +105,15 @@ const CreateAccount: React.FC = () => {
               : ''
           }
         />
-        <button
+        <Button
           onClick={handleSubmit}
-          className="btn waves-effect waves-light green accent-4"
           type="submit"
+          variant="contained"
+          color="primary"
         >
-          Create Account
           <i className="material-icons right">account_circle</i>
-        </button>
+          &nbsp;Create Account
+        </Button>
       </form>
     </div>
   );
