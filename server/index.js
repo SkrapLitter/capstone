@@ -112,6 +112,11 @@ io.on('connection', socket => {
     const subject = `${job.name} cannot be completed due to ${stripeError}`;
     const userAlert = await createAlert(user.id, reservedSubject);
     await createAlert(job.userId, subject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
   });
   socket.on('pendingVerification', async data => {
     const user = await findUserIncludeSessions(data.userId);
