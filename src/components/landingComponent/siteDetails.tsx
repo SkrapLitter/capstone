@@ -47,6 +47,10 @@ const SiteDetails: React.FC = () => {
       <div className="site-details">
         <div className="details-left text">
           <h2>Get green by going green.</h2>
+          <p>
+            Make money cleaning up litter in public parks. Simply reserve a job,
+            then upload pictures when you're done.
+          </p>
         </div>
         <div className="details-right">
           <img
