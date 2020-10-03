@@ -8,6 +8,8 @@ import { Chatroom } from '../../store/inbox/inboxInterface';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import { JobAttributes } from '../../store/job/jobInterface';
+import { completeJob } from '../../store/job/jobActions';
 
 interface RouteParams {
   id: string;
@@ -45,6 +47,13 @@ const PosterButtons: React.FC = () => {
   const openEditPage = () => {
     history.push(`/job/edit/${id}`);
   };
+  const handleComplete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    curJob: JobAttributes
+  ): void => {
+    e.preventDefault();
+    dispatch(completeJob(curJob));
+  };
   return (
     <div className="jobDetailsButtons">
       <Button variant="outlined" onClick={openEditPage}>
@@ -55,6 +64,15 @@ const PosterButtons: React.FC = () => {
         <Button variant="outlined" onClick={openChat} className="m1em">
           <MailOutlineIcon className="buttonIcon" />
           Message Worker
+        </Button>
+      ) : null}
+      {job.userId === user.id && job.status === 'pendingVerification' ? (
+        <Button
+          variant="outlined"
+          onClick={e => handleComplete(e, job)}
+          className="m1em"
+        >
+          Complete Job
         </Button>
       ) : null}
     </div>
