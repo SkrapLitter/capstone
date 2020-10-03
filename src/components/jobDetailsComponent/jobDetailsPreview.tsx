@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { JobAttributes } from '../../store/job/jobInterface';
-import { cancelJob } from '../../store/user/userActions';
+import { cancelJob } from '../../store/job/jobActions';
 
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';

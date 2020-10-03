@@ -14,7 +14,7 @@ const Stripe: React.FC = () => {
         dispatch(updateAccount(res.data));
       });
     }
-  });
+  }, []);
   const onboarding = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
