@@ -105,6 +105,19 @@ io.on('connection', socket => {
       }
     });
   });
+  socket.on('stripeError', async data => {
+    const { job, stripeError } = data;
+    const user = await findUserIncludeSessions(job.reservedUser);
+    const reservedSubject = `${job.name} cannot be completed due to stripe account not set up. Please complete onboarding!`;
+    const subject = `${job.name} cannot be completed due to ${stripeError}`;
+    const userAlert = await createAlert(user.id, reservedSubject);
+    await createAlert(job.userId, subject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
+  });
 });
 
 app.use(async (req, res, next) => {
