@@ -69,26 +69,40 @@ jobRouter.get('/', async (req, res) => {
         limit,
         offset,
         where: {
-          [Op.or]: [
+          [Op.and]: [
             {
-              name: {
-                [Op.iLike]: `%${filter}%`,
-              },
+              [Op.or]: [
+                {
+                  name: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  description: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  city: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  state: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+              ],
             },
             {
-              description: {
-                [Op.iLike]: `%${filter}%`,
-              },
-            },
-            {
-              city: {
-                [Op.iLike]: `%${filter}%`,
-              },
-            },
-            {
-              state: {
-                [Op.iLike]: `%${filter}%`,
-              },
+              [Op.or]: [
+                {
+                  status: 'funded',
+                },
+                {
+                  status: 'volunteer',
+                },
+              ],
             },
           ],
         },
