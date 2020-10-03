@@ -56,9 +56,6 @@ const Navbar: React.FC = () => {
                         Logout
                       </button>
                     </div>
-                    <div>
-                      <Link to={`/stripe/${user.id}`}>Stripe</Link>
-                    </div>
                   </div>
                 </li>
               )}

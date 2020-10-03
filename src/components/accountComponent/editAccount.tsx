@@ -20,6 +20,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import Stripe from '../stripeComponent/stripe';
+import Alert from './alert';
 
 interface Props {
   index: any;
@@ -142,10 +144,10 @@ const EditAccount: React.FC = () => {
           <InboxPreview />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <div>History</div>
+          <Alert />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <div>Payments</div>
+          <Stripe />
         </TabPanel>
       </Box>
     </Container>

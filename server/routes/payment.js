@@ -17,7 +17,7 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       userId: user.id,
       jobId: job.id,
       type: 'deposit',
-      subject: `funding job ${job.name}, id: ${job.id}`,
+      subject: `Payment for funding job ${job.name}`,
     });
     const idempotencyKey = payment.id;
     const charge = await stripe.charges.create(
@@ -122,7 +122,7 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
   }
 });
 
-paymentRouter.put('/stripe/completed/:id', async (req, res) => {
+paymentRouter.put('/stripe/complete/:id', async (req, res) => {
   let status = false;
   try {
     const { id } = req.params;
@@ -133,11 +133,22 @@ paymentRouter.put('/stripe/completed/:id', async (req, res) => {
       },
     });
     if (job) {
-      if (job.funded > 0) {
+      if (!job.price) {
+        await job.update({
+          status: 'completed',
+          funded: 0,
+        });
+        status = true;
+        res.status(200).send({ status });
+      } else if (job.price > 0) {
         const user = await User.findByPk(job.reservedUser);
         if (!user.stripe) {
-          res.redirect(`/api/user/stripe/onboarding/${user.id}`);
-        } else {
+          const stripeError = `${user.username} must complete Stripe Onboarding`;
+          res.status(200).send({
+            status,
+            stripeError,
+          });
+        } else if (user.stripe) {
           await stripe.transfers.create({
             amount: job.funded * 0.9 * 100,
             currency: 'usd',
@@ -172,19 +183,15 @@ paymentRouter.put('/stripe/completed/:id', async (req, res) => {
             userId: user.id,
             jobId: job.id,
           });
+          await job.update({
+            status: 'completed',
+            funded: 0,
+          });
+          status = true;
+          res.status(200).send({ status });
         }
       }
-      await job.update({
-        status: 'completed',
-        funded: 0,
-      });
-      await job.update({
-        status: 'completed',
-        funded: 0,
-      });
-      status = true;
     }
-    res.status(200).send(status);
   } catch (e) {
     console.error(e);
     res.status(500).send(status);

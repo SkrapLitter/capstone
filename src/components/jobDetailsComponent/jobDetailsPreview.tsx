@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { JobAttributes } from '../../store/job/jobInterface';
-import { cancelJob } from '../../store/job/jobActions';
-
+import { cancelJob, completeJob } from '../../store/job/jobActions';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
@@ -12,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import RoomIcon from '@material-ui/icons/Room';
 import Button from '@material-ui/core/Button';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 interface Props {
   jobs: Array<JobAttributes>;
@@ -27,6 +28,13 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
   ): void => {
     e.preventDefault();
     dispatch(cancelJob(job));
+  };
+  const handleComplete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    job: JobAttributes
+  ): void => {
+    e.preventDefault();
+    dispatch(completeJob(job));
   };
 
   return (
@@ -56,14 +64,29 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
                     </div>
                   </Grid>
                   <Grid item xs={2}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      color="secondary"
-                      onClick={e => handleCancel(e, job)}
-                    >
-                      Complete
-                    </Button>
+                    {(job.status === 'funded' || job.status === 'volunteer') &&
+                      !job.reserved && (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="secondary"
+                          onClick={e => handleCancel(e, job)}
+                          startIcon={<CancelIcon />}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                    {job.status === 'pendingVerification' && (
+                      <Button
+                        variant="contained"
+                        size="small"
+                        color="secondary"
+                        onClick={e => handleComplete(e, job)}
+                        startIcon={<CheckCircleIcon />}
+                      >
+                        Complete
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               </ListItemText>

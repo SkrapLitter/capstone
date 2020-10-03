@@ -15,7 +15,7 @@ export const setAlert = (alert: Alert): AlertAction => ({
 export const fetchAlerts = (userId: string): AppThunk => {
   return async dispatch => {
     if (userId) {
-      const alerts = (await Axios.get(`/api/alert/all/${userId}`)).data;
+      const alerts = (await Axios.get(`/api/alert/user/${userId}`)).data;
       dispatch(setAlerts(alerts));
     }
   };
