@@ -12,6 +12,7 @@ import socket from '../../socket';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 const UserButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -96,11 +97,21 @@ const UserButtons: React.FC = () => {
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
+      <Button
+        variant="outlined"
+        onClick={() => history.push(`/checkout/${job.id}`)}
+      >
+        <AttachMoneyIcon className="buttonIcon" />
+        Fund Job
+      </Button>
       {job.reservedUser === user.id ? (
         <Button
           variant="outlined"
           onClick={() => history.push(`/verify/${job.id}`)}
-        >
+          className="m1em"
+  
+          Verify Job Completion
+
           Verify Completion
         </Button>
       ) : null}

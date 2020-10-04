@@ -48,7 +48,6 @@ const JobDetails: React.FC = () => {
   };
   const images =
     job.images && job.images.length ? job.images.map(img => img.url) : [];
-
   return (
     <div className="container jCenter">
       {job && Object.values(job).length ? (
