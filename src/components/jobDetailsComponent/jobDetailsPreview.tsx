@@ -11,7 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import RoomIcon from '@material-ui/icons/Room';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 interface Props {
@@ -66,26 +66,24 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
                   <Grid item xs={2}>
                     {(job.status === 'funded' || job.status === 'volunteer') &&
                       !job.reserved && (
-                        <Button
-                          variant="contained"
+                        <Fab
                           size="small"
                           color="secondary"
+                          aria-label="Cancel"
                           onClick={e => handleCancel(e, job)}
-                          startIcon={<CancelIcon />}
                         >
-                          Cancel
-                        </Button>
+                          <CancelIcon />
+                        </Fab>
                       )}
                     {job.status === 'pendingVerification' && (
-                      <Button
-                        variant="contained"
+                      <Fab
                         size="small"
                         color="secondary"
+                        aria-label="Complete"
                         onClick={e => handleComplete(e, job)}
-                        startIcon={<CheckCircleIcon />}
                       >
-                        Complete
-                      </Button>
+                        <CheckCircleIcon />
+                      </Fab>
                     )}
                   </Grid>
                 </Grid>

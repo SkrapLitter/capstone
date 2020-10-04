@@ -6,7 +6,6 @@ import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import EditAccountForm from './editAccountForm';
 import InboxPreview from '../inboxComponent/inboxPreview';
 
-import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -91,7 +90,7 @@ const EditAccount: React.FC = () => {
   };
 
   return (
-    <Container fixed>
+    <>
       <Grid
         container
         direction="column"
@@ -118,7 +117,6 @@ const EditAccount: React.FC = () => {
             value={value}
             onChange={handleChange}
             variant="scrollable"
-            scrollButtons="on"
             classes={{
               root: classes.tabRoot,
               indicator: classes.tabIndicator,
@@ -150,7 +148,7 @@ const EditAccount: React.FC = () => {
           <Stripe />
         </TabPanel>
       </Box>
-    </Container>
+    </>
   );
 };
 

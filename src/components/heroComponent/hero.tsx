@@ -15,7 +15,7 @@ const Hero: React.FC<Props> = (props: Props) => {
     <div className="hero">
       <Parallax strength={300} bgImage={props.bgImage}>
         <div className="hero-text">
-          <h1>Go Green, Get Paid</h1>
+          <h1>Get Paid with Green</h1>
           <Button
             variant="contained"
             color="primary"

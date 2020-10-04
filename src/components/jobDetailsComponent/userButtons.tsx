@@ -109,10 +109,8 @@ const UserButtons: React.FC = () => {
           variant="outlined"
           onClick={() => history.push(`/verify/${job.id}`)}
           className="m1em"
-  
+        >
           Verify Job Completion
-
-          Verify Completion
         </Button>
       ) : null}
       <Snackbar
