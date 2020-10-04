@@ -41,6 +41,7 @@ const UserButtons: React.FC = () => {
     if (!user.clearance) {
       setMessage('You must be logged in to send a message');
       setOpen(true);
+      return;
     }
     return new Promise((res, rej) => {
       try {
@@ -82,14 +83,16 @@ const UserButtons: React.FC = () => {
   };
   return (
     <div className="jobDetailsButtons">
-      <Button variant="outlined" onClick={handleReserve}>
-        {job.reserved ? (
-          <CloseIcon className="buttonIcon" />
-        ) : (
-          <DoneIcon className="buttonIcon" />
-        )}
-        {job.reserved ? 'Cancel' : 'Reserve'}
-      </Button>
+      {job.reservedUser === user.id && (
+        <Button variant="outlined" onClick={handleReserve}>
+          {job.reserved ? (
+            <CloseIcon className="buttonIcon" />
+          ) : (
+            <DoneIcon className="buttonIcon" />
+          )}
+          {job.reserved ? 'Cancel' : 'Reserve'}
+        </Button>
+      )}
       <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
@@ -106,8 +109,10 @@ const UserButtons: React.FC = () => {
           variant="outlined"
           onClick={() => history.push(`/verify/${job.id}`)}
           className="m1em"
-        >
+  
           Verify Job Completion
+
+          Verify Completion
         </Button>
       ) : null}
       <Snackbar

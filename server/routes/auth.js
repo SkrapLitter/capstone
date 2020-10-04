@@ -102,7 +102,7 @@ authRouter.post(
       res.status(200).send(user);
     } catch (err) {
       console.error(err);
-      res.status(500).send({ message: 'Server error' });
+      res.status(500).send({ message: 'Server error', error: err });
     }
   }
 );

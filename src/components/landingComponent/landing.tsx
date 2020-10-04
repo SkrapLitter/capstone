@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '../heroComponent/hero';
+import SiteDetails from './siteDetails';
 
 const Landing: React.FC = () => {
   const heroBg =
@@ -8,7 +9,8 @@ const Landing: React.FC = () => {
   return (
     <>
       <Hero bgImage={heroBg} />
-      <div className="stripe light-green lighten-5 d-flex justify-center">
+      <SiteDetails />
+      {/* <div className="stripe light-green lighten-5 d-flex justify-center">
         <h6>Skyskräpers:</h6>
         <ul className="d-flex">
           <li>
@@ -55,7 +57,7 @@ const Landing: React.FC = () => {
             <div className="achieve-meta">gaining cleaning with us</div>
           </li>
         </ul>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -104,12 +104,6 @@ const sync = async () => {
       jobId: job2.id,
     });
 
-    // await Image.create({
-    //   url:
-    //     'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
-    //   jobId: job2.id,
-    // });
-
     const job3 = await Job.create({
       name: 'Cooper Park',
       status: 'funded',

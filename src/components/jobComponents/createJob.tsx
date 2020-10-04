@@ -7,6 +7,7 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import CreateAccountOverlay from '../userComponents/createAccountOverlay';
 import { validate } from '../validation';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
@@ -171,14 +172,15 @@ const CreateJob: React.FC = () => {
           </label>
         </div>
         <div className="center">
-          <button
+          <Button
             onClick={handleSubmit}
-            className="btn waves-effect waves-light green accent-4"
             type="submit"
+            variant="contained"
+            color="primary"
           >
-            Create Job
             <i className="material-icons right">work</i>
-          </button>
+            &nbsp;Create Job
+          </Button>
         </div>
         {shouldShowCreateUser && <CreateAccountOverlay />}
       </form>

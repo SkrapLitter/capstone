@@ -92,7 +92,8 @@ export const createAccountThunk = (
       ).data;
       window.location = account;
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
+      throw err.response.data.error.errors[0].message;
     }
   };
 };
