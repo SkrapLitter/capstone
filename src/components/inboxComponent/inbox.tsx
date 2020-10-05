@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { fetchUserInbox } from '../../store/inbox/inboxActions';
 import { Chatroom } from '../../store/inbox/inboxInterface';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -28,43 +29,54 @@ const Inbox: React.FC = () => {
             <List>
               {inbox.chatrooms.map((chatroom: Chatroom) => {
                 return (
-                  <ListItem key={chatroom.id}>
-                    <ListItemIcon>
-                      <Forum />
-                    </ListItemIcon>
-                    <ListItemText>
-                      <Link to={`/inbox/${chatroom.id}`}>
-                        {user.id === chatroom.job.userId ? (
-                          <>
-                            <p>
-                              {chatroom.worker.firstName}{' '}
-                              {chatroom.worker.lastName}
-                              {' - '}
-                              {chatroom.job.name}
-                              {chatroom.posterMessage
-                                ? `  ${chatroom.posterMessage} new Message${
-                                    chatroom.posterMessage > 1 ? 's' : ''
-                                  }!`
-                                : ''}
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <p>
-                              {chatroom.poster.firstName}{' '}
-                              {chatroom.poster.lastName} {' - '}
-                              {chatroom.job.name}
-                              {chatroom.workerMessage
-                                ? `  ${chatroom.workerMessage} new Message${
-                                    chatroom.workerMessage > 1 ? 's' : ''
-                                  }!`
-                                : ''}
-                            </p>
-                          </>
-                        )}
-                      </Link>
-                    </ListItemText>
-                  </ListItem>
+                  <div className="inbox-item">
+                    <Paper key={chatroom.id} elevation={3}>
+                      <ListItem>
+                        <ListItemIcon>
+                          <Forum color="primary" />
+                        </ListItemIcon>
+                        <ListItemText>
+                          <Link
+                            to={`/inbox/${chatroom.id}`}
+                            className="inbox-link"
+                          >
+                            {user.id === chatroom.job.userId ? (
+                              <>
+                                <p>
+                                  {chatroom.worker.firstName}{' '}
+                                  {chatroom.worker.lastName}
+                                  {' - '}
+                                  {chatroom.job.name}
+                                </p>
+                                <p className="new-message">
+                                  {chatroom.posterMessage
+                                    ? `  ${chatroom.posterMessage} new Message${
+                                        chatroom.posterMessage > 1 ? 's' : ''
+                                      }!`
+                                    : ''}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p>
+                                  {chatroom.poster.firstName}{' '}
+                                  {chatroom.poster.lastName} {' - '}
+                                  {chatroom.job.name}
+                                </p>
+                                <p className="new-message">
+                                  {chatroom.workerMessage
+                                    ? `  ${chatroom.workerMessage} new Message${
+                                        chatroom.workerMessage > 1 ? 's' : ''
+                                      }!`
+                                    : ''}
+                                </p>
+                              </>
+                            )}
+                          </Link>
+                        </ListItemText>
+                      </ListItem>
+                    </Paper>
+                  </div>
                 );
               })}
             </List>
