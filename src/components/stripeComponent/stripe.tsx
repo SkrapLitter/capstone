@@ -78,13 +78,9 @@ const Stripe: React.FC = () => {
         <>
           {user.stripe ? (
             <div className="stripe">
-              <Typography variant="h4" component="h4">
-                Skrap Payment Dashboard
-              </Typography>
+              <h1>Skrap Payment Dashboard</h1>
               <br />
-              <Typography variant="h5" component="h5">
-                Balance: ${user.balance}
-              </Typography>
+              <h2>Balance: ${user.balance}</h2>
               <br />
               <Button
                 onClick={e => dashboard(e)}
@@ -94,9 +90,7 @@ const Stripe: React.FC = () => {
                 Stripe Dashboard
               </Button>
               <hr />
-              <Typography variant="h5" component="h5">
-                Payment History
-              </Typography>
+              <h2>Payment History</h2>
               <br />
               {user.payments && user.payments.length ? (
                 <List>
@@ -149,13 +143,13 @@ const Stripe: React.FC = () => {
                             </Grid>
                             <Divider orientation="vertical" flexItem />
                             <Grid item className={classes.row3} xs="auto">
-                              <Typography variant="subtitle1">
+                              <span>
                                 {payment.type === 'payment' ||
                                 payment.type === 'refund'
                                   ? '  +  '
                                   : '  -  '}
                                 ($ {payment.amount})
-                              </Typography>
+                              </span>
                             </Grid>
                           </Grid>
                         </Paper>
