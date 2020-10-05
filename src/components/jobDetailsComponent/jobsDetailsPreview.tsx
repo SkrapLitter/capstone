@@ -93,22 +93,22 @@ const jobsDetailsPreview: React.FC = () => {
       <TabPanel value={value} index={1}>
         <JobDetailsPreview jobs={active} />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={2}>
         <JobDetailsPreview jobs={pending} />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={value} index={3}>
         <JobDetailsPreview jobs={pendingVerification} />
       </TabPanel>
-      <TabPanel value={value} index={7}>
+      <TabPanel value={value} index={4}>
         <JobDetailsPreview jobs={reservedJobs} />
       </TabPanel>
-      <TabPanel value={value} index={8}>
+      <TabPanel value={value} index={5}>
         <JobDetailsPreview jobs={completedJobs} />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={6}>
         <JobDetailsPreview jobs={cancelled} />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={7}>
         <JobDetailsPreview jobs={completed} />
       </TabPanel>
     </Box>

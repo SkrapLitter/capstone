@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import moment from 'moment';
 import InfoIcon from '@material-ui/icons/Info';
+import { Alert as Alerts } from '@material-ui/lab';
 
 const Alert: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const Alert: React.FC = () => {
           })}
         </List>
       ) : (
-        <h3>No History Yet</h3>
+        <Alerts severity="info">No History Yet</Alerts>
       )}
     </Box>
   );
