@@ -3,6 +3,7 @@ const { STRING, UUID, UUIDV4, INTEGER, TEXT, FLOAT } = require('sequelize');
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const Session = require('./session');
+const AWS = require('aws-sdk');
 
 const User = db.define(
   'user',
@@ -60,6 +61,20 @@ const User = db.define(
       beforeCreate: async user => {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
+      },
+      afterCreate: async user => {
+        const s3 = new AWS.S3({
+          accessKeyId: process.env.AWS_ID2,
+          secretAccessKey: process.env.AWS_SECRET2,
+        });
+
+        s3.createBucket({ Bucket: user.id }, (err, data) => {
+          if (err) {
+            console.log('error', err);
+          } else {
+            console.log('success', data);
+          }
+        });
       },
     },
   }
