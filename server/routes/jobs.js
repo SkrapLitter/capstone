@@ -280,6 +280,9 @@ jobRouter.get('/user/:id', async (req, res) => {
               {
                 status: 'volunteer',
               },
+              {
+                status: 'pendingVerification',
+              },
             ],
           },
           {

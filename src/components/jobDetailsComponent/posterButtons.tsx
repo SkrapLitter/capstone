@@ -53,29 +53,36 @@ const PosterButtons: React.FC = () => {
   ): void => {
     e.preventDefault();
     dispatch(completeJob(curJob));
+    history.push(`/account`);
   };
   return (
-    <div className="jobDetailsButtons">
-      <Button variant="outlined" onClick={openEditPage}>
-        <EditIcon className="buttonIcon" />
-        Edit Details
-      </Button>
-      {job.reservedUser ? (
-        <Button variant="outlined" onClick={openChat} className="m1em">
-          <MailOutlineIcon className="buttonIcon" />
-          Message Worker
-        </Button>
-      ) : null}
-      {job.userId === user.id && job.status === 'pendingVerification' ? (
-        <Button
-          variant="outlined"
-          onClick={e => handleComplete(e, job)}
-          className="m1em"
-        >
-          Complete Job
-        </Button>
-      ) : null}
-    </div>
+    <>
+      {job.status !== 'completed' ? (
+        <div className="jobDetailsButtons">
+          <Button variant="outlined" onClick={openEditPage}>
+            <EditIcon className="buttonIcon" />
+            Edit Details
+          </Button>
+          {job.reservedUser ? (
+            <Button variant="outlined" onClick={openChat} className="m1em">
+              <MailOutlineIcon className="buttonIcon" />
+              Message Worker
+            </Button>
+          ) : null}
+          {job.userId === user.id && job.status === 'pendingVerification' ? (
+            <Button
+              variant="outlined"
+              onClick={e => handleComplete(e, job)}
+              className="m1em"
+            >
+              Complete Job
+            </Button>
+          ) : null}
+        </div>
+      ) : (
+        <h4>This Job Is Completed</h4>
+      )}
+    </>
   );
 };
 
