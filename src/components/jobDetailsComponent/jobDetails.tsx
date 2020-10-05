@@ -166,7 +166,12 @@ const JobDetails: React.FC = () => {
                 center={{ lat: job.lat, lng: job.lng }}
                 zoom={zoom}
               >
-                <SingleMarker lat={job.lat} lng={job.lng} text={job.name} />
+                <SingleMarker
+                  lat={job.lat}
+                  lng={job.lng}
+                  text={job.name}
+                  job={job}
+                />
               </GoogleMapReact>
             )}
           </div>

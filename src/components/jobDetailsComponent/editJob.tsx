@@ -3,16 +3,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { AppThunk } from '../../store/thunkType';
-import {
-  fetchJob,
-  addPhotoToJob,
-  deletePhotoFromJob,
-} from '../../store/job/jobActions';
+import { fetchJob, deletePhotoFromJob } from '../../store/job/jobActions';
 import axios from 'axios';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { DropzoneArea } from 'material-ui-dropzone';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,6 +38,7 @@ const EditJob: React.FC = () => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState(null);
   const [description, setDescription] = useState('');
+  const [photos, setPhotos] = useState([]);
 
   const {
     job: { job },
@@ -88,28 +86,40 @@ const EditJob: React.FC = () => {
       // TODO TOAST MESSAGE
       return;
     }
-    axios
-      .put(`/api/jobs/${id}`, {
+    if (!photos.length) {
+      axios
+        .put(`/api/jobs/${id}`, {
+          name,
+          address,
+          description,
+          userId: user.id,
+          type: 'update',
+        })
+        .then(({ data }) => {
+          // navigate to job details page
+          history.push(`/jobs/${data.job.id}`);
+        })
+        // TODO - error handling for server errors - Toast?
+        .catch(console.log);
+    } else {
+      const updatedJob = {
         name,
-        address,
+        address: JSON.stringify(address),
         description,
-        userId: user.id,
-        type: 'update',
-      })
-      .then(({ data }) => {
-        // navigate to job details page
+      };
+      const file = new FormData();
+      photos.forEach(photo => {
+        file.append('image', photo);
+      });
+      Object.keys(updatedJob).forEach(key => {
+        file.append(key, updatedJob[key]);
+      });
+      axios.put(`/api/jobs/withphotos/${id}`, file).then(({ data }) => {
         history.push(`/jobs/${data.job.id}`);
-      })
-      // TODO - error handling for server errors - Toast?
-      .catch(console.log);
+      });
+    }
   };
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    const file = new FormData();
-    file.append('image', e.target.files[0]);
-    dispatch(addPhotoToJob(id, file));
-  };
   const handleDeleteImage = (photoId: string, jobId: string): void => {
     dispatch(deletePhotoFromJob(photoId, jobId));
   };
@@ -148,6 +158,9 @@ const EditJob: React.FC = () => {
             apiKey="AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI"
           />
         </div>
+        <div className="m-t-b">
+          <DropzoneArea onChange={files => setPhotos(files)} />
+        </div>
         <div className="thumbGallery">
           {job &&
             job.images.map(img => (
@@ -163,17 +176,7 @@ const EditJob: React.FC = () => {
               </div>
             ))}
         </div>
-        <div className="m-t-b">
-          <div>
-            <input
-              type="file"
-              name="image"
-              id="imageUpload"
-              onChange={handleImage}
-            />
-          </div>
-        </div>
-        <div className="m8 pRel">
+        <div className="m8 pRel" style={{ marginTop: '20px' }}>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
