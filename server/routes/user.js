@@ -1,6 +1,6 @@
 const userRouter = require('express').Router();
 const {
-  models: { User, Session, Payment },
+  models: { User, Session, Payment, Job },
 } = require('../db');
 const stripe = require('stripe')(process.env.STRIPE_SKEY);
 const dotenv = require('dotenv');
@@ -29,8 +29,10 @@ userRouter.get('/stripe/balance/:id', async (req, res) => {
       include: [
         {
           model: Payment,
+          include: Job,
         },
       ],
+      order: [[Payment, 'createdAt', 'DESC']],
     });
     if (user.stripe) {
       const balance = await stripe.balance.retrieve({

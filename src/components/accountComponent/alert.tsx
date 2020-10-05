@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import moment from 'moment';
+import InfoIcon from '@material-ui/icons/Info';
 
 const Alert: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,15 +19,16 @@ const Alert: React.FC = () => {
   }, []);
   return (
     <Box py={5}>
-      {alert && alert.length && (
+      {alert && alert.length ? (
         <List>
           {alert.map(curAlert => {
             return (
               <>
                 <List key={curAlert.id}>
-                  <ListItem>{curAlert.subject} </ListItem>
                   <ListItem>
-                    {moment(curAlert.createdAt).format('MMMM Do YYYY, h:mm a')}
+                    <InfoIcon color="secondary" />{' '}
+                    {moment(curAlert.createdAt).format('MMMM Do YYYY, h:mm a')}:{' '}
+                    {curAlert.subject}{' '}
                   </ListItem>
                 </List>
                 <hr />
@@ -34,6 +36,8 @@ const Alert: React.FC = () => {
             );
           })}
         </List>
+      ) : (
+        <h3>No History Yet</h3>
       )}
     </Box>
   );

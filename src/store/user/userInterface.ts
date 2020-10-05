@@ -11,7 +11,38 @@ export default interface User {
   balance?: number;
   payments?: Array<Payment>;
 }
-
+interface PhotoAttributes {
+  id: string;
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+  jobId: string | null;
+  user?: User;
+}
+interface JobAttributes {
+  id: string;
+  name: string;
+  status: string; // funded pending volunteer completed cancelled pendingVerification
+  price: number;
+  city: string;
+  state: string;
+  address: string;
+  reserved: boolean;
+  reservedUser?: string;
+  reservedUsername?: string;
+  lat: number;
+  lng: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  description: string;
+  createdUser: string;
+  funded?: number;
+  images?: Array<PhotoAttributes>;
+  summary?: string;
+  user?: User;
+  verifications?: PhotoAttributes[];
+}
 interface Payment {
   id: string;
   amount: number;
@@ -22,4 +53,5 @@ interface Payment {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  job?: Array<JobAttributes>;
 }

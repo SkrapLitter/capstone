@@ -31,7 +31,7 @@ const InboxPreview: React.FC = () => {
             ))}
           </List>
         ) : (
-          <p>No new messages</p>
+          <h3>No Chats Yet</h3>
         )}
       </Box>
     </div>
