@@ -40,8 +40,12 @@ app.use(passport.session());
 app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
+const BASE_URL = process.env.NODE_ENV
+  ? 'http://skraplitter.herokuapp.com'
+  : 'http://localhost:3000';
+
 io.on('connection', socket => {
-  Axios.put(`http://localhost:3000/api/user/socketConnect/${socket.id}`);
+  Axios.put(`${BASE_URL}/api/user/socketConnect/${socket.id}`);
   socket.on('message', async data => {
     try {
       const { chatroomId, author, message, recipient, title } = data;
