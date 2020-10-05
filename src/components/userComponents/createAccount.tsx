@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { createAccountThunk } from '../../store/user/userActions';
 import { AppThunk } from '../../store/thunkType';
@@ -29,17 +29,18 @@ const CreateAccount: React.FC = () => {
 
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const setters = [setUsername, setPassword, setFirstName, setLastName];
-
+  const form = useRef(null);
   const handleSubmit = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
-    if (validate.isValid()) {
+    const inputs = form.current.querySelectorAll('input');
+    console.log('is this getting called at all?');
+    if (validate.isValid(inputs)) {
       // send to server then update redux user with response
       dispatch(
         createAccountThunk(username, password, firstName, lastName)
       ).catch(err => {
-        console.log('sdfkjhdskjhfds');
         toast.error(`${err}`);
       });
       // clear the form
@@ -54,7 +55,7 @@ const CreateAccount: React.FC = () => {
       id="createAccountForm"
     >
       <h4>Create Account</h4>
-      <form className={classes.root} noValidate autoComplete="off">
+      <form ref={form} className={classes.root} noValidate autoComplete="off">
         <TextField
           id="username"
           label="Email"
