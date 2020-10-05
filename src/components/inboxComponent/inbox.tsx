@@ -41,10 +41,12 @@ const Inbox: React.FC = () => {
                               {chatroom.worker.lastName}
                               {' - '}
                               {chatroom.job.name}
+                              {chatroom.posterMessage
+                                ? `  ${chatroom.posterMessage} new Message${
+                                    chatroom.posterMessage > 1 ? 's' : ''
+                                  }!`
+                                : ''}
                             </p>
-                            {chatroom.posterMessage
-                              ? `(${chatroom.posterMessage}) new Messages!`
-                              : ''}
                           </>
                         ) : (
                           <>
@@ -52,10 +54,12 @@ const Inbox: React.FC = () => {
                               {chatroom.poster.firstName}{' '}
                               {chatroom.poster.lastName} {' - '}
                               {chatroom.job.name}
+                              {chatroom.workerMessage
+                                ? `  ${chatroom.workerMessage} new Message${
+                                    chatroom.workerMessage > 1 ? 's' : ''
+                                  }!`
+                                : ''}
                             </p>
-                            {chatroom.workerMessage
-                              ? `(${chatroom.workerMessage}) new Messages!`
-                              : ''}
                           </>
                         )}
                       </Link>

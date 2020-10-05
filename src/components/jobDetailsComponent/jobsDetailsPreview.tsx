@@ -82,15 +82,13 @@ const jobsDetailsPreview: React.FC = () => {
         onChange={handleChange}
         className={classes.tabs}
       >
-        <h4>My Jobs</h4>
-        <Tab label="Active" />
-        <Tab label="Cancelled" />
-        <Tab label="Completed" />
-        <Tab label="Pending" />
-        <Tab label="Verification" />
-        <h4>Employed Jobs</h4>
-        <Tab label="Reserved" />
-        <Tab label="Completed" />
+        <Tab label="My Jobs" />
+        <Tab label="Pending Jobs" />
+        <Tab label="Confirm Cleanup" />
+        <Tab label="My Cleanups" />
+        <Tab label="Past Cleanups" />
+        <Tab label="Cancelled Jobs" />
+        <Tab label="Completed Jobs" />
       </Tabs>
       <TabPanel value={value} index={1}>
         <JobDetailsPreview jobs={active} />
