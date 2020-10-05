@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { JobAttributes } from '../../store/job/jobInterface';
 import { cancelJob, completeJob } from '../../store/job/jobActions';
@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import RoomIcon from '@material-ui/icons/Room';
 import Fab from '@material-ui/core/Fab';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { StoreState } from '../../store/store';
 
 interface Props {
   jobs: Array<JobAttributes>;
@@ -20,6 +21,7 @@ interface Props {
 
 const JobDetailsPreview: React.FC<Props> = (props: Props) => {
   const { jobs } = props;
+  const { user } = useSelector((state: StoreState) => state);
   const dispatch = useDispatch();
 
   const handleCancel = (
@@ -75,16 +77,17 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
                           <CancelIcon />
                         </Fab>
                       )}
-                    {job.status === 'pendingVerification' && (
-                      <Fab
-                        size="small"
-                        color="secondary"
-                        aria-label="Complete"
-                        onClick={e => handleComplete(e, job)}
-                      >
-                        <CheckCircleIcon />
-                      </Fab>
-                    )}
+                    {job.status === 'pendingVerification' &&
+                      job.userId === user.id && (
+                        <Fab
+                          size="small"
+                          color="secondary"
+                          aria-label="Complete"
+                          onClick={e => handleComplete(e, job)}
+                        >
+                          <CheckCircleIcon />
+                        </Fab>
+                      )}
                   </Grid>
                 </Grid>
               </ListItemText>

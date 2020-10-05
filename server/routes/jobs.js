@@ -271,7 +271,30 @@ jobRouter.get('/user/:id', async (req, res) => {
     });
     const reservedJobs = await Job.findAll({
       where: {
+        [Op.and]: [
+          {
+            [Op.or]: [
+              {
+                status: 'funded',
+              },
+              {
+                status: 'volunteer',
+              },
+              {
+                status: 'pendingVerification',
+              },
+            ],
+          },
+          {
+            reservedUser: id,
+          },
+        ],
+      },
+    });
+    const completedJobs = await Job.findAll({
+      where: {
         reservedUser: id,
+        status: 'completed',
       },
     });
     const completed = jobs.filter(job => job.status === 'completed');
@@ -290,6 +313,7 @@ jobRouter.get('/user/:id', async (req, res) => {
       pending,
       active,
       reservedJobs,
+      completedJobs,
     });
   } catch (e) {
     res.sendStatus(500);

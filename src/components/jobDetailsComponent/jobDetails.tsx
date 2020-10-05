@@ -42,7 +42,6 @@ const JobDetails: React.FC = () => {
     user,
     job: { job },
   } = useSelector((state: StoreState) => state);
-  console.log(job);
 
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;

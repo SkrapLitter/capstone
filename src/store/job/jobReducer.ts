@@ -33,6 +33,7 @@ const defaultJobs: Job = {
     cancelled: [],
     active: [],
     reservedJobs: [],
+    completedJobs: [],
   },
 };
 

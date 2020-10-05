@@ -52,6 +52,7 @@ const jobsDetailsPreview: React.FC = () => {
       pending,
       pendingVerification,
       reservedJobs,
+      completedJobs,
     },
   } = useSelector(selectJobs);
 
@@ -81,30 +82,36 @@ const jobsDetailsPreview: React.FC = () => {
         onChange={handleChange}
         className={classes.tabs}
       >
+        <h4>My Jobs</h4>
         <Tab label="Active" />
         <Tab label="Cancelled" />
         <Tab label="Completed" />
         <Tab label="Pending" />
         <Tab label="Verification" />
-        <Tab label="Reserved By User" />
+        <h4>Employed Jobs</h4>
+        <Tab label="Reserved" />
+        <Tab label="Completed" />
       </Tabs>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={1}>
         <JobDetailsPreview jobs={active} />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={2}>
         <JobDetailsPreview jobs={cancelled} />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={3}>
         <JobDetailsPreview jobs={completed} />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
         <JobDetailsPreview jobs={pending} />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={5}>
         <JobDetailsPreview jobs={pendingVerification} />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={value} index={7}>
         <JobDetailsPreview jobs={reservedJobs} />
+      </TabPanel>
+      <TabPanel value={value} index={8}>
+        <JobDetailsPreview jobs={completedJobs} />
       </TabPanel>
     </Box>
   );
