@@ -33,7 +33,7 @@ const CreateJob: React.FC = () => {
   const [price, setPrice] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
-  const [shouldShowCreateUser, setShouldShowCreateUser] = useState(false);
+  const [shouldShowCreateUser, setShouldShowCreateUser] = useState(true);
 
   useEffect(() => {
     // if user is logged in - hide create account overlay

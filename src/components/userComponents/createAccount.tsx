@@ -38,7 +38,7 @@ const CreateAccount: React.FC = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
-    const inputs = form.current.querySelectorAll('input');
+    const inputs: HTMLInputElement[] = form.current.querySelectorAll('input');
     if (validate.isValid(inputs)) {
       // open redirect modal
       setOpen(true);
