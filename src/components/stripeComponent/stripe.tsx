@@ -77,10 +77,14 @@ const Stripe: React.FC = () => {
       {user.clearance ? (
         <>
           {user.stripe ? (
-            <div className="stripe">
-              <h1>Skrap Payment Dashboard</h1>
+            <div className="stripeDash">
+              <Typography variant="h4" component="h4">
+                Skrap Payment Dashboard
+              </Typography>
               <br />
-              <h2>Balance: ${user.balance}</h2>
+              <Typography variant="h5" component="h5">
+                Balance: ${user.balance}
+              </Typography>
               <br />
               <Button
                 onClick={e => dashboard(e)}
@@ -90,7 +94,9 @@ const Stripe: React.FC = () => {
                 Stripe Dashboard
               </Button>
               <hr />
-              <h2>Payment History</h2>
+              <Typography variant="h5" component="h5">
+                Payment History
+              </Typography>
               <br />
               {user.payments && user.payments.length ? (
                 <List>
@@ -103,7 +109,7 @@ const Stripe: React.FC = () => {
                               <ButtonBase>
                                 <PaymentIcon
                                   className={
-                                    payment.type === 'payment' ||
+                                    payment.type === 'paid' ||
                                     payment.type === 'refund'
                                       ? classes.green
                                       : classes.red
@@ -144,7 +150,7 @@ const Stripe: React.FC = () => {
                             <Divider orientation="vertical" flexItem />
                             <Grid item className={classes.row3} xs="auto">
                               <span>
-                                {payment.type === 'payment' ||
+                                {payment.type === 'paid' ||
                                 payment.type === 'refund'
                                   ? '  +  '
                                   : '  -  '}

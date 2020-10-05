@@ -112,13 +112,15 @@ const UserButtons: React.FC = () => {
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
-      <Button
-        variant="outlined"
-        onClick={() => history.push(`/checkout/${job.id}`)}
-      >
-        <AttachMoneyIcon className="buttonIcon" />
-        Fund Job
-      </Button>
+      {job.reservedUser !== user.id && (
+        <Button
+          variant="outlined"
+          onClick={() => history.push(`/checkout/${job.id}`)}
+        >
+          <AttachMoneyIcon className="buttonIcon" />
+          Fund Job
+        </Button>
+      )}
       {job.reservedUser === user.id ? (
         <Button
           variant="outlined"
