@@ -427,15 +427,19 @@ button:focus {
   width: 100%;
   margin: 10px;
   object-fit: cover;
+  background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
 }
 
 .feedDoubleImageLeft {
   margin: 10px 5px 10px 10px;
   height: 100%;
   width: 50%;
+  background-repeat: no-repeat;
   object-fit: cover;
   background-position: center;
+  background-size: cover;
 }
 
 .feedDoubleImageRight {
@@ -443,24 +447,30 @@ button:focus {
   height: 100%;
   width: 50%;
   object-fit: cover;
+  background-repeat: no-repeat;
   background-position: center;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  background-size: cover;
 }
 
 .feedTopRightImage {
   height: 50%;
   object-fit: cover;
+  background-repeat: no-repeat;
   background-position: center;
   margin-bottom: 5px;
+  background-size: cover;
 }
 
 .feedBottomRightImage {
   height: 50%;
+  background-repeat: no-repeat;
   object-fit: cover;
   background-position: center;
   margin-top: 5px;
+  background-size: cover;
 }
 
 @media screen and (max-width: 768px) {
@@ -559,6 +569,9 @@ div.thumb:hover svg {
   }
   .mapContainer {
     width: 95vw;
+  }
+  .updateJobSubmit {
+    margin-bottom: 4em;
   }
 }
 
@@ -798,6 +811,9 @@ div.thumb:hover svg {
   }
   .chatTitleContainer {
     height: 143px;
+  }
+  .mapContainerSmall {
+    margin-bottom: 4em;
   }
 }
 .stripeDash {

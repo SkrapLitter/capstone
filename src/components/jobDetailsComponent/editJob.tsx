@@ -198,16 +198,17 @@ const EditJob: React.FC = () => {
             Description
           </label>
         </div>
-        <Button
-          onClick={handleSubmit}
-          className="btn waves-effect waves-light green accent-4"
-          type="submit"
-          variant="contained"
-          color="primary"
-        >
-          <i className="material-icons mr05">work</i>
-          Submit
-        </Button>
+        <div className="updateJobSubmit">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            <i className="material-icons mr05">work</i>
+            Submit
+          </Button>
+        </div>
       </form>
     </div>
   );
