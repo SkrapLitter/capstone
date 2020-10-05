@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SKEY);
 const dotenv = require('dotenv');
 
 const BASE_URL = process.env.NODE_ENV
-  ? 'http://skraplitter.herokuapp.com'
+  ? 'https://skraplitter.herokuapp.com'
   : 'http://localhost:3000';
 
 dotenv.config();

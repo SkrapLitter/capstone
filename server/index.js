@@ -41,7 +41,7 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.static(DIST_PATH));
 
 const BASE_URL = process.env.NODE_ENV
-  ? 'http://skraplitter.herokuapp.com'
+  ? 'https://skraplitter.herokuapp.com'
   : 'http://localhost:3000';
 
 io.on('connection', socket => {
