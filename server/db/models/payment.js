@@ -15,7 +15,7 @@ const Payment = db.define('payment', {
     type: STRING,
   },
   type: {
-    type: ENUM('payment', 'deposit', 'refund'),
+    type: ENUM('payment', 'deposit', 'refund', 'paid'),
     allowNull: false,
   },
   chargeId: {

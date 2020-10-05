@@ -149,14 +149,14 @@ paymentRouter.put('/stripe/complete/:id', async (req, res) => {
       },
     });
     if (job) {
-      if (!job.price) {
+      if (!job.funded) {
         await job.update({
           status: 'completed',
           funded: 0,
         });
         status = true;
         res.status(200).send({ status });
-      } else if (job.price > 0) {
+      } else if (job.funded > 0) {
         const user = await User.findByPk(job.reservedUser);
         if (!user.stripe) {
           const stripeError = `${user.username} must complete Stripe Onboarding`;
@@ -193,7 +193,7 @@ paymentRouter.put('/stripe/complete/:id', async (req, res) => {
             }
           });
           await Payment.create({
-            type: 'payment',
+            type: 'paid',
             subject: `${job.name} has been completed $(${
               job.funded * 0.9
             })  dollars has been transferred to your account`,
