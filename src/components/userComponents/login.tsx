@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '../../store/store';
 import { loginThunk } from '../../store/user/userActions';
@@ -29,12 +29,15 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const setters = [setUsername, setPassword];
 
+  const form = useRef(null);
+
   const handleSubmit = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
+    const inputs = form.current.querySelectorAll('input');
     // validate form
-    if (validate.isValid()) {
+    if (validate.isValid(inputs)) {
       // send to server then update redux user with response
       dispatch(loginThunk(username, password));
       // clear the form
@@ -49,7 +52,7 @@ const LoginForm: React.FC = () => {
     >
       {error && <div className="alert red lighten-5">Alert: {error}</div>}
       <h4>Login</h4>
-      <form className={classes.root} noValidate autoComplete="off">
+      <form ref={form} className={classes.root} noValidate autoComplete="off">
         <TextField
           id="username"
           label="Email"

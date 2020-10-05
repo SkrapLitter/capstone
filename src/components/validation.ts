@@ -18,19 +18,19 @@ export const isFormValid = (formId): boolean => {
   return inputs.length === 0;
 };
 
-const isValid = (): boolean => {
-  let valid = true;
-  // get all the inputs
-  const inputs = document.querySelectorAll('input');
+const isValid = (inputs): boolean => {
+  let valid = 0;
+
   // if any are invalid or empty, validation fails
   inputs.forEach(input => {
     const isThisInvalid = input.getAttribute('aria-invalid');
-    if (isThisInvalid === 'true' || !input.value.length) {
-      valid = false;
+    if (isThisInvalid === 'false' || input.value.length) {
+      valid++;
     }
   });
+  console.log(valid, inputs.length);
   // otherwise, form is good to go
-  return valid;
+  return valid === inputs.length;
 };
 
 export const validate = {
