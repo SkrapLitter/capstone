@@ -381,7 +381,7 @@ jobRouter.put('/:id', async (req, res) => {
     const { type } = req.body;
     const job = await Job.findOne({
       where: { id },
-      include: [Image],
+      include: [Image, User],
     });
     if (!req.isAuthenticated || !req.user) {
       res.status(500).send({

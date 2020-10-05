@@ -30,7 +30,6 @@ const JobDetails: React.FC = () => {
 
   const [showVerificationGallery, setShowVerificationGallery] = useState(false);
   // const [showVerUpload, setShowVerUpload] = useState(false);
-
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const { id } = useParams<RouteParams>();
   useEffect(() => {
@@ -43,6 +42,8 @@ const JobDetails: React.FC = () => {
     user,
     job: { job },
   } = useSelector((state: StoreState) => state);
+  console.log(job);
+
   const renderButtons = () => {
     return job.userId === user.id ? <PosterButtons /> : <UserButtons />;
   };
@@ -142,7 +143,7 @@ const JobDetails: React.FC = () => {
                     width="24"
                     height="24"
                     className="border-circle z-depth-1"
-                    alt={`${user.firstName} ${user.lastName}`}
+                    alt={job.createdUser}
                   />
                   <p className="gray">Posted By: {job.createdUser}</p>
                 </div>

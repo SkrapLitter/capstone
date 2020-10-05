@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -68,7 +69,7 @@ const UserButtons: React.FC = () => {
           setMessage('Error - Please Try Again');
           setOpen(true);
         });
-    } else {
+    } else if (user.clearance) {
       dispatch(reserveJob(job.id))
         .then(data => {
           socket.emit('reserve', data);
@@ -79,18 +80,34 @@ const UserButtons: React.FC = () => {
           setMessage(e);
           setOpen(true);
         });
+    } else {
+      setMessage('You must be logged in to reserve a job');
+      setOpen(true);
     }
+  };
+  const renderButton = (): JSX.Element => {
+    if (job.reserved) {
+      if (job.reservedUser === user.id) {
+        return (
+          <Button variant="outlined" onClick={handleReserve}>
+            <CloseIcon className="buttonIcon" />
+            &nbsp;Cancel
+          </Button>
+        );
+      }
+
+      return null;
+    }
+    return (
+      <Button variant="outlined" onClick={handleReserve}>
+        <DoneIcon className="buttonIcon" />
+        &nbsp;Reserve
+      </Button>
+    );
   };
   return (
     <div className="jobDetailsButtons">
-      <Button variant="outlined" onClick={handleReserve}>
-        {job.reserved ? (
-          <CloseIcon className="buttonIcon" />
-        ) : (
-          <DoneIcon className="buttonIcon" />
-        )}
-        {job.reserved ? 'Cancel' : 'Reserve'}
-      </Button>
+      {renderButton()}
       <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
