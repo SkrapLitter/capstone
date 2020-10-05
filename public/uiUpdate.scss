@@ -353,6 +353,26 @@ textarea {
   }
 }
 /*
+* ACCOUNT MODAL
+*/
+.account-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 400px;
+  background-color: #fff;
+  z-index: 10000;
+}
+.account-modal .img {
+  background-image: url('https://2004-skrap.s3.amazonaws.com/svg/undraw_make_it_rain_iwk4.svg');
+  width: 300px;
+  height: 200px;
+  background-size: cover;
+}
+
+/*
 *
 * MOBILE-ONLY MEDIA QUERIES
 *

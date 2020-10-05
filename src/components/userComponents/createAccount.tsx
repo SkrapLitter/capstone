@@ -3,9 +3,11 @@ import { useDispatch } from 'react-redux';
 import { createAccountThunk } from '../../store/user/userActions';
 import { AppThunk } from '../../store/thunkType';
 import { validate } from '../validation';
+import AccountModal from './accountModal';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
 import { ToastContainer, toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +28,9 @@ const CreateAccount: React.FC = () => {
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [open, setOpen] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: (a: AppThunk) => Promise<any> = useDispatch();
   const setters = [setUsername, setPassword, setFirstName, setLastName];
   const form = useRef(null);
@@ -35,17 +39,23 @@ const CreateAccount: React.FC = () => {
   ): void => {
     e.preventDefault();
     const inputs = form.current.querySelectorAll('input');
-    console.log('is this getting called at all?');
     if (validate.isValid(inputs)) {
+      // open redirect modal
+      setOpen(true);
       // send to server then update redux user with response
-      dispatch(
-        createAccountThunk(username, password, firstName, lastName)
-      ).catch(err => {
-        toast.error(`${err}`);
-      });
+      setTimeout(() => {
+        dispatch(
+          createAccountThunk(username, password, firstName, lastName)
+        ).catch(err => {
+          toast.error(`${err}`);
+        });
+      }, 5000);
       // clear the form
       setters.forEach(setVal => setVal(''));
     }
+  };
+  const handleClose = (): void => {
+    setOpen(false);
   };
 
   return (
@@ -124,6 +134,9 @@ const CreateAccount: React.FC = () => {
         </Button>
       </form>
       <ToastContainer position="top-center" />
+      <Dialog open={open} onClose={handleClose}>
+        <AccountModal />
+      </Dialog>
     </div>
   );
 };
