@@ -2,7 +2,7 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppThunk } from '../../store/thunkType';
 import GoogleMapReact from 'google-map-react';
@@ -12,7 +12,6 @@ import UserButtons from './userButtons';
 import PosterButtons from './posterButtons';
 import SingleMarker from '../mapComponent/singleMarker';
 import JobImages from './jobImages';
-import { Button } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -28,8 +27,6 @@ const JobDetails: React.FC = () => {
   const zoom = 16;
 
   const [showGallery, setShowGallery] = useState(false);
-
-  const history = useHistory();
 
   const [showVerificationGallery, setShowVerificationGallery] = useState(false);
   // const [showVerUpload, setShowVerUpload] = useState(false);
@@ -51,7 +48,6 @@ const JobDetails: React.FC = () => {
   };
   const images =
     job.images && job.images.length ? job.images.map(img => img.url) : [];
-  console.log('JOB', job);
   return (
     <div className="container jCenter">
       {job && Object.values(job).length ? (
@@ -71,18 +67,7 @@ const JobDetails: React.FC = () => {
             {showGallery && (
               <JobImages setShowGallery={setShowGallery} images={images} />
             )}
-            <div style={{ display: 'flex' }}>
-              {renderButtons()}
-              {job.reservedUser === user.id ? (
-                <Button
-                  variant="outlined"
-                  onClick={() => history.push(`/verify/${job.id}`)}
-                  className="m1em"
-                >
-                  Verify Job Completion
-                </Button>
-              ) : null}
-            </div>
+            <div style={{ display: 'flex' }}>{renderButtons()}</div>
             {job.verifications && job.verifications.length ? (
               <div className="container verificationContainer jCenter">
                 <div>

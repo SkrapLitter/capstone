@@ -12,6 +12,7 @@ import socket from '../../socket';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 const UserButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -40,6 +41,7 @@ const UserButtons: React.FC = () => {
     if (!user.clearance) {
       setMessage('You must be logged in to send a message');
       setOpen(true);
+      return;
     }
     return new Promise((res, rej) => {
       try {
@@ -81,18 +83,36 @@ const UserButtons: React.FC = () => {
   };
   return (
     <div className="jobDetailsButtons">
-      <Button variant="outlined" onClick={handleReserve}>
-        {job.reserved ? (
-          <CloseIcon className="buttonIcon" />
-        ) : (
-          <DoneIcon className="buttonIcon" />
-        )}
-        {job.reserved ? 'Cancel' : 'Reserve'}
-      </Button>
+      {job.reservedUser === user.id && (
+        <Button variant="outlined" onClick={handleReserve}>
+          {job.reserved ? (
+            <CloseIcon className="buttonIcon" />
+          ) : (
+            <DoneIcon className="buttonIcon" />
+          )}
+          {job.reserved ? 'Cancel' : 'Reserve'}
+        </Button>
+      )}
       <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster
       </Button>
+      <Button
+        variant="outlined"
+        onClick={() => history.push(`/checkout/${job.id}`)}
+      >
+        <AttachMoneyIcon className="buttonIcon" />
+        Fund Job
+      </Button>
+      {job.reservedUser === user.id ? (
+        <Button
+          variant="outlined"
+          onClick={() => history.push(`/verify/${job.id}`)}
+          className="m1em"
+        >
+          Verify Job Completion
+        </Button>
+      ) : null}
       <Snackbar
         open={open}
         onClose={handleClose}

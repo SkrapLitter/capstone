@@ -28,31 +28,12 @@ const sync = async () => {
         'https://thumbs.dreamstime.com/b/red-admin-sign-pc-laptop-vector-illustration-administrator-icon-screen-controller-man-system-box-88756468.jpg',
       clearance: 1,
     });
-    // let i = 0;
-    // let j = 0;
-    // if (user.id[i] === test.id[j]) {
-    //   i++;
-    //   j++;
-    // }
-    // const [first, second] =
-    //   user.id[i] <= test.id[j] ? [user.id, test.id] : [test.id, user.id];
-    // const chatusers = `${String(first)}/${String(second)}`;
-    // const testchat = await ChatRoom.create({
-    //   name: 'testroom',
-    //   chatusers,
-    // });
-    // testchat.addUser(user);
-    // testchat.addUser(test);
-    // await ChatMessage.create({
-    //   message: `chat created between ${user.username} and ${test.username}`,
-    //   author: 'System',
-    //   chatroomId: testchat.id,
-    // });
 
     const job1 = await Job.create({
       name: 'McCarren Park',
       status: 'funded',
       price: 20.0,
+      funded: 20.0,
       city: 'Brooklyn',
       state: 'New York',
       address: 'Bedford Ave and Lorimer St',
@@ -94,6 +75,7 @@ const sync = async () => {
       name: 'Tompkins Square Park',
       status: 'funded',
       price: 20.0,
+      funded: 20.0,
       city: 'New York',
       state: 'New York',
       address: 'Tompkins Square Park',
@@ -122,16 +104,11 @@ const sync = async () => {
       jobId: job2.id,
     });
 
-    // await Image.create({
-    //   url:
-    //     'https://c8.alamy.com/comp/ATXCN0/a-rubbish-bin-overflows-with-garbage-in-green-park-london-ATXCN0.jpg',
-    //   jobId: job2.id,
-    // });
-
     const job3 = await Job.create({
       name: 'Cooper Park',
       status: 'funded',
       price: 20.0,
+      funded: 20.0,
       city: 'Brooklyn',
       state: 'New York',
       address: 'Cooper Park',

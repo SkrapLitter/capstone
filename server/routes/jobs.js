@@ -69,26 +69,40 @@ jobRouter.get('/', async (req, res) => {
         limit,
         offset,
         where: {
-          [Op.or]: [
+          [Op.and]: [
             {
-              name: {
-                [Op.iLike]: `%${filter}%`,
-              },
+              [Op.or]: [
+                {
+                  name: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  description: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  city: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+                {
+                  state: {
+                    [Op.iLike]: `%${filter}%`,
+                  },
+                },
+              ],
             },
             {
-              description: {
-                [Op.iLike]: `%${filter}%`,
-              },
-            },
-            {
-              city: {
-                [Op.iLike]: `%${filter}%`,
-              },
-            },
-            {
-              state: {
-                [Op.iLike]: `%${filter}%`,
-              },
+              [Op.or]: [
+                {
+                  status: 'funded',
+                },
+                {
+                  status: 'volunteer',
+                },
+              ],
             },
           ],
         },
@@ -151,22 +165,60 @@ jobRouter.get('/', async (req, res) => {
 
 jobRouter.get('/map', async (req, res) => {
   try {
-    const { north, south, east, west } = req.query;
-    const jobs = await Job.findAll({
-      where: {
-        lat: {
-          [Op.and]: [{ [Op.lte]: +north }, { [Op.gte]: +south }],
+    const { north, south, east, west, filter } = req.query;
+    let jobs;
+    if (filter === 'all') {
+      jobs = await Job.findAll({
+        where: {
+          lat: {
+            [Op.and]: [{ [Op.lte]: +north }, { [Op.gte]: +south }],
+          },
+          lng: {
+            [Op.and]: [{ [Op.lte]: +east }, { [Op.gte]: +west }],
+          },
+          [Op.or]: [
+            {
+              status: {
+                [Op.not]: 'pending',
+              },
+            },
+            {
+              status: {
+                [Op.not]: 'cancelled',
+              },
+            },
+            {
+              status: {
+                [Op.not]: 'completed',
+              },
+            },
+          ],
         },
-        lng: {
-          [Op.and]: [{ [Op.lte]: +east }, { [Op.gte]: +west }],
+        include: [
+          {
+            model: Image,
+          },
+        ],
+      });
+    } else {
+      jobs = await Job.findAll({
+        where: {
+          lat: {
+            [Op.and]: [{ [Op.lte]: +north }, { [Op.gte]: +south }],
+          },
+          lng: {
+            [Op.and]: [{ [Op.lte]: +east }, { [Op.gte]: +west }],
+          },
+          status: filter,
         },
-      },
-      include: [
-        {
-          model: Image,
-        },
-      ],
-    });
+        include: [
+          {
+            model: Image,
+          },
+        ],
+      });
+    }
+
     res.status(200).send(jobs);
   } catch (e) {
     res.status(500).send({ message: 'error' });

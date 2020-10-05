@@ -255,12 +255,12 @@ nav {
 *
 */
 .bodyContainer {
+  margin: 5em 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .contentWrapper {
-  margin-top: 4em;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -274,7 +274,6 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
 }
 .flexColumn {
   display: flex;
@@ -318,6 +317,11 @@ textarea {
   padding: 1em;
   max-width: calc(100% - 2em);
 }
+/*
+*
+* LANDING PAGE STYLES
+*
+*/
 .hero-text {
   color: #fff;
   font: 2rem 'Fredoka One', cursive;
@@ -326,13 +330,26 @@ textarea {
   position: absolute;
   right: 0;
 }
-button {
-  width: 200px;
-}
 .hero-text h1,
 .hero-text h2 {
   margin: 0 0 0.5em 0;
   text-shadow: 2px 2px 5px var(--purpleDk);
+}
+.site-details {
+  display: flex;
+  width: 100%;
+  .details-left,
+  .details-right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    img {
+      max-width: 100%;
+    }
+  }
 }
 /*
 *
@@ -344,7 +361,7 @@ button {
     width: 95vw;
   }
   .jobCard .jobCardInfo {
-    width: 320px;
+    width: 100%;
   }
 }
 @media screen and (max-width: 599px) {
@@ -366,6 +383,23 @@ button {
   }
   .hero h1 {
     font-size: 1.5em;
+  }
+  .site-details {
+    flex-direction: column;
+    text-align: center;
+
+    .details-left,
+    .details-right {
+      width: 100%;
+      h2 {
+        text-align: center;
+        width: 100%;
+      }
+    }
+    .text {
+      order: -1;
+      padding: 2rem;
+    }
   }
 }
 @media screen and (max-width: 374px) {

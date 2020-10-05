@@ -4,6 +4,7 @@ import { StoreState } from '../../store/store';
 import { loginThunk } from '../../store/user/userActions';
 import { validate } from '../validation';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,14 +79,15 @@ const LoginForm: React.FC = () => {
               : ''
           }
         />
-        <button
+        <Button
           onClick={handleSubmit}
-          className="btn waves-effect waves-light green accent-4"
+          variant="contained"
+          color="primary"
           type="submit"
         >
-          Login
           <i className="material-icons right">account_circle</i>
-        </button>
+          &nbsp;Login
+        </Button>
       </form>
     </div>
   );

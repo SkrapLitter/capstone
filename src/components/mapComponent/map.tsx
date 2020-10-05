@@ -1,37 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '../../store/store';
-import { Fab } from '@material-ui/core';
+import {
+  Fab,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import { fetchMapJobs } from '../../store/job/jobActions';
-import Job from '../../store/job/jobInterface';
 import GoogleMapReact from 'google-map-react';
 import MapMarker from './mapMarker';
 
 const useStyles = makeStyles({
   createButton: {
     color: '#ffffff',
-    backgroundColor: '#00c853',
+    backgroundColor: '#04e762',
+  },
+  formControl: {
+    margin: '0 1em 1em 1em',
+    minWidth: 120,
   },
 });
 
-interface Props {
-  job: Job;
-  fetchMapJobs: (
-    north: number,
-    south: number,
-    east: number,
-    west: number
-  ) => Job;
-}
-
-const Map: React.FC<Props> = (props: Props) => {
+const Map: React.FC = () => {
+  const { jobs } = useSelector((state: StoreState) => state.job);
   const [mapCenter, setMapCenter] = useState({ lat: 40.64, lng: -74.08 });
   const [mapZoom, setMapZoom] = useState(11);
   const [locationLoaded, setLocationLoaded] = useState(false);
-
+  const [type, setType] = useState('all');
+  const [filterBounds, setFilterBounds] = useState(null);
+  const dispatch = useDispatch();
   useEffect(() => {
     const success = ({ coords }) => {
       const localCoord = {
@@ -44,10 +46,6 @@ const Map: React.FC<Props> = (props: Props) => {
     navigator.geolocation.getCurrentPosition(success);
     setLocationLoaded(true);
   }, []);
-
-  // useEffect(() => {
-  //   props.fetchJobs();
-  // }, [props.job.jobs.length]);
 
   const getMapBounds = (maps, places) => {
     const bounds = new maps.LatLngBounds();
@@ -81,37 +79,66 @@ const Map: React.FC<Props> = (props: Props) => {
     const south = bounds.se.lat;
     const east = bounds.ne.lng;
     const west = bounds.nw.lng;
-    props.fetchMapJobs(north, south, east, west);
+    dispatch(fetchMapJobs(north, south, east, west, type));
+    setFilterBounds(bounds);
   };
+
+  const handleType = (e: React.ChangeEvent<{ value: string }>) => {
+    const filter: string = e.target.value;
+    setType(filter);
+    const north = filterBounds.ne.lat;
+    const south = filterBounds.se.lat;
+    const east = filterBounds.ne.lng;
+    const west = filterBounds.nw.lng;
+    dispatch(fetchMapJobs(north, south, east, west, filter));
+  };
+
   const classes = useStyles();
   return (
     <div className="container">
       <div className="mapContainer">
         {locationLoaded === true && (
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: 'AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI',
-            }}
-            center={mapCenter}
-            zoom={mapZoom}
-            yesIWantToUseGoogleMapApiInternals
-            onGoogleApiLoaded={({ map, maps }) =>
-              apiIsLoaded(map, maps, props.job.jobs)
-            }
-            onChange={({ bounds }) => handleMapChange(bounds)}
-          >
-            {props.job.jobs.map(job => {
-              return (
-                <MapMarker
-                  key={job.id}
-                  lat={job.lat}
-                  lng={job.lng}
-                  job={job}
-                  text={job.name}
-                />
-              );
-            })}
-          </GoogleMapReact>
+          <div className="jCenter">
+            <div className="mapFilter">
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Job Type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={type}
+                  onChange={handleType}
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="funded">Paid</MenuItem>
+                  <MenuItem value="volunteer">Volunteer</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: 'AIzaSyB3PsGI6ryopGrbeXMY1oO17jTp0ksQFoI',
+              }}
+              center={mapCenter}
+              zoom={mapZoom}
+              yesIWantToUseGoogleMapApiInternals
+              onGoogleApiLoaded={({ map, maps }) =>
+                apiIsLoaded(map, maps, jobs)
+              }
+              onChange={({ bounds }) => handleMapChange(bounds)}
+            >
+              {jobs.map(job => {
+                return (
+                  <MapMarker
+                    key={job.id}
+                    lat={job.lat}
+                    lng={job.lng}
+                    job={job}
+                    text={job.name}
+                  />
+                );
+              })}
+            </GoogleMapReact>
+          </div>
         )}
       </div>
       <div className="createButtonContainer">
@@ -125,10 +152,4 @@ const Map: React.FC<Props> = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: StoreState) => ({
-  job: state.job,
-});
-
-const mapDispatchToProps = { fetchMapJobs };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default Map;

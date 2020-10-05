@@ -60,11 +60,12 @@ const fetchMapJobs = (
   north: number,
   south: number,
   east: number,
-  west: number
+  west: number,
+  filter: string
 ): AppThunk => {
   return async dispatch => {
     const { data } = await Axios.get(
-      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}`
+      `/api/jobs/map/?north=${north}&south=${south}&east=${east}&west=${west}&filter=${filter}`
     );
     dispatch(setJobs(0, data));
   };
@@ -144,13 +145,20 @@ export const completeJob = (job: JobAttributes): AppThunk => {
       const { data } = await Axios.put(
         `/api/payment/stripe/complete/${job.id}`
       );
-      if (data) {
+      if (data.stripe) {
         toast('You have successfully completed this job', { type: 'success' });
         socket.emit('complete', job);
-      } else toast('There was an error cancelling this job', { type: 'error' });
-      dispatch(fetchJobsByUser(job.userId));
+        dispatch(fetchJobsByUser(job.userId));
+      } else {
+        console.log(data.stripeError);
+        toast(data.stripeError, { type: 'error' });
+        socket.emit('stripeError', {
+          job,
+          stripeError: data.stripeError,
+        });
+      }
     } catch (e) {
-      toast('There was an error cancelling this job', { type: 'error' });
+      toast('There was an error completing this job', { type: 'error' });
     }
   };
 };

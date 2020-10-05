@@ -51,6 +51,13 @@
   height: 67vw;
   width: 67vw;
 }
+
+.mapFilter {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .jobImage {
   width: 80vw;
   height: 80vw;
@@ -79,6 +86,7 @@
   animation-name: markerAnimation;
   animation-duration: 1s;
   animation-fill-mode: forwards;
+  transform: translate(-1em, -1em);
   /* transition: ease-in; */
 }
 
@@ -93,9 +101,6 @@
 
 .marker:hover {
   cursor: pointer;
-}
-.marker i {
-  transform: translate(-0.5em, -0.5em);
 }
 
 .mapModal {
@@ -174,6 +179,7 @@ button.m1em {
   color: #039be5;
   border: none;
   font-style: italic;
+  width: auto;
 }
 .anchor:focus {
   border: 1px solid #aaa;
@@ -200,6 +206,9 @@ button.m1em {
 
 .white {
   background: whitesmoke;
+}
+h4 {
+  margin: 1rem 0;
 }
 
 @media (min-width: 1500px) {

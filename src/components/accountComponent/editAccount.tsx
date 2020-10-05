@@ -6,7 +6,6 @@ import JobsDetailsPreview from '../jobDetailsComponent/jobsDetailsPreview';
 import EditAccountForm from './editAccountForm';
 import InboxPreview from '../inboxComponent/inboxPreview';
 
-import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -20,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import Stripe from '../stripeComponent/stripe';
+import Alert from './alert';
 
 interface Props {
   index: any;
@@ -89,7 +90,7 @@ const EditAccount: React.FC = () => {
   };
 
   return (
-    <Container fixed>
+    <>
       <Grid
         container
         direction="column"
@@ -116,7 +117,6 @@ const EditAccount: React.FC = () => {
             value={value}
             onChange={handleChange}
             variant="scrollable"
-            scrollButtons="on"
             classes={{
               root: classes.tabRoot,
               indicator: classes.tabIndicator,
@@ -142,13 +142,13 @@ const EditAccount: React.FC = () => {
           <InboxPreview />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <div>History</div>
+          <Alert />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <div>Payments</div>
+          <Stripe />
         </TabPanel>
       </Box>
-    </Container>
+    </>
   );
 };
 

@@ -105,6 +105,31 @@ io.on('connection', socket => {
       }
     });
   });
+  socket.on('stripeError', async data => {
+    const { job, stripeError } = data;
+    const user = await findUserIncludeSessions(job.reservedUser);
+    const reservedSubject = `${job.name} cannot be completed due to stripe account not set up. Please complete onboarding!`;
+    const subject = `${job.name} cannot be completed due to ${stripeError}`;
+    const userAlert = await createAlert(user.id, reservedSubject);
+    await createAlert(job.userId, subject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
+  });
+  socket.on('pendingVerification', async data => {
+    const user = await findUserIncludeSessions(data.userId);
+    const reservedSubject = `You have verified ${data.name} and payment is pending until ${data.createdUser} has verified job completion`;
+    const subject = `${data.name} has been verified, please approve or give user further instructions to complete verification`;
+    const userAlert = await createAlert(user.id, subject);
+    await createAlert(data.reservedId, reservedSubject);
+    await user.sessions.forEach(session => {
+      if (session.socket in io.sockets.connected) {
+        io.to(session.socket).emit('alert', userAlert);
+      }
+    });
+  });
 });
 
 app.use(async (req, res, next) => {
