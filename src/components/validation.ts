@@ -11,16 +11,15 @@ const setClassName = (validateBy, valid = '', invalid = 'invalid'): string => {
   return validateBy ? valid : invalid;
 };
 
-export const isFormValid = (formId): boolean => {
+export const isFormValid = (formId: string): boolean => {
   const form = document.getElementById(formId);
   const inputs = form.querySelectorAll('.invalid');
 
   return inputs.length === 0;
 };
 
-const isValid = (inputs): boolean => {
+const isValid = (inputs: HTMLInputElement[]): boolean => {
   let valid = 0;
-
   // if any are invalid or empty, validation fails
   inputs.forEach(input => {
     const isThisInvalid = input.getAttribute('aria-invalid');
@@ -28,7 +27,6 @@ const isValid = (inputs): boolean => {
       valid++;
     }
   });
-  console.log(valid, inputs.length);
   // otherwise, form is good to go
   return valid === inputs.length;
 };
