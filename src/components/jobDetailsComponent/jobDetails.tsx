@@ -69,14 +69,23 @@ const JobDetails: React.FC = () => {
             )}
             <div style={{ display: 'flex' }}>{renderButtons()}</div>
             {job.verifications && job.verifications.length ? (
-              <div className="container">
-                <div className="d-flex" style={{ alignItems: 'center' }}>
-                  <p style={{ fontSize: '1.5rem' }}>Verification</p>
-                  <VerifiedUserIcon fontSize="large" />
+              <div className="container verificationContainer jCenter">
+                <div>
+                  <img
+                    className="border-circle"
+                    src={job.verifications[0].user.image}
+                    alt="trash"
+                    style={{
+                      height: '75px',
+                      width: '75px',
+                      border: '1px solid grey',
+                    }}
+                  />
                 </div>
-                <div className="verificationContainer f-centered">
+                <div className="validationImageContainer">
+                  <div className="validationPoint" />
                   <div
-                    className="jobImage"
+                    className="validationImage"
                     style={{
                       backgroundImage: `url('${
                         job.verifications &&
@@ -93,6 +102,21 @@ const JobDetails: React.FC = () => {
                       images={job.verifications.map(img => img.url)}
                     />
                   )}
+                </div>
+                <div className="d-flex" style={{ alignItems: 'center' }}>
+                  <VerifiedUserIcon color="secondary" />
+                  &nbsp;
+                  <p
+                    style={{
+                      marginBlockStart: '0',
+                      marginBlockEnd: '0',
+                      fontSize: '1.3em',
+                    }}
+                  >
+                    This job was cleaned by{' '}
+                    {job.verifications[0].user.firstName}{' '}
+                    {job.verifications[0].user.lastName}
+                  </p>
                 </div>
               </div>
             ) : null}
