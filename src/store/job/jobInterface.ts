@@ -31,6 +31,7 @@ export interface UserJobs {
   pendingVerification?: Array<JobAttributes>;
   pending?: Array<JobAttributes>;
   active?: Array<JobAttributes>;
+  reservedJobs?: Array<JobAttributes>;
 }
 
 export default interface Job {

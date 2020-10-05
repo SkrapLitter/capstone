@@ -39,7 +39,6 @@ const CreateAccount: React.FC = () => {
       dispatch(
         createAccountThunk(username, password, firstName, lastName)
       ).catch(err => {
-        console.log('sdfkjhdskjhfds');
         toast.error(`${err}`);
       });
       // clear the form

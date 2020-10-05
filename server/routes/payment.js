@@ -12,13 +12,23 @@ paymentRouter.post('/stripe/checkout', async (req, res) => {
       email: token.email,
       source: token.id,
     });
-    const payment = await Payment.create({
-      amount: total,
-      userId: user.id,
-      jobId: job.id,
-      type: 'deposit',
-      subject: `Payment for funding job ${job.name}`,
-    });
+    let payment;
+    if (user.id) {
+      payment = await Payment.create({
+        amount: total,
+        userId: user.id,
+        jobId: job.id,
+        type: 'deposit',
+        subject: `Initial Deposit for funding job ${job.name}`,
+      });
+    } else if (!user.id) {
+      payment = await Payment.create({
+        amount: total,
+        jobId: job.id,
+        type: 'deposit',
+        subject: `Initial Deposit for funding job ${job.name}`,
+      });
+    }
     const idempotencyKey = payment.id;
     const charge = await stripe.charges.create(
       {
@@ -72,12 +82,16 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
     const job = await Job.findByPk(id);
     if (job) {
       if (job.status === 'volunteer' || job.status === 'pending') {
-        await Job.update({
-          status: 'cancelled',
-          where: {
-            id,
+        await Job.update(
+          {
+            status: 'cancelled',
           },
-        });
+          {
+            where: {
+              id,
+            },
+          }
+        );
         status = true;
       } else if (job.funded > 0 && job.status === 'funded' && !job.reserved) {
         const payments = await Payment.findAll({
@@ -96,13 +110,15 @@ paymentRouter.put('/stripe/cancel/:id', async (req, res) => {
             charge: 'ch_1HSYwXE7ag3tHwto1gL7LvsA',
             amount: payment.amount * 100,
           });
-          await Payment.create({
-            type: 'refund',
-            subject: `${job.name} has been cancelled and a refund has been issued`,
-            amount: payment.amount,
-            userId: payment.userId,
-            jobId: payment.jobId,
-          });
+          if (payment.userId) {
+            await Payment.create({
+              type: 'refund',
+              subject: `${job.name} has been cancelled and a refund has been issued`,
+              amount: payment.amount,
+              userId: payment.userId,
+              jobId: payment.jobId,
+            });
+          }
         });
         await Alert.create({
           subject: `${job.name} has been cancelled and a refund has been issued`,
@@ -166,19 +182,21 @@ paymentRouter.put('/stripe/complete/:id', async (req, res) => {
             ],
           });
           await payments.forEach(async payment => {
-            await Payment.create({
-              type: 'payment',
-              subject: `${job.name} has been completed and recipient has been paid`,
-              amount: payment.amount,
-              userId: payment.userId,
-              jobId: payment.jobId,
-            });
+            if (payment.userId) {
+              await Payment.create({
+                type: 'payment',
+                subject: `${job.name} has been completed and recipient has been paid`,
+                amount: payment.amount,
+                userId: payment.userId,
+                jobId: payment.jobId,
+              });
+            }
           });
           await Payment.create({
             type: 'payment',
-            subject: `${job.name} has been completed $${
+            subject: `${job.name} has been completed $(${
               job.funded * 0.9
-            } dollars has been transferred to your account`,
+            })  dollars has been transferred to your account`,
             amount: job.funded * 0.9,
             userId: user.id,
             jobId: job.id,

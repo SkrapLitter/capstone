@@ -20,7 +20,6 @@ import socket from './socket';
 import Stripe from './components/stripeComponent/stripe';
 import PhotoVerification from './components/jobDetailsComponent/photoVerification';
 import Checkout from './components/checkoutComponent/checkout';
-import Container from '@material-ui/core/Container';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -50,7 +49,7 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <div className="bodyContainer">
         <Navbar />
-        <Container fixed>
+        <div className="contentWrapper">
           <Switch>
             <Route exact path="/" render={() => <Landing />} />
             <Route path="/stripe/:id" component={Stripe} />
@@ -66,7 +65,7 @@ const App: React.FC = () => {
             <Route path="/checkout/:id" component={Checkout} />
             <Redirect to="/jobs" />
           </Switch>
-        </Container>
+        </div>
         <Footer />
       </div>
       <Footer />

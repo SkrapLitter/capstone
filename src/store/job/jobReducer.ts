@@ -32,6 +32,7 @@ const defaultJobs: Job = {
     pendingVerification: [],
     cancelled: [],
     active: [],
+    reservedJobs: [],
   },
 };
 

@@ -3,14 +3,13 @@ const jobRouter = require('express').Router();
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const {
-  models: { Job, Image, Payment, Verification },
+  models: { Job, Image, Payment, Verification, User },
 } = require('../db');
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
 
 const axios = require('axios');
-const User = require('../db/models/user');
 
 const upload = multer();
 const multipleUpload = upload.array('image');
@@ -35,12 +34,19 @@ jobRouter.get('/', async (req, res) => {
         offset,
         order: [['updatedAt', 'DESC']],
         where: {
-          [Op.or]: [
+          [Op.and]: [
             {
-              status: 'funded',
+              [Op.or]: [
+                {
+                  status: 'funded',
+                },
+                {
+                  status: 'volunteer',
+                },
+              ],
             },
             {
-              status: 'volunteer',
+              reserved: false,
             },
           ],
         },
@@ -56,6 +62,7 @@ jobRouter.get('/', async (req, res) => {
         offset,
         where: {
           status: `${type}`,
+          reserved: false,
         },
         order: [['updatedAt', 'DESC']],
         include: [
@@ -64,7 +71,7 @@ jobRouter.get('/', async (req, res) => {
           },
         ],
       });
-    } else if (!type) {
+    } else if (!type || type === 'all') {
       jobs = await Job.findAndCountAll({
         limit,
         offset,
@@ -98,9 +105,11 @@ jobRouter.get('/', async (req, res) => {
               [Op.or]: [
                 {
                   status: 'funded',
+                  reserved: false,
                 },
                 {
                   status: 'volunteer',
+                  reserved: false,
                 },
               ],
             },
@@ -145,6 +154,7 @@ jobRouter.get('/', async (req, res) => {
             },
             {
               status: `${type}`,
+              reserved: false,
             },
           ],
         },
@@ -258,6 +268,11 @@ jobRouter.get('/user/:id', async (req, res) => {
       },
       include: [Image, Payment],
     });
+    const reservedJobs = await Job.findAll({
+      where: {
+        reservedUser: id,
+      },
+    });
     const completed = jobs.filter(job => job.status === 'completed');
     const cancelled = jobs.filter(job => job.status === 'cancelled');
     const pendingVerification = jobs.filter(
@@ -267,13 +282,13 @@ jobRouter.get('/user/:id', async (req, res) => {
     const active = jobs.filter(
       job => job.status === 'volunteer' || job.status === 'funded'
     );
-
     res.status(200).send({
       completed,
       cancelled,
       pendingVerification,
       pending,
       active,
+      reservedJobs,
     });
   } catch (e) {
     res.sendStatus(500);
@@ -284,7 +299,7 @@ jobRouter.get('/user/:id', async (req, res) => {
 jobRouter.post('/', multipleUpload, async (req, res) => {
   try {
     const file = req.files;
-    const { name, price, userId, description, status } = req.body;
+    const { name, price, userId, createdUser, description, status } = req.body;
     let { address } = req.body;
     address = JSON.parse(address);
     const bucketName = { Bucket: userId };
@@ -315,6 +330,7 @@ jobRouter.post('/', multipleUpload, async (req, res) => {
       address: address.value.structured_formatting.main_text,
       city,
       state,
+      createdUser,
     });
 
     const s3 = new AWS.S3({

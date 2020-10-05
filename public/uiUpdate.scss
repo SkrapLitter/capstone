@@ -255,7 +255,6 @@ nav {
 *
 */
 .bodyContainer {
-  margin: 5em 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -265,6 +264,8 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 4em;
+  width: 80%;
 }
 .hero {
   width: 100vw;

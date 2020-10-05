@@ -5,6 +5,7 @@ import { StoreState } from '../../store/store';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import moment from 'moment';
 
 const Alert: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,17 @@ const Alert: React.FC = () => {
       {alert && alert.length && (
         <List>
           {alert.map(curAlert => {
-            return <ListItem key={curAlert.id}>{curAlert.subject}</ListItem>;
+            return (
+              <>
+                <List key={curAlert.id}>
+                  <ListItem>{curAlert.subject} </ListItem>
+                  <ListItem>
+                    {moment(curAlert.createdAt).format('MMMM Do YYYY, h:mm a')}
+                  </ListItem>
+                </List>
+                <hr />
+              </>
+            );
           })}
         </List>
       )}
