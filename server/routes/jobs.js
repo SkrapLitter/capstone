@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 require('dotenv').config();
 const jobRouter = require('express').Router();
 const multer = require('multer');
@@ -372,6 +373,78 @@ jobRouter.post('/', multipleUpload, async (req, res) => {
   } catch (e) {
     res.status(500).send(e);
     console.error('Error posting job', e);
+  }
+});
+
+jobRouter.put('/withphotos/:id', multipleUpload, async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+    const job = await Job.findByPk(id);
+    const file = req.files;
+    const { name, description } = req.body;
+    let { address } = req.body;
+    address = JSON.parse(address);
+    const bucketName = { Bucket: user.id };
+    if (address) {
+      let city;
+      let state;
+      let lat;
+      let lng;
+      city = address.value.structured_formatting.secondary_text.split(', ')[0];
+      state = address.value.structured_formatting.secondary_text.split(', ')[1];
+      const geocodeData = await axios
+        .get(
+          `https://maps.googleapis.com/maps/api/geocode/json?place_id=${encodeURI(
+            `${address.value.place_id}`
+          )}&key=${process.env.GEOCODE_KEY}`
+        )
+        .then(response => response.data);
+
+      lat = geocodeData.results[0].geometry.location.lat;
+      lng = geocodeData.results[0].geometry.location.lng;
+      await job.update({ name, description, city, state, lat, lng });
+    } else {
+      await job.update({ name, description });
+    }
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_ID2,
+      secretAccessKey: process.env.AWS_SECRET2,
+    });
+
+    s3.createBucket(bucketName, (err, data) => {
+      if (err) {
+        console.log('error', err);
+      } else {
+        console.log('success', data);
+      }
+    });
+    const promises = [];
+    file.forEach(img => {
+      const params = {
+        Bucket: bucketName.Bucket,
+        Key: img.originalname,
+        Body: img.buffer,
+        ACL: 'public-read',
+      };
+      const promise = s3.upload(params).promise();
+      promises.push(promise);
+    });
+
+    Promise.all(promises)
+      .then(async data => {
+        data.forEach(async img => {
+          await Image.create({
+            url: img.Location,
+            jobId: job.id,
+          });
+        });
+      })
+      .then(() => {
+        res.status(201).send({ job });
+      });
+  } catch (e) {
+    console.log(e);
   }
 });
 
