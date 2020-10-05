@@ -92,7 +92,7 @@ const JobDetailsPreview: React.FC<Props> = (props: Props) => {
           ))}
         </List>
       ) : (
-        <Box p={5}>No jobs yet</Box>
+        <Box component="h3">No Jobs Yet</Box>
       )}
     </Box>
   );
