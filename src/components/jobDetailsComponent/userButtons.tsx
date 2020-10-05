@@ -106,37 +106,43 @@ const UserButtons: React.FC = () => {
     );
   };
   return (
-    <div className="jobDetailsButtons">
-      {renderButton()}
-      <Button variant="outlined" onClick={openChat}>
-        <MailOutlineIcon className="buttonIcon" />
-        Message Poster
-      </Button>
-      {job.reservedUser !== user.id && (
-        <Button
-          variant="outlined"
-          onClick={() => history.push(`/checkout/${job.id}`)}
-        >
-          <AttachMoneyIcon className="buttonIcon" />
-          Fund Job
-        </Button>
+    <>
+      {job.status !== 'completed' ? (
+        <div className="jobDetailsButtons">
+          {renderButton()}
+          <Button variant="outlined" onClick={openChat}>
+            <MailOutlineIcon className="buttonIcon" />
+            Message Poster
+          </Button>
+          {job.reservedUser !== user.id && (
+            <Button
+              variant="outlined"
+              onClick={() => history.push(`/checkout/${job.id}`)}
+            >
+              <AttachMoneyIcon className="buttonIcon" />
+              Fund Job
+            </Button>
+          )}
+          {job.reservedUser === user.id ? (
+            <Button
+              variant="outlined"
+              onClick={() => history.push(`/verify/${job.id}`)}
+              className="m1em"
+            >
+              Verify Job Completion
+            </Button>
+          ) : null}
+          <Snackbar
+            open={open}
+            onClose={handleClose}
+            autoHideDuration={3000}
+            message={message}
+          />
+        </div>
+      ) : (
+        <h4>This Job Is Completed</h4>
       )}
-      {job.reservedUser === user.id ? (
-        <Button
-          variant="outlined"
-          onClick={() => history.push(`/verify/${job.id}`)}
-          className="m1em"
-        >
-          Verify Job Completion
-        </Button>
-      ) : null}
-      <Snackbar
-        open={open}
-        onClose={handleClose}
-        autoHideDuration={3000}
-        message={message}
-      />
-    </div>
+    </>
   );
 };
 
