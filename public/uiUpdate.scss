@@ -371,7 +371,25 @@ textarea {
   height: 200px;
   background-size: cover;
 }
-
+/*
+* INBOX STYLES
+*/
+a.inbox-link,
+a.inbox-link:visited {
+  text-decoration: none;
+  color: #2d3142;
+}
+.inbox-item {
+  margin-bottom: 0.1em;
+}
+.inbox-item p {
+  margin: 0.25em 0;
+}
+p.new-message {
+  font-size: x-small;
+  color: var(--green);
+  margin: 0;
+}
 /*
 *
 * MOBILE-ONLY MEDIA QUERIES
