@@ -57,7 +57,7 @@ const Checkout: React.FC = () => {
         })
       ).data;
       if (status === 'success') {
-        history.push('/account');
+        history.push(`/jobs/${job.job.id}`);
       }
     }
   };
@@ -95,7 +95,9 @@ const Checkout: React.FC = () => {
                   </TableCell>
                   <TableCell align="right">{price}</TableCell>
                   <TableCell align="right">{job.job.funded}</TableCell>
-                  <TableCell align="right">{difference}</TableCell>
+                  <TableCell align="right">
+                    {difference ? difference.toFixed(2) : 0}
+                  </TableCell>
                   <TableCell align="right">{user.username}</TableCell>
                 </TableRow>
               </TableBody>
@@ -105,11 +107,13 @@ const Checkout: React.FC = () => {
             <h3>Total</h3>
             <br />
             <hr />
-            <p>Amount Needed: ${difference.toFixed(2)}</p>
+            <p>Amount Needed: ${difference ? difference.toFixed(2) : 0}</p>
             <hr />
-            <p>Application Fee: ${applicationFee.toFixed(2)} </p>
+            <p>
+              Application Fee: ${applicationFee ? applicationFee.toFixed(2) : 0}{' '}
+            </p>
             <hr />
-            <p>Total: {total.toFixed(2)}</p>
+            <p>Total: {total ? total.toFixed(2) : 0}</p>
             <hr />
             <StripeCheckout
               stripeKey="pk_test_51HQb6CE7ag3tHwtoywBsVrSo0kouJGEUUBUT6wVztfN4vo7qpNv1tHFjMj5JbBAQy0ytr1SvzjS3fvQ7AR4eJqYA00AYgeIALr"

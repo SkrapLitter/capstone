@@ -83,16 +83,14 @@ const UserButtons: React.FC = () => {
   };
   return (
     <div className="jobDetailsButtons">
-      {job.reservedUser === user.id && (
-        <Button variant="outlined" onClick={handleReserve}>
-          {job.reserved ? (
-            <CloseIcon className="buttonIcon" />
-          ) : (
-            <DoneIcon className="buttonIcon" />
-          )}
-          {job.reserved ? 'Cancel' : 'Reserve'}
-        </Button>
-      )}
+      <Button variant="outlined" onClick={handleReserve}>
+        {job.reserved ? (
+          <CloseIcon className="buttonIcon" />
+        ) : (
+          <DoneIcon className="buttonIcon" />
+        )}
+        {job.reserved ? 'Cancel' : 'Reserve'}
+      </Button>
       <Button variant="outlined" onClick={openChat}>
         <MailOutlineIcon className="buttonIcon" />
         Message Poster

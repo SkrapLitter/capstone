@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Alert from '@material-ui/lab/Alert';
+import moment from 'moment';
 
 const Stripe: React.FC = () => {
   const { user } = useSelector((store: StoreState) => store);
@@ -43,10 +44,10 @@ const Stripe: React.FC = () => {
         <>
           {user.stripe ? (
             <>
-              <Typography variant="h3" component="h3">
+              <Typography variant="h4" component="h4">
                 Stripe Dashboard
               </Typography>
-              <Typography variant="h4" component="h4">
+              <Typography variant="h5" component="h5">
                 Balance: ${user.balance}
               </Typography>
               <Button
@@ -60,11 +61,20 @@ const Stripe: React.FC = () => {
                 <List>
                   {user.payments.map(payment => {
                     return (
-                      <ListItem key={payment.id}>
-                        <p>{payment.subject}</p>
-                        <p>{payment.type}</p>
-                        <p>{payment.amount}</p>
-                      </ListItem>
+                      <>
+                        <List key={payment.id}>
+                          <ListItem>Subject:{payment.subject}</ListItem>
+                          <ListItem>Type:{payment.type}</ListItem>
+                          <ListItem>Amount:$ {payment.amount}</ListItem>
+                          <ListItem>
+                            Time:{' '}
+                            {moment(payment.createdAt).format(
+                              'MMMM Do YYYY, h:mm a'
+                            )}
+                          </ListItem>
+                        </List>
+                        <hr />
+                      </>
                     );
                   })}
                 </List>

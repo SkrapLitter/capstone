@@ -82,6 +82,7 @@ const CreateJob: React.FC = () => {
       description,
       userId: user.id,
       status,
+      createdUser: user.firstName,
     };
     const file = new FormData();
     photos.forEach(photo => {
@@ -94,7 +95,6 @@ const CreateJob: React.FC = () => {
       .post('/api/jobs', file)
       .then(({ data }) => {
         // get jobId for navigation
-        console.log(data);
         const id = data.id;
         if (status === 'volunteer') {
           // navigate to job details page
@@ -106,7 +106,6 @@ const CreateJob: React.FC = () => {
       // TODO - error handling for server errors - Toast?
       .catch(console.log);
   };
-
   return (
     <div
       className="container"

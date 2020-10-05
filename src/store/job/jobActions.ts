@@ -145,12 +145,11 @@ export const completeJob = (job: JobAttributes): AppThunk => {
       const { data } = await Axios.put(
         `/api/payment/stripe/complete/${job.id}`
       );
-      if (data.stripe) {
+      if (data.status) {
         toast('You have successfully completed this job', { type: 'success' });
         socket.emit('complete', job);
         dispatch(fetchJobsByUser(job.userId));
       } else {
-        console.log(data.stripeError);
         toast(data.stripeError, { type: 'error' });
         socket.emit('stripeError', {
           job,

@@ -45,7 +45,14 @@ const jobsDetailsPreview: React.FC = () => {
 
   const selectJobs = (state: StoreState) => state.job;
   const {
-    userJobs: { active, cancelled, completed, pending, pendingVerification },
+    userJobs: {
+      active,
+      cancelled,
+      completed,
+      pending,
+      pendingVerification,
+      reservedJobs,
+    },
   } = useSelector(selectJobs);
 
   const [value, setValue] = React.useState(0);
@@ -79,6 +86,7 @@ const jobsDetailsPreview: React.FC = () => {
         <Tab label="Completed" />
         <Tab label="Pending" />
         <Tab label="Verification" />
+        <Tab label="Reserved By User" />
       </Tabs>
       <TabPanel value={value} index={0}>
         <JobDetailsPreview jobs={active} />
@@ -94,6 +102,9 @@ const jobsDetailsPreview: React.FC = () => {
       </TabPanel>
       <TabPanel value={value} index={4}>
         <JobDetailsPreview jobs={pendingVerification} />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+        <JobDetailsPreview jobs={reservedJobs} />
       </TabPanel>
     </Box>
   );

@@ -42,7 +42,7 @@
   justify-content: center;
   margin-top: 20px;
   height: 75vh;
-  width: 100%;
+  width: 80vw;
 }
 .mapContainerSmall {
   display: flex;
@@ -557,6 +557,9 @@ div.thumb:hover svg {
     bottom: 0;
     margin: 0 20px calc(20px + 50px) 0;
   }
+  .mapContainer {
+    width: 95vw;
+  }
 }
 
 .stripe {
@@ -748,7 +751,7 @@ div.thumb:hover svg {
 }
 
 .chatTopHalf {
-  width: 100%;
+  width: 95vw;
   max-height: 62%;
   padding: 0 20px;
   position: fixed;
@@ -766,7 +769,7 @@ div.thumb:hover svg {
   height: 60px;
   background-color: white;
   margin-top: 5px;
-  width: 100%;
+  width: 95vw;
 }
 
 .messageList {
@@ -785,6 +788,10 @@ div.thumb:hover svg {
     padding: 0 10px;
     margin-bottom: 4em;
     box-sizing: border-box;
+    width: 97vw;
+  }
+  .chatTopHalf {
+    width: 97vw;
   }
   .messageInput {
     padding: 0 10px;
