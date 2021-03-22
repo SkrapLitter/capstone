@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
-import { fetchMapJobs } from '../../store/job/jobActions';
+import { fetchMapJobs, fetchJobs } from '../../store/job/jobActions';
 import GoogleMapReact from 'google-map-react';
 import MapMarker from './mapMarker';
 
@@ -34,6 +34,11 @@ const Map: React.FC = () => {
   const [type, setType] = useState('all');
   const [filterBounds, setFilterBounds] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchJobs());
+  }, []);
+
   useEffect(() => {
     const success = ({ coords }) => {
       const localCoord = {
