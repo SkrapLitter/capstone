@@ -1,0 +1,821 @@
+.justify-center {
+  justify-content: center;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.f-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.border-circle {
+  border-radius: 50%;
+}
+
+.fixedFooter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+@media screen and (min-width: 600px) {
+  .fixedFooter {
+    display: none;
+  }
+}
+
+.contentWrapper {
+  padding-bottom: 60px;
+}
+
+.mapContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  height: 75vh;
+  width: 80vw;
+}
+.mapContainerSmall {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  height: 67vw;
+  width: 67vw;
+}
+
+.mapFilter {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.jobImage {
+  width: 80vw;
+  height: 80vw;
+  max-width: 400px;
+  max-height: 400px;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.jCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+@media screen and (min-width: 601px) {
+  .mapContainerSmall {
+    height: 400px;
+    width: 400px;
+  }
+}
+
+.marker {
+  opacity: 0;
+  animation-name: markerAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  transform: translate(-1em, -1em);
+  /* transition: ease-in; */
+}
+
+@keyframes markerAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.marker:hover {
+  cursor: pointer;
+}
+
+.mapModal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+}
+.feedPage {
+  display: flex;
+  flex-direction: row;
+  background-color: whitesmoke;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 20px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  margin: 0;
+  flex-grow: 1;
+  min-width: 100vw;
+}
+.FeedNavContainer {
+  max-width: 20vw;
+  margin-top: 0;
+  padding: 10px;
+}
+.feedNav {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-around;
+}
+.jobContainer {
+  flex-grow: 1;
+  justify-content: space-evenly;
+  max-width: 80vw;
+  margin-top: 25px;
+  height: 100vh;
+}
+.grid {
+  padding: 10px;
+}
+.ghost {
+  display: none;
+}
+.logoutButton {
+  color: white;
+  text-transform: none;
+}
+.m-t-l {
+  margin-top: 3rem;
+}
+.m-t-b {
+  margin: 2em 0;
+}
+.m-b-s {
+  margin-bottom: 1rem;
+}
+button.m1em {
+  margin: 2em 1em;
+}
+.buttonIcon {
+  margin-right: 0.5em;
+}
+.max-w-400 {
+  max-width: 400px;
+}
+.alert {
+  padding: 1rem;
+  text-align: center;
+}
+.anchor,
+.anchor:focus {
+  background: transparent;
+  color: #039be5;
+  border: none;
+  font-style: italic;
+  width: auto;
+}
+.anchor:focus {
+  border: 1px solid #aaa;
+  border-radius: 2px;
+}
+.charcoal {
+  color: #777;
+  font-style: italic;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  transition: 0.3s;
+  position: absolute;
+  transform: translateY(-100%);
+}
+.animateForm {
+  transform: translateY(0%);
+}
+
+.white {
+  background: whitesmoke;
+}
+h4 {
+  margin: 1rem 0;
+}
+
+@media (min-width: 1500px) {
+  .feedContainer {
+    /* display: flex;
+    justify-content: center; */
+    /* max-width: 700px; */
+    margin: 0 20%;
+  }
+}
+.cardButtons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.cardButton {
+  margin: 5px;
+}
+
+.jobImage {
+  padding: 10px;
+}
+
+.feedButton {
+  background-color: #00c853;
+}
+
+.createDescription {
+  width: 100%;
+  height: 200px;
+  border-radius: 5px;
+  border: 1px solid lightslategray;
+  resize: none;
+  overflow-y: scroll;
+  padding: 1em;
+}
+.createDescription.invalid {
+  border: 1px solid red;
+}
+
+.mapCard {
+  height: 500px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.jobImages {
+  height: 200px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mapCardImage {
+  width: 100%;
+  height: 200px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.mapImageContainer {
+  margin: 0px 10px;
+  margin-top: 10px;
+  height: 200px;
+}
+
+.mapCardText {
+  margin: 0px 10px;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mapCardButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+}
+
+.thumbnail {
+  height: 75px;
+  width: 75px;
+  margin: 10px;
+}
+
+.logOutBtn {
+  margin: 1em;
+  color: grey;
+}
+
+.alertPage {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.alertList {
+  background: whitesmoke;
+}
+.flexRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+.flexRow img {
+  margin: 0 1em;
+}
+#jobPrice {
+  margin: 0;
+}
+
+button:focus {
+  background-color: transparent;
+}
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  padding: 1em 0;
+}
+.closeIcon {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 10vh;
+}
+.closeIcon svg,
+#gallery svg {
+  cursor: pointer;
+  width: 10vw;
+}
+#gallery {
+  display: flex;
+  justify-content: space-between;
+  height: 80vh;
+  align-items: center;
+}
+.jobGalleryImg {
+  width: 100%;
+  height: 80vh;
+  max-height: 80vh;
+  max-width: 100%;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.3s transform;
+  position: absolute;
+  top: 5vh;
+  left: 0;
+}
+
+#galleryImgContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  flex-grow: grow;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.moveLeft {
+  transform: translateX(-100vw);
+}
+.moveRight {
+  transform: translateX(100vw);
+}
+.dNone {
+  display: none;
+}
+
+.navLogo {
+  margin-left: 10px;
+  font: 2rem 'Fredoka One', sans-serif;
+}
+
+.feedButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sortIcon {
+  color: #00c853;
+}
+
+.sortIcon:hover {
+  cursor: pointer;
+}
+
+.infiniteContainer {
+  padding: 10px;
+}
+
+.feedJobImageContainer {
+  height: 600px;
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.feedSingleImage {
+  height: 100%;
+  width: 100%;
+  margin: 10px;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.feedDoubleImageLeft {
+  margin: 10px 5px 10px 10px;
+  height: 100%;
+  width: 50%;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+}
+
+.feedDoubleImageRight {
+  margin: 10px 10px 10px 5px;
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background-size: cover;
+}
+
+.feedTopRightImage {
+  height: 50%;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 5px;
+  background-size: cover;
+}
+
+.feedBottomRightImage {
+  height: 50%;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  background-position: center;
+  margin-top: 5px;
+  background-size: cover;
+}
+
+@media screen and (max-width: 768px) {
+  .feedJobImageContainer {
+    height: 350px;
+    width: 350px;
+  }
+}
+
+.feedTextContainer {
+  padding: 10px;
+  display: flex;
+  max-width: 600px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.volunteerIcon {
+  width: 16px;
+  height: auto;
+  margin-right: 5px;
+}
+
+.createButtonContainer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 20px;
+}
+
+.pRel {
+  position: relative;
+}
+
+#descriptionLabel {
+  margin: 0 1em;
+  position: absolute;
+  top: 1em;
+  left: 0;
+  transition: 0.3s ease all;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.54);
+}
+label#descriptionLabel.active {
+  margin: 0 0 0.5em;
+  color: var(--green);
+  font-size: 0.8em;
+  top: -1.5em;
+}
+.smallText {
+  font-size: 0.9em;
+}
+.m8 {
+  margin: 8px;
+}
+
+.thumbGallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.thumbGallery > div.thumb {
+  width: 95px;
+  height: 95px;
+  margin: 5px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+div.thumb > svg {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+}
+
+div.thumb:hover svg {
+  display: block;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .createButtonContainer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 0 20px calc(20px + 50px) 0;
+  }
+  .mapContainer {
+    width: 95vw;
+  }
+  .updateJobSubmit {
+    margin-bottom: 4em;
+  }
+}
+
+.stripe {
+  align-items: center;
+  font-family: 'Fredoka One', cursive;
+  padding: 1rem;
+}
+
+.stripe ul {
+  margin: 0 2rem;
+}
+
+.stripe ul li {
+  padding: 0 0.5rem;
+}
+
+.achieve {
+  align-items: center;
+  display: flex;
+  font-size: 1.6rem;
+  height: 100px;
+  justify-content: center;
+  text-align: center;
+  width: 100px;
+}
+
+.achieve-meta {
+  max-width: 100px;
+  padding: 0 1rem;
+}
+#jobs .badge {
+  text-transform: uppercase;
+}
+
+.verificationContainer {
+  height: 600px;
+  width: 100%;
+  width: auto;
+}
+
+.validationImageContainer {
+  max-width: 100%;
+  width: 400px;
+  height: 400px;
+  margin: 20px 0;
+  background-color: #dddddd;
+  position: relative;
+  border-radius: 5px;
+}
+.validationPoint {
+  position: absolute;
+  left: 48.8%;
+  height: 40px;
+  width: 40px;
+  background-color: #dddddd;
+  transform: rotate(45deg) translate(-50%, 0);
+}
+
+.validationImage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  max-width: 350px;
+  max-height: 350px;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.inboxCard {
+  max-height: 100px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.chatMessageL {
+  display: flex;
+  justify-content: flex-start;
+  margin: 5px 0;
+}
+
+.chatMessageR {
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px 0;
+}
+
+.messageInput {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0 50px;
+}
+
+.recipient {
+  display: flex;
+  justify-content: flex-start;
+  background-color: lightgrey;
+  border-radius: 30px 30px 30px 0;
+  width: auto;
+  max-width: 60%;
+  padding: 0 10px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.sender {
+  display: flex;
+  text-align: right;
+  justify-content: flex-end;
+  background-color: #00c853;
+  border-radius: 30px 30px 0 30px;
+  width: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 60%;
+  padding: 0 10px;
+}
+
+.sender > p,
+.recipient > p {
+  width: 100%;
+  max-width: 100%;
+}
+
+.chatTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+  padding: 0 20px;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+.chatTitleContainer {
+  width: 100%;
+  margin-top: 1em;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.chatTitleFlex {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.chatTitleText > p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.chatTitleLocation {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.chatTitleLocation > p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-size: 1.5rem;
+}
+
+.chatTitleLocation:hover {
+  cursor: pointer;
+}
+
+.backIcon {
+  position: absolute;
+  top: 50px;
+  left: 5%;
+}
+
+.backIcon:hover {
+  cursor: pointer;
+}
+
+.chatTopHalf {
+  width: 95vw;
+  max-height: 62%;
+  padding: 0 20px;
+  position: fixed;
+  top: 14rem;
+  overflow-y: scroll;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.chatBottomHalf {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 0;
+  height: 60px;
+  background-color: white;
+  margin-top: 5px;
+  width: 95vw;
+}
+
+.messageList {
+  width: 100%;
+  padding-inline-start: 0;
+  padding: 20px;
+}
+@media screen and (max-width: 600px) {
+  .chatMessageL {
+    padding-left: 20px;
+  }
+  .chatMessageR {
+    padding-right: 20px;
+  }
+  .chatBottomHalf {
+    padding: 0 10px;
+    margin-bottom: 4em;
+    box-sizing: border-box;
+    width: 97vw;
+  }
+  .chatTopHalf {
+    width: 97vw;
+  }
+  .messageInput {
+    padding: 0 10px;
+  }
+  .chatTitleContainer {
+    height: 143px;
+  }
+  .mapContainerSmall {
+    margin-bottom: 4em;
+  }
+}
+.stripeDash {
+  text-align: center;
+}

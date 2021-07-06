@@ -1,0 +1,8 @@
+node_modules
+.idea
+.vscode
+.DS_Store
+dist
+.env
+src/**/*.js
+src/**/*.js.map

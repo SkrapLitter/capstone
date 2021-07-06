@@ -1,0 +1,54 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:prettier/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["@typescript-eslint", "react"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 11
+  },
+  "rules": {
+    "consistent-return": "off",
+    "prefer-destructuring": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "object-shorthand": "off",
+    "react/prop-types": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/destructuring-assignment": 0,
+    "react/no-unescaped-entities": 0,
+    "no-nested-ternary": 0,
+    "no-unneeded-ternary": "off",
+    "react/jsx-wrap-multilines": 0,
+    "import/order": "off",
+    "react/jsx-boolean-value": 0,
+    "import/prefer-default-export": "off",
+    "react/jsx-curly-newline": 0,
+    "jsx-a11y/label-has-associated-control": 1,
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/no-var-requires": 0,
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    ],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "func-names": "off"
+  }
+}
